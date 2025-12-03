@@ -1,0 +1,75 @@
+# --- Node ---
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+package-lock.json
+yarn.lock
+
+# --- Expo ---
+.expo/
+.expo-shared/
+dist/
+web-build/
+
+# --- React Native Bundler ---
+bundles/
+*.bundle
+*.map
+
+# --- React Native Web ---
+.web/
+.next/
+out/
+
+# --- Build Artifacts ---
+build/
+android/app/build/
+ios/build/
+ios/Pods/
+*.xcworkspace
+*.xcuserdata/
+*.xcuserstate
+*.lock
+*.iml
+
+# --- Android Specific ---
+*.apk
+*.keystore
+android/.gradle/
+android/local.properties
+android/.idea/
+
+# --- iOS Specific ---
+Pods/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+project.xcworkspace
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- IDE Folders ---
+.vscode/
+.idea/
+
+# --- Environment Files ---
+.env
+.env.local
+.env.*.local
+
+# --- Logs ---
+*.log
+
+# --- Temporary Files ---
+*.tmp
+temp/
+tmp/
+
+# --- EAS (Expo) ---
+.easl
+eas.json
