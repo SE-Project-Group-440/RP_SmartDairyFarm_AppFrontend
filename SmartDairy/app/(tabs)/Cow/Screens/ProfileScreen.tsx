@@ -15,12 +15,15 @@ import {
   LogOut,
   Settings,
 } from "lucide-react-native";
+import { useAuthStore } from '@/Store/auth.store';
 
 export function ProfileScreen() {
   const [language, setLanguage] = useState("english");
   const [darkMode, setDarkMode] = useState(false);
+  const logout = useAuthStore((s) => s.logout);
   const [syncStatus, setSyncStatus] =
     useState<"synced" | "syncing" | "offline">("synced");
+  
 
   return (
     <ScrollView className="flex-1 bg-slate-50">
@@ -246,12 +249,16 @@ export function ProfileScreen() {
         </View>
 
         {/* Logout */}
-        <Pressable className="bg-white border-2 border-red-200 rounded-2xl py-4 flex-row items-center justify-center gap-2">
-          <LogOut size={20} color="#dc2626" />
-          <Text className="text-red-600">
-            Log Out
-          </Text>
-        </Pressable>
+        <Pressable
+  onPress={logout}
+  className="bg-white border-2 border-red-200 rounded-2xl py-4 flex-row items-center justify-center gap-2"
+>
+  <LogOut size={20} color="#dc2626" />
+  <Text className="text-red-600 font-medium">
+    Log Out
+  </Text>
+</Pressable>
+
       </View>
     </ScrollView>
   );
