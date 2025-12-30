@@ -4,17 +4,34 @@ import { signupRequest } from "../../services/authService";
 import { useAuthStore } from "../../Store/auth.store";
 import { router } from "expo-router";
 
+type SignupForm = {
+  fname: string;
+  lname: string;
+  mobile: string;
+  email: string;
+  password: string;
+  admintype: boolean;
+};
+
 export default function Signup() {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<SignupForm>({
     fname: "",
     lname: "",
     mobile: "",
     email: "",
     password: "",
-    admintype: false,
+    admintype: false, 
   });
 
   const login = useAuthStore((s) => s.login);
+
+  const inputFields: (keyof Omit<SignupForm, "admintype">)[] = [
+    "fname",
+    "lname",
+    "mobile",
+    "email",
+    "password",
+  ];
 
   const handleSignup = async () => {
     try {
@@ -40,22 +57,20 @@ export default function Signup() {
       </Text>
 
       <View className="space-y-4">
-        {Object.entries(form).map(([key, value]) =>
-          key !== "admintype" ? (
-            <TextInput
-              key={key}
-              className="h-12 rounded-xl border border-border px-4 text-foreground"
-              placeholder={key.toUpperCase()}
-              placeholderTextColor="#9ca3af"
-              autoCapitalize="none"
-              secureTextEntry={key === "password"}
-              value={value}
-              onChangeText={(v) =>
-                setForm((prev) => ({ ...prev, [key]: v }))
-              }
-            />
-          ) : null
-        )}
+        {inputFields.map((key) => (
+          <TextInput
+            key={key}
+            className="h-12 rounded-xl border border-border px-4 text-foreground"
+            placeholder={key.toUpperCase()}
+            placeholderTextColor="#9ca3af"
+            autoCapitalize="none"
+            secureTextEntry={key === "password"}
+            value={form[key]}
+            onChangeText={(v) =>
+              setForm((prev) => ({ ...prev, [key]: v }))
+            }
+          />
+        ))}
       </View>
 
       <Pressable

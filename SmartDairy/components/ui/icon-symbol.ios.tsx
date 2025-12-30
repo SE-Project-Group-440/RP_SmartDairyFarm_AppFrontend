@@ -1,32 +1,37 @@
-import { SymbolView, SymbolViewProps, SymbolWeight } from 'expo-symbols';
-import { StyleProp, ViewStyle } from 'react-native';
+"use client";
+
+import React from "react";
+import { StyleProp, TextStyle } from "react-native";
+import MaterialIcons from "@react-native-vector-icons/material-icons";
+
+
+/* ---------------------------------- */
+/* Types */
+/* ---------------------------------- */
+
+type IconSymbolProps = {
+  name: React.ComponentProps<typeof MaterialIcons>["name"];
+  size?: number;
+  color: string;
+  style?: StyleProp<TextStyle>;
+};
+
+/* ---------------------------------- */
+/* IconSymbol */
+/* ---------------------------------- */
 
 export function IconSymbol({
   name,
   size = 24,
   color,
   style,
-  weight = 'regular',
-}: {
-  name: SymbolViewProps['name'];
-  size?: number;
-  color: string;
-  style?: StyleProp<ViewStyle>;
-  weight?: SymbolWeight;
-}) {
+}: IconSymbolProps) {
   return (
-    <SymbolView
-      weight={weight}
-      tintColor={color}
-      resizeMode="scaleAspectFit"
+    <MaterialIcons
       name={name}
-      style={[
-        {
-          width: size,
-          height: size,
-        },
-        style,
-      ]}
+      size={size}
+      color={color}
+      style={style}
     />
   );
 }

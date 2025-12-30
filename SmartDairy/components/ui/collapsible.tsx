@@ -1,45 +1,150 @@
-import { PropsWithChildren, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+"use client";
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import React, {
+  createContext,
+  useContext,
+  useRef,
+  useState,
+  ReactNode,
+} from "react";
+import {
+  Animated,
+  Pressable,
+  View,
+  LayoutChangeEvent,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 
-export function Collapsible({ children, title }: PropsWithChildren & { title: string }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const theme = useColorScheme() ?? 'light';
+/* ---------------------------------- */
+/* Context */
+/* ---------------------------------- */
+
+type CollapsibleContextType = {
+  open: boolean;
+  toggle: () => void;
+  animatedHeight: Animated.AnimatedInterpolation<number>;
+  setContentHeight: (height: number) => void;
+};
+
+const CollapsibleContext = createContext<CollapsibleContextType | null>(null);
+
+function useCollapsible() {
+  const ctx = useContext(CollapsibleContext);
+  if (!ctx) {
+    throw new Error(
+      "Collapsible components must be used within <Collapsible />"
+    );
+  }
+  return ctx;
+}
+
+/* ---------------------------------- */
+/* Collapsible Root */
+/* ---------------------------------- */
+
+type CollapsibleProps = {
+  defaultOpen?: boolean;
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+};
+
+function Collapsible({
+  defaultOpen = false,
+  children,
+  style,
+}: CollapsibleProps) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  const progress = useRef(
+    new Animated.Value(defaultOpen ? 1 : 0)
+  ).current;
+
+  const contentHeight = useRef(0);
+
+  const toggle = () => {
+    Animated.timing(progress, {
+      toValue: open ? 0 : 1,
+      duration: 250,
+      useNativeDriver: false, // height animation = false
+    }).start();
+
+    setOpen(!open);
+  };
+
+  const setContentHeight = (height: number) => {
+    contentHeight.current = height;
+  };
+
+  const animatedHeight = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, contentHeight.current],
+  });
 
   return (
-    <ThemedView>
-      <TouchableOpacity
-        style={styles.heading}
-        onPress={() => setIsOpen((value) => !value)}
-        activeOpacity={0.8}>
-        <IconSymbol
-          name="chevron.right"
-          size={18}
-          weight="medium"
-          color={theme === 'light' ? Colors.light.icon : Colors.dark.icon}
-          style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
-        />
-
-        <ThemedText type="defaultSemiBold">{title}</ThemedText>
-      </TouchableOpacity>
-      {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
-    </ThemedView>
+    <CollapsibleContext.Provider
+      value={{ open, toggle, animatedHeight, setContentHeight }}
+    >
+      <View style={style}>{children}</View>
+    </CollapsibleContext.Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  heading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  content: {
-    marginTop: 6,
-    marginLeft: 24,
-  },
-});
+/* ---------------------------------- */
+/* Collapsible Trigger */
+/* ---------------------------------- */
+
+type CollapsibleTriggerProps = {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+};
+
+function CollapsibleTrigger({ children, style }: CollapsibleTriggerProps) {
+  const { toggle } = useCollapsible();
+
+  return (
+    <Pressable onPress={toggle} style={style}>
+      {children}
+    </Pressable>
+  );
+}
+
+/* ---------------------------------- */
+/* Collapsible Content */
+/* ---------------------------------- */
+
+type CollapsibleContentProps = {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+};
+
+function CollapsibleContent({
+  children,
+  style,
+}: CollapsibleContentProps) {
+  const { animatedHeight, setContentHeight } = useCollapsible();
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    setContentHeight(event.nativeEvent.layout.height);
+  };
+
+  return (
+    <Animated.View
+      style={[
+        {
+          height: animatedHeight,
+          overflow: "hidden",
+        },
+        style,
+      ]}
+    >
+      <View onLayout={onLayout}>{children}</View>
+    </Animated.View>
+  );
+}
+
+/* ---------------------------------- */
+/* Exports */
+/* ---------------------------------- */
+
+export { Collapsible, CollapsibleTrigger, CollapsibleContent };

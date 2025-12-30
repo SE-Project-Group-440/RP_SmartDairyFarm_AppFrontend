@@ -2,14 +2,13 @@ import { useState } from "react";
 import {
   View,
   Text,
-  Pressable,
+  Pressable
 } from "react-native";
-import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 
-
-import { DairyManagementScreen } from "../(tabs)/Cow/Screens/DairyManagementScreen";
-import { ProfileScreen } from "../(tabs)/Cow/Screens/ProfileScreen";
+import { DairyManagementScreen } from "./Screens/DairyManagementScreen";
+import { ProfileScreen } from "./Screens/ProfileScreen";
 
 export type MainTab =
   | "dairy"
