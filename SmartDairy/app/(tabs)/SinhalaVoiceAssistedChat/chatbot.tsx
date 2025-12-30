@@ -37,7 +37,7 @@ const knowledgeBase: Record<string, { response: string; audio?: string }> = {
   },
 };
 
-export default function App() {
+export default function ChatScreen() {
   const [messages, setMessages] = useState<
     { id: number; text: string; isUser: boolean }[]
   >([
