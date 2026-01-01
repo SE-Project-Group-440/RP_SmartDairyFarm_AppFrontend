@@ -8,6 +8,7 @@ import {
   Modal,
 } from "react-native";
 import { ArrowLeft, Camera } from "lucide-react-native";
+import { useCowStore } from "../../Store/cowStore";
 
 interface AddCowScreenProps {
   onBack: () => void;
@@ -20,32 +21,69 @@ const breeds = [
   "Ayrshire",
   "Brown Swiss",
   "Sahiwal",
+  "Murrah",
   "Other",
 ];
 
 export function AddCowScreen({ onBack }: AddCowScreenProps) {
+  const { createCow, isCreating } = useCowStore();
+
   const [formData, setFormData] = useState({
     name: "",
     breed: "",
-    age: "",
-    purchaseDate: "",
-    lactationNumber: "",
-    currentLactationDay: "",
-    notes: "",
+    birthDate: "",
+    color: "",
+    weight: "",
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const isFormValid = formData.name && formData.breed && formData.age;
+  const isFormValid =
+    formData.name &&
+    formData.breed &&
+    formData.birthDate;
 
-  const handleSubmit = () => {
-    setShowSuccess(true);
+  
 
-    setTimeout(() => {
-      setShowSuccess(false);
-      onBack();
-    }, 2000);
+  const calculateAgeInMonths = (birthDate: string) => {
+    const birth = new Date(birthDate);
+    const today = new Date();
+
+    const years = today.getFullYear() - birth.getFullYear();
+    const months = today.getMonth() - birth.getMonth();
+
+    return years * 12 + months;
   };
+
+  const handleSubmit = async () => {
+    if (!isFormValid || isCreating) return;
+
+    const payload = {
+      name: formData.name,
+      breed: formData.breed,
+      birthDate: formData.birthDate,
+      ageInMonths: calculateAgeInMonths(formData.birthDate),
+      color: formData.color || null,
+      weight: formData.weight
+        ? Number(formData.weight)
+        : null,
+      status: "Active" as const,
+    };
+
+    try {
+      await createCow(payload);
+      setShowSuccess(true);
+
+      setTimeout(() => {
+        setShowSuccess(false);
+        onBack();
+      }, 1500);
+    } catch (e) {
+      console.error("Create cow failed", e);
+    }
+  };
+
+  /* ---------------- UI ---------------- */
 
   return (
     <>
@@ -57,17 +95,21 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
             className="mb-4 flex-row items-center gap-2"
           >
             <ArrowLeft size={20} color="#dcfce7" />
-            <Text className="text-green-100">Back to Dashboard</Text>
+            <Text className="text-green-100">
+              Back to Dashboard
+            </Text>
           </Pressable>
 
-          <Text className="text-2xl text-white mb-1">Add New Cow</Text>
+          <Text className="text-2xl text-white mb-1">
+            Add New Cow
+          </Text>
           <Text className="text-green-100">
             Register a new cow to your farm
           </Text>
         </View>
 
         <View className="px-6 py-6 space-y-6">
-          {/* Photo Upload */}
+          {/* Photo */}
           <View className="bg-white rounded-2xl p-6 border border-slate-100">
             <Text className="text-sm text-slate-600 mb-3">
               Cow Photo (Optional)
@@ -81,39 +123,34 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
             </Pressable>
           </View>
 
-          {/* Basic Information */}
-          <View className="bg-white rounded-2xl p-6 border border-slate-100">
-            <Text className="text-slate-900 mb-4">
+          {/* Basic Info */}
+          <View className="bg-white rounded-2xl p-6 border border-slate-100 space-y-4">
+            <Text className="text-slate-900">
               Basic Information
             </Text>
 
-            <View className="space-y-4">
-              {/* Name */}
-              <View>
-                <Text className="text-sm text-slate-600 mb-2">
-                  Cow Name *
-                </Text>
-                <TextInput
-                  value={formData.name}
-                  onChangeText={(v) =>
-                    setFormData({ ...formData, name: v })
-                  }
-                  placeholder="e.g., Lassie"
-                  className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
-                />
-              </View>
+            {/* Name */}
+            <View>
+              <Text className="text-sm text-slate-600 mb-2">
+                Cow Name *
+              </Text>
+              <TextInput
+                value={formData.name}
+                onChangeText={(v) =>
+                  setFormData({ ...formData, name: v })
+                }
+                placeholder="e.g., Raththi"
+                className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
+              />
+            </View>
 
-              {/* Breed */}
-              <View>
-                <Text className="text-sm text-slate-600 mb-2">
-                  Breed *
-                </Text>
-
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  className="flex-row gap-2"
-                >
+            {/* Breed */}
+            <View>
+              <Text className="text-sm text-slate-600 mb-2">
+                Breed *
+              </Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View className="flex-row gap-2">
                   {breeds.map((breed) => (
                     <Pressable
                       key={breed}
@@ -137,128 +174,84 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
                       </Text>
                     </Pressable>
                   ))}
-                </ScrollView>
-              </View>
-
-              {/* Age */}
-              <View>
-                <Text className="text-sm text-slate-600 mb-2">
-                  Age (Years) *
-                </Text>
-                <TextInput
-                  value={formData.age}
-                  onChangeText={(v) =>
-                    setFormData({ ...formData, age: v })
-                  }
-                  placeholder="e.g., 3"
-                  keyboardType="numeric"
-                  className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
-                />
-              </View>
-
-              {/* Purchase Date */}
-              <View>
-                <Text className="text-sm text-slate-600 mb-2">
-                  Purchase / Birth Date
-                </Text>
-                <TextInput
-                  value={formData.purchaseDate}
-                  onChangeText={(v) =>
-                    setFormData({ ...formData, purchaseDate: v })
-                  }
-                  placeholder="YYYY-MM-DD"
-                  className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
-                />
-              </View>
+                </View>
+              </ScrollView>
             </View>
-          </View>
 
-          {/* Lactation Info */}
-          <View className="bg-white rounded-2xl p-6 border border-slate-100">
-            <Text className="text-slate-900 mb-4">
-              Lactation Information
-            </Text>
-
-            <View className="space-y-4">
-              <View>
-                <Text className="text-sm text-slate-600 mb-2">
-                  Lactation Number
-                </Text>
-                <TextInput
-                  value={formData.lactationNumber}
-                  onChangeText={(v) =>
-                    setFormData({ ...formData, lactationNumber: v })
-                  }
-                  placeholder="e.g., 2"
-                  keyboardType="numeric"
-                  className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
-                />
-              </View>
-
-              <View>
-                <Text className="text-sm text-slate-600 mb-2">
-                  Current Lactation Day
-                </Text>
-                <TextInput
-                  value={formData.currentLactationDay}
-                  onChangeText={(v) =>
-                    setFormData({
-                      ...formData,
-                      currentLactationDay: v,
-                    })
-                  }
-                  placeholder="e.g., 45"
-                  keyboardType="numeric"
-                  className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
-                />
-                <Text className="text-xs text-slate-500 mt-1">
-                  Days since last calving
-                </Text>
-              </View>
+            {/* Birth Date */}
+            <View>
+              <Text className="text-sm text-slate-600 mb-2">
+                Birth Date *
+              </Text>
+              <TextInput
+                value={formData.birthDate}
+                onChangeText={(v) =>
+                  setFormData({
+                    ...formData,
+                    birthDate: v,
+                  })
+                }
+                placeholder="YYYY-MM-DD"
+                className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
+              />
             </View>
-          </View>
 
-          {/* Notes */}
-          <View className="bg-white rounded-2xl p-6 border border-slate-100">
-            <Text className="text-slate-900 mb-4">
-              Additional Notes
-            </Text>
-            <TextInput
-              value={formData.notes}
-              onChangeText={(v) =>
-                setFormData({ ...formData, notes: v })
-              }
-              placeholder="Any special notes about this cow..."
-              multiline
-              numberOfLines={4}
-              className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl text-top"
-            />
+            {/* Color */}
+            <View>
+              <Text className="text-sm text-slate-600 mb-2">
+                Color (Optional)
+              </Text>
+              <TextInput
+                value={formData.color}
+                onChangeText={(v) =>
+                  setFormData({ ...formData, color: v })
+                }
+                placeholder="e.g., Black"
+                className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
+              />
+            </View>
+
+            {/* Weight */}
+            <View>
+              <Text className="text-sm text-slate-600 mb-2">
+                Weight (kg, optional)
+              </Text>
+              <TextInput
+                value={formData.weight}
+                onChangeText={(v) =>
+                  setFormData({ ...formData, weight: v })
+                }
+                keyboardType="numeric"
+                placeholder="e.g., 450"
+                className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
+              />
+            </View>
           </View>
 
           {/* Submit */}
           <Pressable
             onPress={handleSubmit}
-            disabled={!isFormValid || showSuccess}
+            disabled={!isFormValid || isCreating}
             className={`py-5 rounded-2xl items-center ${
-              isFormValid && !showSuccess
+              isFormValid && !isCreating
                 ? "bg-green-600"
                 : "bg-slate-300"
             }`}
           >
             <Text
               className={`text-lg ${
-                isFormValid && !showSuccess
+                isFormValid && !isCreating
                   ? "text-white"
                   : "text-slate-500"
               }`}
             >
-              {showSuccess ? "✓ Cow Added!" : "Add Cow to Farm"}
+              {isCreating ? "Saving..." : "Add Cow"}
             </Text>
           </Pressable>
 
           {!isFormValid && (
             <Text className="text-center text-sm text-slate-500">
-              * Please fill in all required fields
+              * Name, Breed, and Birth Date are required
             </Text>
           )}
         </View>
@@ -275,7 +268,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
               Cow Added Successfully!
             </Text>
             <Text className="text-sm text-slate-600 text-center">
-              {formData.name} has been registered to your farm
+              {formData.name} has been registered
             </Text>
           </View>
         </View>
