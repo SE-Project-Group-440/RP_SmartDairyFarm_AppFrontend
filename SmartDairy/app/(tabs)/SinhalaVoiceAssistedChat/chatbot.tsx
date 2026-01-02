@@ -1,5 +1,5 @@
-// App.tsx
-import React, { useState, useRef } from 'react';
+// ChatScreen.tsx
+import React, { useState, useRef } from "react";
 import {
   SafeAreaView,
   View,
@@ -8,120 +8,100 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  Platform,
-  Alert,
-} from 'react-native';
-import * as Speech from 'expo-speech';
+} from "react-native";
+import * as Speech from "expo-speech";
+import { askChat } from "../../../services/chatService";
 
-// Knowledge base
-const knowledgeBase: Record<string, { response: string; audio?: string }> = {
-  'ආහාර': {
-    response: 'ගවුන්ගේ ආහාර ගැන:\n🌱 තණකොළ: දිනකට ශරීර බරෙන් 2-3%\n🌾 පිදුරු: දිනකට 1-2 කිලෝ\n🥬 කොළ ආහාර: කස්සාව, ගිනිතිත්ත, ඉප්පොහා\n💧 ජලය: දිනකට ලීටර 30-50\n🧂 ලුණු: දිනකට ග්‍රෑම් 20-30\nසමතුලිත ආහාරයක් ගවුන්ට ගැනීම ඉතාමත් වැදගත්.',
-    audio: 'ගවුන්ගේ ආහාරයට තණකොළ, පිදුරු, කොළ ආහාර සහ ජලය අවශ්‍යයි.',
-  },
-  'කිරි': {
-    response: 'කිරි නිෂ්පාදනය වැඩි කරන ක්‍රම:\n🥛 නිසි ආහාර ගැනීම\n⏰ කාලානුකූල කිරි ගැනීම\n🏥 නිසි සෞඛ්‍ය රැකවරණය\n🛁 සනීපාරක්ෂාව\n🌡️ සුදුසු උෂ්ණත්වය\n💆‍♀️ ආතතිය අඩු කිරීම',
-    audio: 'කිරි නිෂ්පාදනය වැඩි කරන්න නිසි ආහාර සහ සනීපාරක්ෂාව වැදගත්.',
-  },
-  'රෝග': {
-    response: 'ගවුන්ගේ සාමාන්‍ය රෝග ලක්ෂණ:\n🌡️ උණ\n😴 සුස්තිකම\n👃 නාසාවේ ස්‍රාවය\n💧 අමාත්‍ය පාචනය\n🦵 කෙඳි ගැටගැසීම\n⚠️ වහාම වෛද්‍ය බලන්න',
-    audio: 'ගවුන්ගේ රෝග ලක්ෂණ උණ, සුස්තිකම, නාසාවේ ස්‍රාවය වැනි දේ.',
-  },
-  'සනීපාරක්ෂාව': {
-    response: 'ගවුන්ගේ සනීපාරක්ෂාව:\n🧼 දිනකට 2 වාරයක් අත් සෝදන්න\n🪣 උපකරණ පිරිසිදු කරන්න\n🏠 ගවත්ත පිරිසිදුව තබාගන්න\n💧 ශුද්ධ ජලය ලබාදෙන්න\n🧽 ශරීරය පිරිසිදු කරන්න',
-    audio: 'සනීපාරක්ෂාවට අත් සෝදන්න, උපකරණ පිරිසිදු කරන්න වැදගත්.',
-  },
-  'තෝරාගැනීම': {
-    response: 'හොඳ ගවයන් තෝරාගන්නේ:\n🐄 වර්ගය\n📏 ශරීර ගොඩනැගිල්ල\n🥛 කිරි නිෂ්පාදන ඉතිහාසය\n🏥 සෞඛ්‍ය තත්ත්වය\n🎯 වයස 2-6 අවුරුදු',
-    audio: 'හොඳ ගවයන් තෝරාගන්න වර්ගය, ශරීර ගොඩනැගිල්ල, සෞඛ්‍ය තත්ත්වය බලන්න.',
-  },
+type Message = {
+  id: number;
+  text: string;
+  isUser: boolean;
 };
 
 export default function ChatScreen() {
-  const [messages, setMessages] = useState<
-    { id: number; text: string; isUser: boolean }[]
-  >([
+  const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: 'ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා. ඔබට කතා කරන්න හෝ ටයිප් කරන්න පුළුවන්!',
+      text: "ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා. ඔබට ප්‍රශ්න අසන්න පුළුවන් 😊",
       isUser: false,
     },
   ]);
-  const [inputText, setInputText] = useState('');
+
+  const [inputText, setInputText] = useState("");
+  const [loading, setLoading] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
 
   const quickQuestions = [
-    'ගවුන්ගේ ආහාර කෙසේ දිය යුතුද?',
-    'කිරි නිෂ්පාදනය වැඩි කරන්නේ කෙසේද?',
-    'ගවුන්ගේ රෝග ලක්ෂණ මොනවාද?',
-    'ගවුන්ට සනීපාරක්ෂාව කෙසේද?',
-    'නව ගවයන් තෝරාගන්නේ කෙසේද?',
+    "ගවුන්ගේ ආහාර කෙසේ දිය යුතුද?",
+    "කිරි නිෂ්පාදනය වැඩි කරන්නේ කෙසේද?",
+    "ගවුන්ගේ රෝග ලක්ෂණ මොනවාද?",
+    "ගවුන්ට සනීපාරක්ෂාව කෙසේද?",
+    "නව ගවයන් තෝරාගන්නේ කෙසේද?",
   ];
 
-  const findResponse = (question: string) => {
-    const lowerQuestion = question.toLowerCase();
-    for (let keyword in knowledgeBase) {
-      if (
-        lowerQuestion.includes(keyword) ||
-        (lowerQuestion.includes('feed') || lowerQuestion.includes('food')) &&
-          keyword === 'ආහාර' ||
-        lowerQuestion.includes('milk') && keyword === 'කිරි' ||
-        (lowerQuestion.includes('disease') || lowerQuestion.includes('sick')) &&
-          keyword === 'රෝග' ||
-        (lowerQuestion.includes('clean') || lowerQuestion.includes('hygiene')) &&
-          keyword === 'සනීපාරක්ෂාව' ||
-        (lowerQuestion.includes('select') || lowerQuestion.includes('choose')) &&
-          keyword === 'තෝරාගැනීම'
-      ) {
-        return knowledgeBase[keyword];
-      }
-    }
-    return {
-      response:
-        'මට ඔබගේ ප්‍රශ්නය හරියටම තේරුණේ නෑ. කරුණාකර වඩාත් නිශ්චිත ප්‍රශ්නයක් අසන්න.',
-      audio: 'මට ඔබගේ ප්‍රශ්නය හරියටම තේරුණේ නෑ.',
-    };
-  };
-
-  const sendMessage = (text?: string) => {
-    const message = text || inputText;
+  // 🔹 MAIN SEND FUNCTION (REAL MODEL)
+  const sendMessage = async (text?: string) => {
+    const message = text ?? inputText;
     if (!message.trim()) return;
 
-    const userMessage = { id: Date.now(), text: message.trim(), isUser: true };
-    setMessages((prev) => [...prev, userMessage]);
-    setInputText('');
+    const userMsg: Message = {
+      id: Date.now(),
+      text: message.trim(),
+      isUser: true,
+    };
 
-    setTimeout(() => {
-      const botResp = findResponse(message);
-      setMessages((prev) => [
+    setMessages(prev => [...prev, userMsg]);
+    setInputText("");
+    setLoading(true);
+
+    try {
+      const data = await askChat(userMsg.text);
+
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: data.answer,
+        isUser: false,
+      };
+
+      setMessages(prev => [...prev, botMsg]);
+
+      // 🔊 Speak Sinhala answer
+      //Speech.speak(data.answer, { language: "si-LK" });
+    } catch (err) {
+      setMessages(prev => [
         ...prev,
-        { id: Date.now() + 1, text: botResp.response, isUser: false },
+        {
+          id: Date.now() + 2,
+          text: "දෝෂයක් සිදු විය. කරුණාකර නැවත උත්සාහ කරන්න.",
+          isUser: false,
+        },
       ]);
-      if (botResp.audio) Speech.speak(botResp.audio, { language: 'si-LK' });
-    }, 500);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const clearChat = () => {
     setMessages([
       {
         id: 1,
-        text: 'ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා. ඔබට කතා කරන්න හෝ ටයිප් කරන්න පුළුවන්!',
+        text: "ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා 😊",
         isUser: false,
       },
     ]);
   };
 
-  const askQuickQuestion = (question: string) => {
-    sendMessage(question);
-  };
-
   return (
     <SafeAreaView style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🐄 කිරි ගොවිතැන් උපදේශක</Text>
-        <Text style={styles.headerSubtitle}>Dairy Farm Educational Assistant</Text>
+        <Text style={styles.headerSubtitle}>
+          AI Dairy Farm Assistant (Sinhala)
+        </Text>
       </View>
 
+      {/* Chat */}
       <ScrollView
         style={styles.chatContainer}
         ref={scrollViewRef}
@@ -129,41 +109,48 @@ export default function ChatScreen() {
           scrollViewRef.current?.scrollToEnd({ animated: true })
         }
       >
-        {messages.map((msg) => (
+        {messages.map(msg => (
           <View
             key={msg.id}
-            style={[styles.message, msg.isUser ? styles.userMessage : styles.botMessage]}
+            style={[
+              styles.message,
+              msg.isUser ? styles.userMessage : styles.botMessage,
+            ]}
           >
-            {!msg.isUser && <View style={styles.avatarBot}>🤖</View>}
+            {!msg.isUser && <Text style={styles.avatar}>🤖</Text>}
             <View
               style={[
-                styles.messageContent,
+                styles.bubble,
                 msg.isUser ? styles.userBubble : styles.botBubble,
               ]}
             >
-              <Text style={{ color: msg.isUser ? '#fff' : '#333' }}>{msg.text}</Text>
+              <Text style={{ color: msg.isUser ? "#fff" : "#333" }}>
+                {msg.text}
+              </Text>
             </View>
-            {msg.isUser && <View style={styles.avatarUser}>👤</View>}
+            {msg.isUser && <Text style={styles.avatar}>👤</Text>}
           </View>
         ))}
+
+        {loading && <Text style={{ marginTop: 10 }}>🤖 සිතමින්...</Text>}
       </ScrollView>
 
+      {/* Input */}
       <View style={styles.inputSection}>
-        <View style={styles.inputContainer}>
+        <View style={styles.inputRow}>
           <TextInput
             style={styles.textInput}
             value={inputText}
             onChangeText={setInputText}
-            placeholder="ඔබගේ ප්‍රශ්නය යොමු කරන්න..."
+            placeholder="ඔබගේ ප්‍රශ්නය ඇතුළත් කරන්න..."
             onSubmitEditing={() => sendMessage()}
-            returnKeyType="send"
           />
           <TouchableOpacity style={styles.sendBtn} onPress={() => sendMessage()}>
-            <Text style={{ color: 'white', fontSize: 16 }}>📤 යවන්න</Text>
+            <Text style={{ color: "white" }}>📤</Text>
           </TouchableOpacity>
         </View>
 
-        
+        {/* Controls */}
         <View style={styles.controls}>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: '#17a2b8', marginRight: 10 }]}
@@ -179,67 +166,71 @@ export default function ChatScreen() {
           </TouchableOpacity>
         </View>
 
-        <Text style={{ color: 'black', marginTop: 20,fontWeight: 'bold' }}>ඉක්මන් ප්‍රශ්න :</Text>
-
-
-        <View style={styles.quickQuestions}>  
+        {/* Quick Questions */}
+        <Text style={styles.quickTitle}>ඉක්මන් ප්‍රශ්න</Text>
+        <View style={styles.quickQuestions}>
           {quickQuestions.map((q, i) => (
             <TouchableOpacity
               key={i}
               style={styles.quickBtn}
-              onPress={() => askQuickQuestion(q)}
+              onPress={() => sendMessage(q)}
             >
               <Text>{q}</Text>
             </TouchableOpacity>
           ))}
-          
         </View>
-
-        
-
       </View>
     </SafeAreaView>
   );
 }
 
+/* ---------------- STYLES ---------------- */
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#667eea' },
-  header: { padding: 20, backgroundColor: '#4CAF50', alignItems: 'center' },
-  headerTitle: { fontSize: 24, fontWeight: 'bold', color: 'white' },
-  headerSubtitle: { fontSize: 14, color: 'white', opacity: 0.9 },
-  chatContainer: { flex: 1, padding: 10, backgroundColor: '#f8f9fa' },
-  message: { flexDirection: 'row', marginBottom: 10, alignItems: 'flex-end' },
-  userMessage: { justifyContent: 'flex-end' },
-  botMessage: { justifyContent: 'flex-start' },
-  messageContent: { maxWidth: '70%', padding: 12, borderRadius: 20 },
-  userBubble: { backgroundColor: '#007bff', borderBottomRightRadius: 5 },
-  botBubble: { backgroundColor: 'white', borderWidth: 1, borderColor: '#e9ecef', borderBottomLeftRadius: 5 },
-  avatarUser: { marginLeft: 5 },
-  avatarBot: { marginRight: 5 },
-  inputSection: { padding: 10, backgroundColor: 'white' },
-  inputContainer: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  container: { flex: 1, backgroundColor: "#f1f5f9" },
+  header: { padding: 20, backgroundColor: "#16a34a", alignItems: "center" },
+  headerTitle: { fontSize: 22, fontWeight: "bold", color: "white" },
+  headerSubtitle: { fontSize: 13, color: "white", opacity: 0.9 },
+
+  chatContainer: { flex: 1, padding: 10 },
+  message: { flexDirection: "row", marginBottom: 10 },
+  userMessage: { justifyContent: "flex-end" },
+  botMessage: { justifyContent: "flex-start" },
+  bubble: { maxWidth: "70%", padding: 12, borderRadius: 18 },
+  userBubble: { backgroundColor: "#2563eb", borderBottomRightRadius: 4 },
+  botBubble: {
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
+    borderBottomLeftRadius: 4,
+  },
+  avatar: { marginHorizontal: 6, fontSize: 18 },
+
+  inputSection: { padding: 10, backgroundColor: "white" },
+  inputRow: { flexDirection: "row", alignItems: "center", gap: 8 },
   textInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#e9ecef',
+    borderColor: "#e5e7eb",
     borderRadius: 25,
     padding: 12,
   },
   sendBtn: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#16a34a",
     padding: 12,
     borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  quickQuestions: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 10, gap: 5 },
+
+  controls: { flexDirection: "row", marginTop: 10 },
+  btn: { padding: 10, borderRadius: 20 },
+
+  quickTitle: { marginTop: 15, fontWeight: "bold" },
+  quickQuestions: { flexDirection: "row", flexWrap: "wrap", marginTop: 8 },
   quickBtn: {
-    backgroundColor: '#e9ecef',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    margin: 3,
+    backgroundColor: "#e5e7eb",
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 18,
+    margin: 4,
   },
-  controls: { flexDirection: 'row', marginTop: 10 },
-  btn: { padding: 12, borderRadius: 25, justifyContent: 'center', alignItems: 'center' },
 });
