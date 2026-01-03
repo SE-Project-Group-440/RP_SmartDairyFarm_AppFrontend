@@ -66,7 +66,7 @@ export function DairyDashboard({
                 50.9L
               </Text>
               <Text className="text-xs text-slate-600">
-                Today's Milk
+                Todays Milk
               </Text>
             </View>
 
