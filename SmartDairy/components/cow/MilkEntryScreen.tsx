@@ -36,6 +36,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
   const [notes, setNotes] = useState("");
 
   const [success, setSuccess] = useState(false);
+  const [result, setResult] = useState<any>(null); 
 
   useEffect(() => {
     fetchCows();
@@ -43,20 +44,18 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
 
   const dailyMilk =
     Number(morning || 0) +
-    Number(evening || 0) ;
+    Number(evening || 0);
 
   const filteredCows = useMemo(() => {
     return cows.filter((c) =>
-      `${c.name} ${c.breed}`
-        .toLowerCase()
-        .includes(search.toLowerCase()),
+      `${c.name} ${c.breed}`.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, cows]);
 
   const handleSubmit = async () => {
     if (!cowId) return;
 
-    await submitMilk({
+    const response = await submitMilk({
       cowId,
       morning: Number(morning || 0),
       evening: Number(evening || 0),
@@ -64,12 +63,15 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
       notes,
     });
 
+    setResult(response); 
     setSuccess(true);
+
+    
+
     setMorning("");
     setEvening("");
     setNotes("");
 
-    setTimeout(() => setSuccess(false), 1500);
   };
 
   return (
@@ -130,6 +132,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
             {dailyMilk.toFixed(1)} L
           </Text>
         </View>
+
 
         {/* Notes */}
         <TextInput
@@ -198,16 +201,79 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
       </Modal>
 
       {/* Success Modal */}
-      <Modal visible={success} transparent>
-        <View className="flex-1 bg-black/30 items-center justify-center">
-          <View className="bg-white p-8 rounded-3xl items-center">
-            <Check size={48} color="#16a34a" />
-            <Text className="text-xl mt-2">
-              Saved Successfully
+      <Modal visible={success} transparent animationType="fade">
+  <View className="flex-1 bg-black/30 items-center justify-center">
+    <View className="bg-white p-6 rounded-3xl w-[90%]">
+      {/* Success Icon */}
+      <View className="items-center mb-4">
+        <Check size={48} color="#16a34a" />
+        <Text className="text-xl mt-2 font-semibold">
+          Saved Successfully
+        </Text>
+      </View>
+
+      {/* Recommendation */}
+      {result?.recommendation && (
+        <View
+          className={`rounded-2xl p-4 border mb-4 ${
+            result.recommendation.color === "green"
+              ? "bg-green-100 border-green-300"
+              : result.recommendation.color === "orange"
+              ? "bg-orange-100 border-orange-300"
+              : "bg-blue-100 border-blue-300"
+          }`}
+        >
+          <Text className="text-xs text-slate-600 mb-1">
+            AI Milk Yield Insight
+          </Text>
+
+          <Text className="text-lg font-semibold mb-2">
+            {result.recommendation.title}
+          </Text>
+
+          <Text className="text-sm text-slate-700 mb-3">
+            {result.recommendation.message}
+          </Text>
+
+          <View className="flex-row justify-between mb-3">
+            <Text className="text-sm text-slate-600">
+              Predicted:{" "}
+              <Text className="font-semibold">
+                {result.recommendation.predictedMilk} L
+              </Text>
+            </Text>
+
+            <Text className="text-sm text-slate-600">
+              Actual:{" "}
+              <Text className="font-semibold">
+                {result.recommendation.actualMilk} L
+              </Text>
             </Text>
           </View>
+
+          {result.recommendation.actions.map(
+            (action: string, i: number) => (
+              <Text key={i} className="text-sm text-slate-700">
+                • {action}
+              </Text>
+            )
+          )}
         </View>
-      </Modal>
+      )}
+
+      {/* ✅ Close Button */}
+      <Pressable
+        onPress={() => setSuccess(false)}
+        className="bg-green-600 py-3 rounded-xl items-center"
+      >
+        <Text className="text-white text-lg font-semibold">
+          Done
+        </Text>
+      </Pressable>
+    </View>
+  </View>
+</Modal>
+
     </>
   );
 }

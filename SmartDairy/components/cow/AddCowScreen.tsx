@@ -109,19 +109,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
         </View>
 
         <View className="px-6 py-6 space-y-6">
-          {/* Photo */}
-          <View className="bg-white rounded-2xl p-6 border border-slate-100">
-            <Text className="text-sm text-slate-600 mb-3">
-              Cow Photo (Optional)
-            </Text>
-
-            <Pressable className="h-32 border-2 border-dashed border-slate-300 rounded-xl items-center justify-center gap-2">
-              <Camera size={32} color="#94a3b8" />
-              <Text className="text-sm text-slate-600">
-                Tap to add photo
-              </Text>
-            </Pressable>
-          </View>
+          
 
           {/* Basic Info */}
           <View className="bg-white rounded-2xl p-6 border border-slate-100 space-y-4">
