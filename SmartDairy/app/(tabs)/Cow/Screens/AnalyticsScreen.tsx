@@ -54,7 +54,7 @@ const monthlyChart = {
 
 /* ---------- SCREEN ---------- */
 
-export function AnalyticsScreen() {
+export default function AnalyticsScreen() {
   const [timeframe, setTimeframe] = useState<"week" | "month">("week");
 
   const chartData = timeframe === "week" ? weeklyChart : monthlyChart;

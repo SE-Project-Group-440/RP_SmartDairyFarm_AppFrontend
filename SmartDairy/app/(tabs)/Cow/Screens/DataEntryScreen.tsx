@@ -22,7 +22,7 @@ const cows = [
   { id: "3", name: "Daisy" },
 ];
 
-export function DataEntryScreen() {
+export default function DataEntryScreen() {
   const [selectedCow, setSelectedCow] = useState("1");
   const [session, setSession] = useState<"morning" | "evening">("morning");
   const [milkAmount, setMilkAmount] = useState(15);
