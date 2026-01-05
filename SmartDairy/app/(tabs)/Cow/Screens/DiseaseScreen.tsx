@@ -13,6 +13,9 @@ import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+
 
 const uriToBlob = async (uri: string): Promise<Blob> => {
   const response = await fetch(uri);
@@ -25,6 +28,7 @@ export default function DiseaseScreen() {
   const [symptoms, setSymptoms] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const navigation = useNavigation();
 
   /* -------------------- Pick Cattle Image -------------------- */
   const pickImage = async () => {
@@ -43,11 +47,13 @@ export default function DiseaseScreen() {
       copyToCacheDirectory: true,
     });
 
-    if (res.type === "success") {
+    if (!res.canceled && res.assets?.length > 0) {
+      const file = res.assets[0];
+
       setReport({
-        uri: res.uri,
-        name: res.name,
-        mimeType: res.mimeType,
+        uri: file.uri,
+        name: file.name,
+        mimeType: file.mimeType,
       });
     }
   };
@@ -102,8 +108,8 @@ export default function DiseaseScreen() {
 
       const baseURL =
         Platform.OS === "android" || Platform.OS === "ios"
-          ? "http://192.168.100.238:8000"
-          : "http://192.168.100.238:8000"; // Update to your backend URL
+          ? "http://192.168.1.15:8000"
+          : "http://192.168.1.15:8000"; // Update to your backend URL
 
       const res = await axios.post(
         `${baseURL}/cattle/disease/predict`,
@@ -130,13 +136,23 @@ export default function DiseaseScreen() {
   return (
     <ScrollView className="flex-1 bg-slate-100">
       {/* Header */}
-      <View className="bg-green-600 px-6 pt-12 pb-8 rounded-b-3xl">
-        <Text className="text-white text-lg font-semibold text-center">
-          Disease Prediction
-        </Text>
-        <Text className="text-green-100 text-center mt-1 text-sm">
-          Upload information for AI analysis
-        </Text>
+      <View className="bg-green-600 px-6 pt-12 pb-8 rounded-b-3xl flex-row items-center">
+        {/* Back Button */}
+        <Pressable
+          onPress={() => navigation.goBack()}
+          className="absolute left-6 top-12"
+        >
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </Pressable>
+
+        <View className="flex-1">
+          <Text className="text-white text-lg font-semibold text-center">
+            Disease Prediction
+          </Text>
+          <Text className="text-green-100 text-center mt-1 text-sm">
+            Upload information for AI analysis
+          </Text>
+        </View>
       </View>
 
       {/* Content */}
