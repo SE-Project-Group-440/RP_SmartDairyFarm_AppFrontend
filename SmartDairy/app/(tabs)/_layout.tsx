@@ -10,6 +10,8 @@ import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 
 import  DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen";
 import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
+import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Cow/Screens/DiseaseHomeScreen";
+import DiseaseScreenComponent from "../(tabs)/Cow/Screens/DiseaseScreen";
 
 export type MainTab =
   | "dairy"
@@ -35,6 +37,8 @@ export default function LactationCurveHome() {
     useState<MainTab>("dairy");
   const [dairyScreen, setDairyScreen] =
     useState<DairyScreen>("dashboard");
+  const [diseaseScreen, setDiseaseScreen] =
+    useState<DiseaseScreen>("home");
   const [selectedCowId, setSelectedCowId] =
     useState<string | null>(null);
 
@@ -74,19 +78,11 @@ export default function LactationCurveHome() {
         );
 
       case "Dinidi":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <TrendingUp size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Dinidi
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-      );
+        return diseaseScreen === "home" ? (
+          <DiseaseHomeScreen onNavigate={setDiseaseScreen} />
+        ) : (
+          <DiseaseScreenComponent />
+        );
 
       case "profile":
         return <ProfileScreen />;
@@ -195,7 +191,10 @@ export default function LactationCurveHome() {
 
           {/* Feature 4 */}
           <Pressable
-            onPress={() => setCurrentTab("Dinidi")}
+            onPress={() => {
+              setCurrentTab("Dinidi");
+              setDiseaseScreen("home");
+            }}
             className={`items-center px-4 py-2 rounded-xl ${
               currentTab === "Dinidi"
                 ? "bg-green-50"
