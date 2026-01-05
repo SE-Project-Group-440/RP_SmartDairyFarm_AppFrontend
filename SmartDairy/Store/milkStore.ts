@@ -14,7 +14,6 @@ interface MilkState {
   error: string | null;
   submitMilk: (data: MilkPayload) => Promise<void>;
 }
-
 export const useMilkStore = create<MilkState>((set) => ({
   isSubmitting: false,
   error: null,
@@ -22,7 +21,10 @@ export const useMilkStore = create<MilkState>((set) => ({
   submitMilk: async (data) => {
     try {
       set({ isSubmitting: true, error: null });
-      await api.post("/milktoml", data);
+
+      const res = await api.post("/milk/milktoml", data);
+
+      return res.data; // ✅ THIS IS THE KEY FIX
     } catch (err: any) {
       set({
         error:
