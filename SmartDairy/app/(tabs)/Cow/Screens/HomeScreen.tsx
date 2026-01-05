@@ -25,7 +25,7 @@ const mockCows = [
   { id: "3", name: "Daisy", status: "healthy", milk: 20.1, lactationDay: 201 },
 ];
 
-export function HomeScreen({ onCowSelect, onNavigate }: HomeScreenProps) {
+export default function HomeScreen({ onCowSelect, onNavigate }: HomeScreenProps) {
   const currentHour = new Date().getHours();
   const greeting =
     currentHour < 12

@@ -40,3 +40,29 @@ export const useCowStore = create<CowState>((set) => ({
     }
   },
 }));
+export interface Cow {
+  _id: string;
+  name: string;
+  breed: string;
+}
+
+interface CowListState {
+  cows: Cow[];
+  isLoading: boolean;
+  fetchCows: () => Promise<void>;
+}
+
+export const useCowListStore = create<CowListState>((set) => ({
+  cows: [],
+  isLoading: false,
+
+  fetchCows: async () => {
+    try {
+      set({ isLoading: true });
+      const res = await api.get("/cows");
+      set({ cows: res.data });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+}));

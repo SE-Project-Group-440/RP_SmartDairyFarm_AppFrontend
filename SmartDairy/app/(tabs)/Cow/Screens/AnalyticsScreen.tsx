@@ -10,64 +10,65 @@ import {
   TrendingUp,
   TrendingDown,
   Lightbulb,
-  Calendar,
 } from "lucide-react-native";
 import { LineChart } from "react-native-chart-kit";
 
 const screenWidth = Dimensions.get("window").width;
 
-/* ---------- DATA ---------- */
+/* ================= HARDCODED DATA ================= */
 
-const weeklyChart = {
-  labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  datasets: [
-    {
-      data: [48, 52, 49, 47, 51, 50, 53],
-      color: () => "#10b981",
-      strokeWidth: 3,
-    },
-    {
-      data: [50, 50, 50, 50, 50, 50, 50],
-      color: () => "#94a3b8",
-      strokeWidth: 2,
-    },
-  ],
-  legend: ["Actual", "Expected"],
-};
+// WEEKLY
+const weeklyActual = [48, 52, 49, 47, 51, 50, 53];
+const weeklyPredicted = [50, 50, 50, 50, 50, 50, 50];
 
-const monthlyChart = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-  datasets: [
-    {
-      data: [1420, 1380, 1510, 1480, 1550],
-      color: () => "#10b981",
-      strokeWidth: 3,
-    },
-    {
-      data: [1450, 1450, 1450, 1450, 1450],
-      color: () => "#94a3b8",
-      strokeWidth: 2,
-    },
-  ],
-  legend: ["Actual", "Expected"],
-};
+// MONTHLY
+const monthlyActual = [1420, 1380, 1510, 1480, 1550];
+const monthlyPredicted = [1450, 1450, 1450, 1450, 1450];
 
-/* ---------- SCREEN ---------- */
+// TOTALS
+const actualTotalSoFar = 350.5; // liters
+const predictedTotal = 365.0; // liters
+const deviation = predictedTotal - actualTotalSoFar;
 
-export function AnalyticsScreen() {
+/* ================= SCREEN ================= */
+
+export default function AnalyticsScreen() {
   const [timeframe, setTimeframe] = useState<"week" | "month">("week");
 
-  const chartData = timeframe === "week" ? weeklyChart : monthlyChart;
+  const labels =
+    timeframe === "week"
+      ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      : ["Jan", "Feb", "Mar", "Apr", "May"];
+
+  const actualData =
+    timeframe === "week" ? weeklyActual : monthlyActual;
+
+  const predictedData =
+    timeframe === "week" ? weeklyPredicted : monthlyPredicted;
+
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        data: actualData,
+        color: () => "#16a34a", // green
+        strokeWidth: 3,
+      },
+      {
+        data: predictedData,
+        color: () => "#2563eb", // blue
+        strokeWidth: 2,
+      },
+    ],
+    legend: ["Actual", "Predicted"],
+  };
 
   const chartConfig = {
     backgroundGradientFrom: "#ffffff",
     backgroundGradientTo: "#ffffff",
-    color: (opacity = 1) => `rgba(15, 23, 42, ${opacity})`,
+    color: () => "#0f172a",
     labelColor: () => "#64748b",
-    strokeWidth: 3,
-    propsForDots: {
-      r: "4",
-    },
+    propsForDots: { r: "4" },
   };
 
   return (
@@ -78,12 +79,12 @@ export function AnalyticsScreen() {
           Analytics & Insights
         </Text>
         <Text className="text-green-100">
-          Track your farm's performance
+          Actual vs Predicted Milk Production
         </Text>
       </View>
 
       <View className="px-6 py-6 space-y-6">
-        {/* Timeframe Selector */}
+        {/* Timeframe */}
         <View className="flex-row gap-3">
           {["week", "month"].map((t) => (
             <Pressable
@@ -106,26 +107,34 @@ export function AnalyticsScreen() {
           ))}
         </View>
 
+        {/* Totals */}
+        <View className="flex-row gap-3">
+          <SummaryCard
+            title="Actual So Far"
+            value={`${actualTotalSoFar} L`}
+            subtitle="Measured output"
+          />
+          <SummaryCard
+            title="Predicted Total"
+            value={`${predictedTotal} L`}
+            subtitle="Projected output"
+          />
+        </View>
+
+        <SummaryCard
+          title="Deviation"
+          value={`${deviation > 0 ? "+" : ""}${deviation.toFixed(1)} L`}
+          subtitle={deviation > 0 ? "Below target" : "Above target"}
+        />
+
         {/* Chart */}
         <View className="bg-white rounded-2xl p-5 border border-slate-100">
-          <View className="flex-row justify-between mb-4">
-            <View>
-              <Text className="text-slate-900 mb-1">
-                Milk Production
-              </Text>
-              <Text className="text-sm text-slate-500">
-                Expected vs Actual
-              </Text>
-            </View>
-            <View className="items-end">
-              <Text className="text-2xl text-slate-900">
-                350.5L
-              </Text>
-              <Text className="text-xs text-green-600">
-                +3.2% this week
-              </Text>
-            </View>
-          </View>
+          <Text className="text-slate-900 mb-1">
+            Milk Production Curve
+          </Text>
+          <Text className="text-sm text-slate-500 mb-4">
+            Actual vs Predicted
+          </Text>
 
           <LineChart
             data={chartData}
@@ -142,90 +151,33 @@ export function AnalyticsScreen() {
 
         <InsightCard
           icon={<TrendingUp size={20} color="#16a34a" />}
-          title="Production Above Target"
-          text="This week's production is 3.2% higher than expected."
+          title="Production On Track"
+          text="Actual production is closely following the predicted curve."
           bg="bg-green-50"
           border="border-green-200"
         />
 
         <InsightCard
           icon={<Lightbulb size={20} color="#2563eb" />}
-          title="Best Performing Day"
-          text="Sunday had the highest yield at 53L."
+          title="Projection Insight"
+          text="Final yield is expected to reach 365L by period end."
           bg="bg-blue-50"
           border="border-blue-200"
         />
 
         <InsightCard
           icon={<TrendingDown size={20} color="#ea580c" />}
-          title="Weekly Low Point"
-          text="Thursday dipped 6% below weekly average."
+          title="Minor Deviation"
+          text="Current output is slightly below predicted levels."
           bg="bg-orange-50"
           border="border-orange-200"
         />
-
-        {/* Individual Performance */}
-        <View className="bg-white rounded-2xl p-5 border border-slate-100">
-          <View className="flex-row justify-between mb-4">
-            <Text className="text-slate-900">
-              Individual Performance
-            </Text>
-            <Text className="text-green-600 text-sm">
-              See All
-            </Text>
-          </View>
-
-          {[
-            { name: "Daisy", milk: 20.1, trend: "+8%", up: true },
-            { name: "Lassie", milk: 18.5, trend: "+2%", up: true },
-            { name: "Bella", milk: 12.3, trend: "-12%", up: false },
-          ].map((cow, i) => (
-            <View key={i} className="flex-row items-center gap-4 mb-4">
-              <View className="w-10 h-10 bg-amber-200 rounded-xl items-center justify-center">
-                🐄
-              </View>
-
-              <View className="flex-1">
-                <Text className="text-slate-900 mb-1">
-                  {cow.name}
-                </Text>
-                <View className="h-2 bg-slate-100 rounded-full">
-                  <View
-                    className={`h-2 rounded-full ${
-                      cow.up ? "bg-green-500" : "bg-orange-500"
-                    }`}
-                    style={{ width: `${(cow.milk / 25) * 100}%` }}
-                  />
-                </View>
-              </View>
-
-              <View className="items-end">
-                <Text className="text-slate-900">
-                  {cow.milk}L
-                </Text>
-                <Text
-                  className={`text-xs ${
-                    cow.up ? "text-green-600" : "text-orange-600"
-                  }`}
-                >
-                  {cow.trend}
-                </Text>
-              </View>
-            </View>
-          ))}
-        </View>
-
-        {/* Summary */}
-        <View className="flex-row gap-3">
-          <SummaryCard title="Avg per Cow" value="17.0L" subtitle="+1.5L" />
-          <SummaryCard title="Best Day" value="53L" subtitle="Sunday" />
-        </View>
       </View>
     </ScrollView>
   );
 }
 
-/* ---------- COMPONENTS ---------- */
+/* ================= COMPONENTS ================= */
 
 function InsightCard({
   icon,
