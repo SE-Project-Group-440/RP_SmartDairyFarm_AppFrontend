@@ -7,8 +7,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 
-import { DairyManagementScreen } from "./Screens/DairyManagementScreen";
-import { ProfileScreen } from "./Screens/ProfileScreen";
+import  DairyManagementScreen  from "./Screens/DairyManagementScreen";
+import ProfileScreen from "./Screens/ProfileScreen";
 
 export type MainTab =
   | "dairy"

@@ -75,7 +75,7 @@ const mockRecommendations: Recommendation[] = [
   },
 ];
 
-export function RecommendationsScreen() {
+export default function RecommendationsScreen() {
   const [completedIds, setCompletedIds] = useState<
     Set<string>
   >(new Set());

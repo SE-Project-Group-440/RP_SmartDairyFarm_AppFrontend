@@ -17,7 +17,7 @@ import {
 } from "lucide-react-native";
 import { useAuthStore } from '@/Store/auth.store';
 
-export function ProfileScreen() {
+export default function ProfileScreen() {
   const [language, setLanguage] = useState("english");
   const [darkMode, setDarkMode] = useState(false);
   const logout = useAuthStore((s) => s.logout);

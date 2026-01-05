@@ -3,7 +3,7 @@ import React from "react";
 import { DairyDashboard } from "../../../../components/cow/DairyDashboard";
 import { AddCowScreen } from "../../../../components/cow/AddCowScreen";
 import { CowListScreen } from "../../../../components/cow/CowListScreen";
-import { CowProfileScreen } from "./CowProfileScreen";
+import CowProfileScreen from "../../Cow/Screens/CowProfileScreen";
 import { MilkEntryScreen } from "../../../../components/cow/MilkEntryScreen";
 import { AnalyticsForecastingScreen } from "../../../../components/cow/AnalyticsForecastingScreen";
 import { AlertsRecommendationsScreen } from "../../../../components/cow/AlertsRecommendationsScreen";
@@ -18,7 +18,7 @@ interface DairyManagementScreenProps {
   onCowSelect: (cowId: string) => void;
 }
 
-export function DairyManagementScreen({
+export default function DairyManagementScreen({
   currentScreen,
   onNavigate,
   selectedCowId,

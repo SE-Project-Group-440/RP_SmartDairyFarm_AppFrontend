@@ -57,7 +57,7 @@ const mockAlerts: Alert[] = [
   },
 ];
 
-export function AlertsScreen({ onCowSelect }: AlertsScreenProps) {
+export default function AlertsScreen({ onCowSelect }: AlertsScreenProps) {
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
 
   const activeAlerts = mockAlerts.filter(
