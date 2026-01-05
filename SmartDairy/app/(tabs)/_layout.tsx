@@ -37,7 +37,7 @@ export type DairyScreen =
 
 export default function LactationCurveHome() {
   const [currentTab, setCurrentTab] =
-    useState<MainTab>("dairy");
+    useState<MainTab>("Dairy");
   const [dairyScreen, setDairyScreen] =
     useState<DairyScreen>("dashboard");
   const [diseaseScreen, setDiseaseScreen] =
@@ -52,7 +52,7 @@ export default function LactationCurveHome() {
 
   const renderMainContent = () => {
     switch (currentTab) {
-      case "dairy":
+      case "Dairy":
         return (
           <DairyManagementScreen
             currentScreen={dairyScreen}
@@ -68,7 +68,7 @@ export default function LactationCurveHome() {
       case "HeatStress":
         return <CattleListScreen />;
 
-      case "Dinidi":
+      case "Health":
         return diseaseScreen === "home" ? (
           <DiseaseHomeScreen onNavigate={setDiseaseScreen} />
         ) : (
@@ -96,11 +96,11 @@ export default function LactationCurveHome() {
           {/* Dairy */}
           <Pressable
             onPress={() => {
-              setCurrentTab("dairy");
+              setCurrentTab("Dairy");
               setDairyScreen("dashboard");
             }}
             className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "dairy"
+              currentTab === "Dairy"
                 ? "bg-green-50"
                 : ""
             }`}
@@ -108,14 +108,14 @@ export default function LactationCurveHome() {
             <Milk
               size={24}
               color={
-                currentTab === "dairy"
+                currentTab === "Dairy"
                   ? "#15803d"
                   : "#475569"
               }
             />
             <Text
               className={`text-xs ${
-                currentTab === "dairy"
+                currentTab === "Dairy"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
@@ -142,13 +142,15 @@ export default function LactationCurveHome() {
               }
             />
             <Text
+            numberOfLines={2}
               className={`text-xs ${
                 currentTab === "Chatbot"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
             >
-              කිරි ගොවිතැන් උපදේශක
+              
+              උපදේශක
             </Text>
           </Pressable>
 
@@ -176,18 +178,18 @@ export default function LactationCurveHome() {
                   : "text-slate-600"
               }`}
             >
-              Anjana
+              HeatStress
             </Text>
           </Pressable>
 
           {/* Feature 4 */}
           <Pressable
             onPress={() => {
-              setCurrentTab("Dinidi");
+              setCurrentTab("Health");
               setDiseaseScreen("home");
             }}
             className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Dinidi"
+              currentTab === "Health"
                 ? "bg-green-50"
                 : ""
             }`}
@@ -195,19 +197,19 @@ export default function LactationCurveHome() {
             <TrendingUp
               size={24}
               color={
-                currentTab === "Dinidi"
+                currentTab === "Health"
                   ? "#15803d"
                   : "#475569"
               }
             />
             <Text
               className={`text-xs ${
-                currentTab === "Dinidi"
+                currentTab === "Health"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
             >
-              Dinidi
+              Health
             </Text>
           </Pressable>
 
