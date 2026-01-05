@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
+  Image
 } from "react-native";
 import * as Speech from "expo-speech";
 import { askChat } from "../../../services/chatService";
@@ -85,7 +86,7 @@ export default function ChatScreen() {
     setMessages([
       {
         id: 1,
-        text: "ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා 😊",
+        text: "ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා. ඔබට ප්‍රශ්න අසන්න පුළුවන් ",
         isUser: false,
       },
     ]);
@@ -96,9 +97,9 @@ export default function ChatScreen() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🐄 කිරි ගොවිතැන් උපදේශක</Text>
-        <Text style={styles.headerSubtitle}>
+        {/* <Text style={styles.headerSubtitle}>
           AI Dairy Farm Assistant (Sinhala)
-        </Text>
+        </Text> */}
       </View>
 
       {/* Chat */}
@@ -117,7 +118,12 @@ export default function ChatScreen() {
               msg.isUser ? styles.userMessage : styles.botMessage,
             ]}
           >
-            {!msg.isUser && <Text style={styles.avatar}>🤖</Text>}
+            {!msg.isUser && <Text style={styles.avatar}>
+              <Image
+                source={require("../../../assets/images/chatbot.png")}
+                style={styles.image}
+            
+              /></Text>}
             <View
               style={[
                 styles.bubble,
@@ -128,11 +134,21 @@ export default function ChatScreen() {
                 {msg.text}
               </Text>
             </View>
-            {msg.isUser && <Text style={styles.avatar}>👤</Text>}
+            {msg.isUser && <Text style={styles.avatar}>
+              <Image
+                source={require("../../../assets/images/user.png")}
+                style={styles.image}
+            
+              /></Text>}
           </View>
         ))}
 
-        {loading && <Text style={{ marginTop: 10 }}>🤖 සිතමින්...</Text>}
+        {loading && <Text style={{ marginTop: 10 }}>
+          <Image
+                source={require("../../../assets/images/process.png")}
+                style={styles.image}
+            
+              />සිතමින්....</Text>}
       </ScrollView>
 
       {/* Input */}
@@ -146,7 +162,13 @@ export default function ChatScreen() {
             onSubmitEditing={() => sendMessage()}
           />
           <TouchableOpacity style={styles.sendBtn} onPress={() => sendMessage()}>
-            <Text style={{ color: "white" }}>📤</Text>
+            <Text style={{ color: "white" }}>
+              <Image
+                source={require("../../../assets/images/send.png")}
+                style={styles.image}
+            
+              />
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -156,13 +178,24 @@ export default function ChatScreen() {
             style={[styles.btn, { backgroundColor: '#17a2b8', marginRight: 10 }]}
             onPress={clearChat}
           >
-            <Text style={{ color: 'white' }}>🎤 කතා කරන්න</Text>
+            <Text style={{ color: 'white' }}>
+              <Image
+                source={require("../../../assets/images/mic.png")}
+                style={styles.image}
+            
+              />
+               කතා කරන්න</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.btn, { backgroundColor: '#dc3545' }]}
             onPress={clearChat}
           >
-            <Text style={{ color: 'white' }}>🗑️ මකන්න</Text>
+            <Text style={{ color: 'white' }}>
+              <Image
+                source={require("../../../assets/images/delete.png")}
+                style={styles.image}
+            
+              /> මකන්න</Text>
           </TouchableOpacity>
         </View>
 
@@ -233,4 +266,11 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     margin: 4,
   },
+  image: {
+  width: 14,
+  height: 14,
+  marginHorizontal: 6,
+  borderRadius: 16, 
+},
+
 });
