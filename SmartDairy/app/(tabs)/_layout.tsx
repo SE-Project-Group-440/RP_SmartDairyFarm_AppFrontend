@@ -10,7 +10,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import  DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen";
 import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
-import DiseaseScreen from "../(tabs)/Cow/Screens/DiseaseScreen";
+import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Cow/Screens/DiseaseHomeScreen";
+import DiseaseScreenComponent from "../(tabs)/Cow/Screens/DiseaseScreen";
 
 export type MainTab =
   | "dairy"
@@ -36,6 +37,8 @@ export default function LactationCurveHome() {
     useState<MainTab>("dairy");
   const [dairyScreen, setDairyScreen] =
     useState<DairyScreen>("dashboard");
+  const [diseaseScreen, setDiseaseScreen] =
+    useState<DiseaseScreen>("home");
   const [selectedCowId, setSelectedCowId] =
     useState<string | null>(null);
 
@@ -87,7 +90,11 @@ export default function LactationCurveHome() {
         );
 
       case "Dinidi":
-        return <DiseaseScreen />;
+        return diseaseScreen === "home" ? (
+          <DiseaseHomeScreen onNavigate={setDiseaseScreen} />
+        ) : (
+          <DiseaseScreenComponent />
+        );
 
       case "profile":
         return <ProfileScreen />;
@@ -196,7 +203,10 @@ export default function LactationCurveHome() {
 
           {/* Feature 4 */}
           <Pressable
-            onPress={() => setCurrentTab("Dinidi")}
+            onPress={() => {
+              setCurrentTab("Dinidi");
+              setDiseaseScreen("home");
+            }}
             className={`items-center px-4 py-2 rounded-xl ${
               currentTab === "Dinidi"
                 ? "bg-green-50"
