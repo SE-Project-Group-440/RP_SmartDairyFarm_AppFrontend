@@ -281,7 +281,7 @@ export default function DiseaseScreen() {
 
             {result.blood_report && (
               <>
-                <Text className="font-semibold mb-1">Blood Report (OCR)</Text>
+                <Text className="font-semibold mb-1">Blood Report Overview</Text>
                 <ScrollView className="max-h-48 border border-slate-200 rounded-lg p-2">
                   <Text selectable className="text-xs leading-5">
                     {result.blood_report}
