@@ -235,26 +235,6 @@ export function DairyDashboard({
                 <Text className="text-white text-xs">1</Text>
               </View>
             </Pressable>
-
-            <Pressable
-              onPress={() => onNavigate("recommendations")}
-              className="bg-white border-2 border-slate-200 rounded-2xl p-5 flex-row items-center gap-4"
-            >
-              <View className="w-12 h-12 bg-green-50 rounded-xl items-center justify-center">
-                <Lightbulb size={24} color="#16a34a" />
-              </View>
-
-              <View className="flex-1">
-                <Text className="text-slate-900 mb-1">
-                  AI Recommendations
-                </Text>
-                <Text className="text-sm text-slate-600">
-                  4 smart suggestions available
-                </Text>
-              </View>
-
-              <ChevronRight size={20} color="#94a3b8" />
-            </Pressable>
           </View>
         </View>
 

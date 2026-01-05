@@ -7,8 +7,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 
-import { DairyManagementScreen } from "./Screens/DairyManagementScreen";
-import { ProfileScreen } from "./Screens/ProfileScreen";
+import  DairyManagementScreen  from "./Screens/DairyManagementScreen";
+import ProfileScreen from "./Screens/ProfileScreen";
+import DiseaseScreen from "./Screens/DiseaseScreen";
 
 export type MainTab =
   | "dairy"
@@ -85,19 +86,7 @@ export default function LactationCurveHome() {
         );
 
       case "Dinidi":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <TrendingUp size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Dinidi
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-      );
+        return <DiseaseScreen />;
 
       case "profile":
         return <ProfileScreen />;

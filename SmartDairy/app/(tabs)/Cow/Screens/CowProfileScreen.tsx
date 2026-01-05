@@ -79,7 +79,7 @@ const generateLactationData = (
 
 /* ---------- SCREEN ---------- */
 
-export function CowProfileScreen({
+export default function CowProfileScreen({
   cowId,
   onBack,
 }: CowProfileScreenProps) {

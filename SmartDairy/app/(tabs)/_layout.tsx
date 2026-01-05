@@ -6,17 +6,21 @@ import {
 } from "react-native";
 import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 
 
-import { DairyManagementScreen } from "../(tabs)/Cow/Screens/DairyManagementScreen";
-import { ProfileScreen } from "../(tabs)/Cow/Screens/ProfileScreen";
+
 import  CattleListScreen  from "../(tabs)/cattleHeat/Screens/CattleListScreen";
+import  DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen";
+import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
+import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Cow/Screens/DiseaseHomeScreen";
+import DiseaseScreenComponent from "../(tabs)/Cow/Screens/DiseaseScreen";
 
 export type MainTab =
-  | "dairy"
-  | "Samudra"
+  | "Dairy"
+  | "Chatbot"
   | "HeatStress"
-  | "Dinidi"
+  | "Health"
   | "profile";
 
 export type DairyScreen =
@@ -36,6 +40,8 @@ export default function LactationCurveHome() {
     useState<MainTab>("dairy");
   const [dairyScreen, setDairyScreen] =
     useState<DairyScreen>("dashboard");
+  const [diseaseScreen, setDiseaseScreen] =
+    useState<DiseaseScreen>("home");
   const [selectedCowId, setSelectedCowId] =
     useState<string | null>(null);
 
@@ -56,38 +62,18 @@ export default function LactationCurveHome() {
           />
         );
 
-      case "Samudra":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <Package size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Samudra
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-        );
+      case "Chatbot":
+        return <ChatScreen />;
 
       case "HeatStress":
         return <CattleListScreen />;
 
       case "Dinidi":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <TrendingUp size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Dinidi
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-      );
+        return diseaseScreen === "home" ? (
+          <DiseaseHomeScreen onNavigate={setDiseaseScreen} />
+        ) : (
+          <DiseaseScreenComponent />
+        );
 
       case "profile":
         return <ProfileScreen />;
@@ -140,9 +126,9 @@ export default function LactationCurveHome() {
 
           {/* Feature 2 */}
           <Pressable
-            onPress={() => setCurrentTab("Samudra")}
+            onPress={() => setCurrentTab("Chatbot")}
             className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Samudra"
+              currentTab === "Chatbot"
                 ? "bg-green-50"
                 : ""
             }`}
@@ -150,19 +136,19 @@ export default function LactationCurveHome() {
             <Package
               size={24}
               color={
-                currentTab === "Samudra"
+                currentTab === "Chatbot"
                   ? "#15803d"
                   : "#475569"
               }
             />
             <Text
               className={`text-xs ${
-                currentTab === "Samudra"
+                currentTab === "Chatbot"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
             >
-              Samudra
+              කිරි ගොවිතැන් උපදේශක
             </Text>
           </Pressable>
 
@@ -196,7 +182,10 @@ export default function LactationCurveHome() {
 
           {/* Feature 4 */}
           <Pressable
-            onPress={() => setCurrentTab("Dinidi")}
+            onPress={() => {
+              setCurrentTab("Dinidi");
+              setDiseaseScreen("home");
+            }}
             className={`items-center px-4 py-2 rounded-xl ${
               currentTab === "Dinidi"
                 ? "bg-green-50"

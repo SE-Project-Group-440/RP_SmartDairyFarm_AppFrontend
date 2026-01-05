@@ -105,9 +105,7 @@ export function AlertsRecommendationsScreen({
   const activeAlerts = mockAlerts.filter(
     (a) => !dismissedAlertIds.has(a.id)
   );
-  const activeRecommendations = mockRecommendations.filter(
-    (r) => !completedRecIds.has(r.id)
-  );
+
 
   const getAlertStyle = (type: Alert["type"]) => {
     switch (type) {
@@ -182,30 +180,6 @@ export function AlertsRecommendationsScreen({
             </Text>
           </Pressable>
 
-          <Pressable
-            onPress={() => setView("recommendations")}
-            className={`flex-1 py-3 rounded-xl flex-row items-center justify-center gap-2 ${
-              view === "recommendations"
-                ? "bg-green-600"
-                : "bg-white border-2 border-slate-200"
-            }`}
-          >
-            <Lightbulb
-              size={18}
-              color={
-                view === "recommendations" ? "white" : "#334155"
-              }
-            />
-            <Text
-              className={
-                view === "recommendations"
-                  ? "text-white"
-                  : "text-slate-700"
-              }
-            >
-              AI Tips ({activeRecommendations.length})
-            </Text>
-          </Pressable>
         </View>
 
         {/* Alerts */}
@@ -273,70 +247,7 @@ export function AlertsRecommendationsScreen({
             );
           })}
 
-        {/* Recommendations */}
-        {view === "recommendations" &&
-          activeRecommendations.map((rec) => (
-            <View
-              key={rec.id}
-              className="bg-green-50 border-2 border-green-200 rounded-2xl p-5"
-            >
-              <View className="flex-row gap-3 mb-4">
-                <View className="w-10 h-10 bg-green-100 rounded-xl items-center justify-center">
-                  <Lightbulb size={20} color="#16a34a" />
-                </View>
-
-                <View className="flex-1">
-                  <Text className="text-slate-900 mb-1">
-                    {rec.title}
-                  </Text>
-                  <Text className="text-sm text-slate-700 mb-2">
-                    {rec.description}
-                  </Text>
-                  <Text className="text-xs text-slate-600">
-                    🐄 {rec.cowName}
-                  </Text>
-                </View>
-              </View>
-
-              <View className="bg-white/70 rounded-xl p-3 mb-3">
-                <Text className="text-xs text-slate-500 mb-1">
-                  Why this matters
-                </Text>
-                <Text className="text-sm text-slate-700">
-                  {rec.reason}
-                </Text>
-              </View>
-
-              <View className="bg-white/70 rounded-xl p-3 mb-4">
-                <Text className="text-xs text-slate-500 mb-1">
-                  Expected impact
-                </Text>
-                <Text className="text-sm text-slate-700">
-                  {rec.impact}
-                </Text>
-              </View>
-
-              <View className="flex-row gap-2">
-                <Pressable
-                  onPress={() =>
-                    setCompletedRecIds(
-                      (p) => new Set([...p, rec.id])
-                    )
-                  }
-                  className="flex-1 bg-green-600 rounded-xl py-3 flex-row items-center justify-center gap-2"
-                >
-                  <Check size={16} color="white" />
-                  <Text className="text-white">
-                    Mark as Done
-                  </Text>
-                </Pressable>
-
-                <Pressable className="px-4 bg-white border border-slate-200 rounded-xl py-3">
-                  <Clock size={16} color="#334155" />
-                </Pressable>
-              </View>
-            </View>
-          ))}
+       
       </View>
     </ScrollView>
   );
