@@ -54,7 +54,7 @@ return (
           },
           {
             label: "Last Check",
-            value: "2h",
+            value: "1min",
             icon: "time",
             color: "#2563eb",
           },
