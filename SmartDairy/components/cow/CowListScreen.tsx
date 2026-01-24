@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -14,62 +14,59 @@ import {
   Trash2,
 } from "lucide-react-native";
 
+import { useCowManageStore } from "../../Store/cowManageStore";
+
 interface CowListScreenProps {
   onCowSelect: (cowId: string) => void;
   onBack: () => void;
 }
 
-const mockCows = [
-  {
-    id: "1",
-    name: "Lassie",
-    breed: "Jersey",
-    age: "4y 3m",
-    lactationNumber: 3,
-    lactationDay: 142,
-    status: "healthy",
-    avgMilk: 18.5,
-  },
-  {
-    id: "2",
-    name: "Bella",
-    breed: "Holstein Friesian",
-    age: "3y 1m",
-    lactationNumber: 2,
-    lactationDay: 89,
-    status: "warning",
-    avgMilk: 12.3,
-  },
-  {
-    id: "3",
-    name: "Daisy",
-    breed: "Jersey Cross",
-    age: "5y 8m",
-    lactationNumber: 4,
-    lactationDay: 201,
-    status: "healthy",
-    avgMilk: 20.1,
-  },
-];
-
 export function CowListScreen({
   onCowSelect,
   onBack,
 }: CowListScreenProps) {
+  const { cows, fetchCows, isLoading } = useCowManageStore();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredCows = mockCows.filter(
-    (cow) =>
-      cow.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cow.breed.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    fetchCows();
+  }, []);
 
-  const healthyCount = mockCows.filter(
-    (c) => c.status === "healthy"
+  const filteredCows = useMemo(() => {
+    return cows.filter(
+      (cow) =>
+        cow.name
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase()) ||
+        cow.breed
+          ?.toLowerCase()
+          .includes(searchQuery.toLowerCase())
+    );
+  }, [cows, searchQuery]);
+
+  const healthyCount = filteredCows.filter(
+    (c) => c.status === "Active"
   ).length;
-  const warningCount = mockCows.filter(
-    (c) => c.status === "warning"
-  ).length;
+  const warningCount =
+    filteredCows.length - healthyCount;
+
+    function calculateAgeInMonths(birthDate?: string): number {
+  if (!birthDate) return 0;
+
+  const dob = new Date(birthDate);
+  const today = new Date();
+
+  let months =
+    (today.getFullYear() - dob.getFullYear()) * 12 +
+    (today.getMonth() - dob.getMonth());
+
+  if (today.getDate() < dob.getDate()) {
+    months -= 1;
+  }
+
+  return Math.max(months, 0);
+}
+
 
   return (
     <ScrollView className="flex-1 bg-slate-50">
@@ -89,7 +86,7 @@ export function CowListScreen({
           Manage Cows
         </Text>
         <Text className="text-green-100">
-          {mockCows.length} cows registered
+          {cows.length} cows registered
         </Text>
       </View>
 
@@ -133,10 +130,9 @@ export function CowListScreen({
         <View className="space-y-3">
           {filteredCows.map((cow) => (
             <View
-              key={cow.id}
+              key={cow._id}
               className="bg-white rounded-2xl p-5 border border-slate-100"
             >
-              {/* Main Info */}
               <View className="flex-row gap-4 mb-4">
                 <View className="w-16 h-16 bg-amber-200 rounded-xl items-center justify-center">
                   <Text className="text-2xl">🐄</Text>
@@ -155,51 +151,56 @@ export function CowListScreen({
 
                     <View
                       className={`px-3 py-1 rounded-full ${
-                        cow.status === "healthy"
+                        cow.status === "Active"
                           ? "bg-green-100"
                           : "bg-orange-100"
                       }`}
                     >
                       <Text
                         className={`text-xs ${
-                          cow.status === "healthy"
+                          cow.status === "Active"
                             ? "text-green-700"
                             : "text-orange-700"
                         }`}
                       >
-                        {cow.status === "healthy"
+                        {cow.status === "Active"
                           ? "✓ Healthy"
                           : "⚠ Monitor"}
                       </Text>
                     </View>
                   </View>
 
-                  {/* Stats */}
                   <View className="flex-row flex-wrap gap-y-2">
                     <Text className="w-1/2 text-sm text-slate-600">
                       Age:{" "}
                       <Text className="text-slate-900">
-                        {cow.age}
+                        {calculateAgeInMonths(
+                          cow.birthDate
+                        )}{" "}
+                        months
                       </Text>
                     </Text>
-                    <Text className="w-1/2 text-sm text-slate-600">
-                      Lactation:{" "}
-                      <Text className="text-slate-900">
-                        #{cow.lactationNumber}
-                      </Text>
-                    </Text>
-                    <Text className="w-1/2 text-sm text-slate-600">
-                      Day:{" "}
-                      <Text className="text-slate-900">
-                        {cow.lactationDay}
-                      </Text>
-                    </Text>
-                    <Text className="w-1/2 text-sm text-slate-600">
-                      Avg Milk:{" "}
-                      <Text className="text-slate-900">
-                        {cow.avgMilk}L
-                      </Text>
-                    </Text>
+                  <Text className="w-1/2 text-sm text-slate-600">
+  Lactation:{" "}
+  <Text className="text-slate-900">
+    {cow.lactationRound ?? "—"}
+  </Text>
+</Text>
+
+<Text className="w-1/2 text-sm text-slate-600">
+  Day:{" "}
+  <Text className="text-slate-900">
+    {cow.lactationDay ?? "—"}
+  </Text>
+</Text>
+
+<Text className="w-1/2 text-sm text-slate-600">
+  Avg Milk:{" "}
+  <Text className="text-slate-900">
+    {cow.avgMilk ? `${cow.avgMilk} L` : "—"}
+  </Text>
+</Text>
+
                   </View>
                 </View>
               </View>
@@ -207,7 +208,7 @@ export function CowListScreen({
               {/* Actions */}
               <View className="flex-row gap-2">
                 <Pressable
-                  onPress={() => onCowSelect(cow.id)}
+                  onPress={() => onCowSelect(cow._id)}
                   className="flex-1 bg-green-600 rounded-xl py-2.5 flex-row items-center justify-center gap-2"
                 >
                   <Eye size={16} color="white" />
@@ -228,8 +229,7 @@ export function CowListScreen({
           ))}
         </View>
 
-        {/* Empty State */}
-        {filteredCows.length === 0 && (
+        {!isLoading && filteredCows.length === 0 && (
           <View className="bg-white rounded-2xl p-8 items-center">
             <Text className="text-4xl mb-4">🔍</Text>
             <Text className="text-slate-900 mb-2">
