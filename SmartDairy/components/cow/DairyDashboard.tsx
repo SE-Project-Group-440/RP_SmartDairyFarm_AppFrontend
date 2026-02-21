@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import {
   Plus,
@@ -9,6 +10,7 @@ import {
   History,
   ChevronRight,
 } from "lucide-react-native";
+import { api } from "../../hooks/api";
 
 export type DairyScreen =
   | "add-cow"
@@ -35,6 +37,32 @@ export function DairyDashboard({
   onNavigate,
   onCowSelect,
 }: DairyDashboardProps) {
+  const [dashboardData, setDashboardData] = useState({
+    todaysMilk: 0,
+    totalCows: 0,
+    activeAlerts: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/dashboard/summary");
+      if (res.data?.success && res.data?.summary) {
+        setDashboardData(res.data.summary);
+      }
+    } catch (error) {
+      console.warn("Failed to fetch dashboard data", error);
+      // Keep default values on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const hour = new Date().getHours();
   const greeting =
     hour < 12
@@ -63,7 +91,7 @@ export function DairyDashboard({
           <View className="flex-row justify-between">
             <View className="flex-1 items-center">
               <Text className="text-2xl text-green-600 mb-1">
-                50.9L
+                {dashboardData.todaysMilk}L
               </Text>
               <Text className="text-xs text-slate-600">
                 Todays Milk
@@ -72,7 +100,7 @@ export function DairyDashboard({
 
             <View className="flex-1 items-center border-x border-slate-200">
               <Text className="text-2xl text-slate-900 mb-1">
-                {mockCows.length}
+                {dashboardData.totalCows}
               </Text>
               <Text className="text-xs text-slate-600">
                 Total Cows
@@ -81,7 +109,7 @@ export function DairyDashboard({
 
             <View className="flex-1 items-center">
               <Text className="text-2xl text-orange-600 mb-1">
-                1
+                {dashboardData.activeAlerts}
               </Text>
               <Text className="text-xs text-slate-600">
                 Alerts
@@ -227,13 +255,15 @@ export function DairyDashboard({
                   Alerts & Notifications
                 </Text>
                 <Text className="text-sm text-slate-600">
-                  1 alert needs attention
+                  {dashboardData.activeAlerts} {dashboardData.activeAlerts === 1 ? "alert" : "alerts"} needs attention
                 </Text>
               </View>
 
-              <View className="w-6 h-6 bg-red-500 rounded-full items-center justify-center">
-                <Text className="text-white text-xs">1</Text>
-              </View>
+              {dashboardData.activeAlerts > 0 && (
+                <View className="w-6 h-6 bg-red-500 rounded-full items-center justify-center">
+                  <Text className="text-white text-xs">{dashboardData.activeAlerts}</Text>
+                </View>
+              )}
             </Pressable>
           </View>
         </View>

@@ -37,6 +37,8 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
   });
 
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const isFormValid =
     formData.name &&
@@ -78,8 +80,14 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
         setShowSuccess(false);
         onBack();
       }, 1500);
-    } catch (e) {
+    } catch (e: any) {
       console.error("Create cow failed", e);
+      setErrorMessage(
+        e?.response?.data?.message || 
+        e?.message || 
+        "Failed to add cow. Please try again."
+      );
+      setShowError(true);
     }
   };
 
@@ -244,6 +252,29 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
           )}
         </View>
       </ScrollView>
+
+      {/* Error Modal */}
+      <Modal visible={showError} transparent animationType="fade">
+        <View className="flex-1 bg-black/20 items-center justify-center">
+          <View className="bg-white rounded-3xl p-8 items-center mx-6">
+            <View className="w-20 h-20 bg-red-100 rounded-full items-center justify-center mb-4">
+              <Text className="text-4xl">⚠️</Text>
+            </View>
+            <Text className="text-xl text-slate-900 mb-3 font-semibold">
+              Failed to Add Cow
+            </Text>
+            <Text className="text-sm text-slate-600 text-center mb-6">
+              {errorMessage}
+            </Text>
+            <Pressable
+              onPress={() => setShowError(false)}
+              className="bg-red-600 px-6 py-3 rounded-xl"
+            >
+              <Text className="text-white font-semibold">Try Again</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
 
       {/* Success Modal */}
       <Modal visible={showSuccess} transparent animationType="fade">
