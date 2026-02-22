@@ -213,25 +213,8 @@ export function DairyDashboard({
               <Text className="text-slate-900 mb-1">
                 Analytics
               </Text>
-              <Text className="text-xs text-slate-600">
-                Daily & weekly
-              </Text>
             </Pressable>
 
-            <Pressable
-              onPress={() => onNavigate("forecasting")}
-              className="flex-1 bg-white border-2 border-slate-200 rounded-2xl p-4"
-            >
-              <View className="w-10 h-10 bg-indigo-50 rounded-xl items-center justify-center mb-3">
-                <TrendingUp size={20} color="#4f46e5" />
-              </View>
-              <Text className="text-slate-900 mb-1">
-                Forecasting
-              </Text>
-              <Text className="text-xs text-slate-600">
-                Weekly & monthly
-              </Text>
-            </Pressable>
           </View>
         </View>
 

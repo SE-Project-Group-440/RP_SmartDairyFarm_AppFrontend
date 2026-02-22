@@ -185,16 +185,21 @@ export default function AnalyticsForecastingScreen({ onBack }: AnalyticsForecast
               </Text>
 
               {(() => {
-  const displayData = predictions.slice(0, Math.min(predictions.length, 60));
-  const step = Math.ceil(displayData.length / 8);
+ const displayData = predictions.slice(0, Math.min(predictions.length, 280));
+
+const totalDays = displayData.length;
+const interval = Math.floor(totalDays / 6);
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <LineChart
         data={{
-          labels: displayData.map((p, index) =>
-            index % step === 0 ? `D${p.milkingDay}` : ""
-          ),
+          labels: displayData.map((p, index) => {
+  if (index === 0) return "D1";
+  if (index === totalDays - 1) return `D${p.milkingDay}`;
+  if (index % interval === 0) return `D${p.milkingDay}`;
+  return "";
+}),
           datasets: [
             {
               data: displayData.map((p) => p.actualMilk || 0),
@@ -209,7 +214,7 @@ export default function AnalyticsForecastingScreen({ onBack }: AnalyticsForecast
           ],
           legend: ["Actual (L)", "Predicted (L)"],
         }}
-        width={displayData.length * 12}
+       width={Math.max(screenWidth - 48, displayData.length * 6)}
         height={300}
         fromZero
         yAxisSuffix="L"
