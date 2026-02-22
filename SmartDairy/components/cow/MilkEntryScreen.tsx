@@ -88,6 +88,25 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
       setIsSubmitting(true);
       setErrorMessage("");
 
+      
+       if (calvingDate) {
+        try {
+          await api.post("/lact/", {
+            cowId,
+            calvingDate,
+            healthStatus: "Healthy",
+            lactationRound: 1, 
+          });
+          console.log("New lactation cycle created and predictions generating...");
+        } catch (cycleErr: any) {
+          const cycleErrMsg = cycleErr?.response?.data?.error || "Failed to create lactation cycle";
+          setErrorMessage(cycleErrMsg);
+          setShowError(true);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const payload: any = {
         cowId,
         notes,

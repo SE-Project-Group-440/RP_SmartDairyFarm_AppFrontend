@@ -37,19 +37,28 @@ export default function AnalyticsForecastingScreen({ onBack }: AnalyticsForecast
   const [loading, setLoading] = useState(false);
   const [predictions, setPredictions] = useState<any[]>([]);
 
-  const chartConfig = {
-    backgroundGradientFrom: "#ffffff",
-    backgroundGradientTo: "#ffffff",
-    color: () => "#0f172a",
-    labelColor: () => "#64748b",
-    propsForDots: { r: "2" },
-  };
+ const chartConfig = {
+  backgroundGradientFrom: "#ffffff",
+  backgroundGradientTo: "#ffffff",
+  decimalPlaces: 1,
+  color: (opacity = 1) => `rgba(15, 23, 42, ${opacity})`,
+  labelColor: () => "#475569",
+  propsForDots: {
+    r: "4",
+    strokeWidth: "2",
+    stroke: "#fff",
+  },
+  propsForBackgroundLines: {
+    strokeDasharray: "", 
+    stroke: "#e2e8f0",
+  },
+};
 
   useEffect(() => {
-    // Fetch cows on mount and from store
+    
     fetchStoreCows().catch((err) => {
       console.warn("Store fetch failed, falling back to API", err);
-      // Fallback: fetch directly if store fails
+      
       api
         .get("/cows")
         .then((res) => setCows(res.data || []))
@@ -58,7 +67,7 @@ export default function AnalyticsForecastingScreen({ onBack }: AnalyticsForecast
   }, []);
 
   useEffect(() => {
-    // Sync store cows to local state
+    
     if (storeCows && storeCows.length > 0) {
       setCows(storeCows);
     }
@@ -87,7 +96,7 @@ export default function AnalyticsForecastingScreen({ onBack }: AnalyticsForecast
 
       setSelectedCycle(res.data.lactationCycle || null);
 
-      // Normalize predictions to objects with milkingDay, predictedMilk, actualMilk
+      
       const data = res.data?.predictions || [];
       const normalized = data.map((d: any) => ({
         milkingDay: d.milkingDay || 0,
@@ -97,7 +106,7 @@ export default function AnalyticsForecastingScreen({ onBack }: AnalyticsForecast
         completed: d.completed,
       }));
       
-      // sort by milkingDay
+     
       normalized.sort((a: any, b: any) => a.milkingDay - b.milkingDay);
       setPredictions(normalized);
     } catch (err) {
@@ -168,37 +177,150 @@ export default function AnalyticsForecastingScreen({ onBack }: AnalyticsForecast
         )}
 
         {!loading && predictions.length > 0 && (
-          <View className="bg-white rounded-2xl p-5 border border-slate-100">
-            <Text className="text-slate-900 font-semibold mb-2">Full Lactation Forecast</Text>
-            <Text className="text-xs text-slate-500 mb-4">
-              Days predicted: {predictions.length} | Actual recorded: {predictions.filter(p => p.actualMilk > 0).length}
-            </Text>
+          <>
+            <View className="bg-white rounded-2xl p-5 border border-slate-100">
+              <Text className="text-slate-900 font-semibold mb-2">Full Lactation Forecast</Text>
+              <Text className="text-xs text-slate-500 mb-4">
+                Days predicted: {predictions.length} | Actual recorded: {predictions.filter(p => p.actualMilk > 0).length}
+              </Text>
 
-            <LineChart
-              data={{
-                labels: predictions.slice(0, Math.min(predictions.length, 60)).map((p) => `${p.milkingDay}`),
-                datasets: [
-                  { 
-                    data: predictions.slice(0, Math.min(predictions.length, 60)).map((p) => p.actualMilk || 0), 
-                    color: () => "#10b981",
-                    strokeWidth: 2,
-                  },
-                  { 
-                    data: predictions.slice(0, Math.min(predictions.length, 60)).map((p) => p.predictedMilk || 0), 
-                    color: () => "#94a3b8",
-                    strokeWidth: 2,
-                  },
-                ],
-                legend: ["Actual", "Predicted"],
-              }}
-              width={Math.max(screenWidth - 48, Math.min(predictions.length, 60) * 6)}
-              height={300}
-              chartConfig={chartConfig}
-              withDots={false}
-              bezier
-              style={{ borderRadius: 16 }}
-            />
-          </View>
+              {(() => {
+  const displayData = predictions.slice(0, Math.min(predictions.length, 60));
+  const step = Math.ceil(displayData.length / 8);
+
+  return (
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <LineChart
+        data={{
+          labels: displayData.map((p, index) =>
+            index % step === 0 ? `D${p.milkingDay}` : ""
+          ),
+          datasets: [
+            {
+              data: displayData.map((p) => p.actualMilk || 0),
+              color: () => "#10b981",
+              strokeWidth: 3,
+            },
+            {
+              data: displayData.map((p) => p.predictedMilk || 0),
+              color: () => "#6366f1",
+              strokeWidth: 2,
+            },
+          ],
+          legend: ["Actual (L)", "Predicted (L)"],
+        }}
+        width={displayData.length * 12}
+        height={300}
+        fromZero
+        yAxisSuffix="L"
+        chartConfig={chartConfig}
+        withDots={false}
+        withVerticalLines={false}
+        withOuterLines={false}
+        withInnerLines={true}
+        style={{ borderRadius: 16 }}
+      />
+    </ScrollView>
+  );
+})()}
+            </View>
+
+            {/* Summary Statistics */}
+            <View className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-200 space-y-3">
+              <Text className="text-lg font-bold text-green-900">📊 Performance Summary</Text>
+              
+              <View className="space-y-2">
+                <View className="flex-row justify-between items-center">
+                  <Text className="text-slate-700">Total Predicted</Text>
+                  <Text className="text-xl font-bold text-slate-900">{predictions.reduce((sum, p) => sum + (p.predictedMilk || 0), 0).toFixed(1)} L</Text>
+                </View>
+                
+                <View className="flex-row justify-between items-center">
+                  <Text className="text-slate-700">Total Actual</Text>
+                  <Text className="text-xl font-bold text-green-600">{predictions.reduce((sum, p) => sum + (p.actualMilk || 0), 0).toFixed(1)} L</Text>
+                </View>
+
+                <View className="border-b border-green-200 mb-2" />
+
+                <View className="flex-row justify-between items-center">
+                  <Text className="text-slate-700">Days Recorded</Text>
+                  <Text className="font-semibold text-slate-900">{predictions.filter(p => p.actualMilk > 0).length} / {predictions.length}</Text>
+                </View>
+
+                <View className="flex-row justify-between items-center">
+                  <Text className="text-slate-700">Avg Daily (Actual)</Text>
+                  <Text className="font-semibold text-slate-900">
+                    {predictions.length > 0 ? (predictions.reduce((sum, p) => sum + (p.actualMilk || 0), 0) / predictions.filter(p => p.actualMilk > 0).length || 0).toFixed(2) : 0} L
+                  </Text>
+                </View>
+
+                <View className="flex-row justify-between items-center">
+                  <Text className="text-slate-700">Avg Daily (Predicted)</Text>
+                  <Text className="font-semibold text-slate-600">
+                    {(predictions.reduce((sum, p) => sum + (p.predictedMilk || 0), 0) / predictions.length).toFixed(2)} L
+                  </Text>
+                </View>
+              </View>
+
+              {/* Performance badge */}
+              {(() => {
+                const actualSum = predictions.reduce((sum, p) => sum + (p.actualMilk || 0), 0);
+                const predictedSum = predictions.reduce((sum, p) => sum + (p.predictedMilk || 0), 0);
+                const variance = ((actualSum - predictedSum) / predictedSum * 100);
+                
+                return (
+                  <View className={`p-3 rounded-xl ${variance > 5 ? 'bg-blue-100' : variance < -5 ? 'bg-orange-100' : 'bg-green-100'}`}>
+                    <Text className={`text-sm font-semibold text-center ${variance > 5 ? 'text-blue-900' : variance < -5 ? 'text-orange-900' : 'text-green-900'}`}>
+                      {variance > 5 ? `✅ Performing ${variance.toFixed(1)}% above prediction` : variance < -5 ? `⚠️ ${Math.abs(variance).toFixed(1)}% below prediction` : `✓ On track with prediction`}
+                    </Text>
+                  </View>
+                );
+              })()}
+            </View>
+
+            {/* Daily breakdown for first 14 days */}
+            {predictions.length > 0 && (
+              <View className="bg-white rounded-2xl p-5 border border-slate-100">
+                <Text className="text-slate-900 font-semibold mb-3">📅 Recent Activity</Text>
+                <View className="space-y-2">
+                  {predictions.slice(0, 14).map((pred, idx) => (
+                    <View key={idx} className="flex-row items-center justify-between p-3 bg-slate-50 rounded-xl">
+                      <View className="flex-1">
+                        <Text className="font-semibold text-slate-900">Day {pred.milkingDay}</Text>
+                        <Text className="text-xs text-slate-500">
+                          {pred.datePred ? new Date(pred.datePred).toLocaleDateString() : ""}
+                        </Text>
+                      </View>
+                      
+                      <View className="flex-row gap-3 items-center">
+                        {pred.actualMilk > 0 ? (
+                          <>
+                            <View className="items-end">
+                              <Text className="text-sm font-semibold text-green-600">{pred.actualMilk.toFixed(1)}L</Text>
+                              <Text className="text-xs text-slate-500">recorded</Text>
+                            </View>
+                            <View className="bg-green-100 px-2 py-1 rounded-full">
+                              <Text className="text-xs font-semibold text-green-700">✓</Text>
+                            </View>
+                          </>
+                        ) : (
+                          <>
+                            <View className="items-end">
+                              <Text className="text-sm font-semibold text-slate-600">{pred.predictedMilk.toFixed(1)}L</Text>
+                              <Text className="text-xs text-slate-500">predicted</Text>
+                            </View>
+                            <View className="bg-slate-200 px-2 py-1 rounded-full">
+                              <Text className="text-xs text-slate-600">-</Text>
+                            </View>
+                          </>
+                        )}
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+          </>
         )}
 
         {!loading && predictions.length === 0 && (
