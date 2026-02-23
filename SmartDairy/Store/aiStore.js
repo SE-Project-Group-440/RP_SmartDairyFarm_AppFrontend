@@ -59,20 +59,25 @@ export const useAIStore = create((set) => ({
 },
   // Mark AI done → triggers pregnancy prediction
   markDone: async (cow, ai_date) => {
-    set({ loading: true });
-    try {
-      const data = await markAIDone(cow.recommendation._id, ai_date);
-      console.log("Received AI done request:", recommendationId, ai_date);
+  set({ loading: true });
+  try {
+    await markAIDone(cow.recommendation._id, ai_date);
 
-      set((state) => ({
-        cows: state.cows.map((c) =>
-          c._id === cow._id ? { ...c, recommendation: data.recommendation } : c
-        ),
-        loading: false,
-      }));
-    } catch (err) {
-      console.log(err);
-      set({ loading: false });
-    }
-  },
+    // 🔥 Refetch from DB to sync properly
+    const updated = await fetchPendingCows();
+
+    const flattened = updated.map((rec) => ({
+      _id: rec._id,
+      cowId: rec.cowId,
+      ...rec.input_data,
+      recommendation: rec,
+    }));
+
+    set({ cows: flattened, loading: false });
+
+  } catch (err) {
+    console.log(err);
+    set({ loading: false });
+  }
+},
 }));

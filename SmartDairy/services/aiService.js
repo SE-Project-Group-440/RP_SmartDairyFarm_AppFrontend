@@ -25,6 +25,6 @@ export const markAIDone = async (recommendationId, ai_date) => {
 
 // services/aiService.js
 export const fetchPendingCows = async () => {
-  const response = await API.get("/pending");
+  const response = await API.get("/all");
   return response.data;
 };
