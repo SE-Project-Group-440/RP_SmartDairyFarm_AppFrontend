@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import {AiRecommendationScreen} from "./AIPrediction/AiRecommendationScreen";
 
 import { DairyManagementScreen } from "../(tabs)/Cow/Screens/DairyManagementScreen";
 import { ProfileScreen } from "../(tabs)/Cow/Screens/ProfileScreen";
@@ -71,20 +71,7 @@ export default function LactationCurveHome() {
         );
 
       case "Anjana":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <TrendingUp size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Anjana
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-        );
-
+        return <AiRecommendationScreen />;
       case "Dinidi":
         return (
           <View className="flex-1 items-center justify-center bg-slate-50 px-6">
