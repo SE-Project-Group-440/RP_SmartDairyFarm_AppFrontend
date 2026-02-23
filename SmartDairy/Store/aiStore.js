@@ -62,6 +62,7 @@ export const useAIStore = create((set) => ({
     set({ loading: true });
     try {
       const data = await markAIDone(cow.recommendation._id, ai_date);
+      console.log("Received AI done request:", recommendationId, ai_date);
 
       set((state) => ({
         cows: state.cows.map((c) =>

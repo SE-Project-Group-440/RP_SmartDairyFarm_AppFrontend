@@ -30,7 +30,7 @@ export const AiRecommendationScreen = () => {
     "E. Age (Month)": "",
   });
 
-  const [aiDate, setAiDate] = useState("");
+  const [aiDates, setAiDates] = useState({});
   useEffect(() => {
     fetchPending(); // fetch PENDING cows from DB on mount
   }, []);
@@ -77,6 +77,7 @@ export const AiRecommendationScreen = () => {
 
       {cows.map((cow) => (
         <View key={cow._id} style={{ borderWidth: 1, padding: 10, marginVertical: 5 }}>
+          <Text>Cow ID: {cow["cowId"]}</Text>
           <Text>Lactation No: {cow["Lactation No"]}</Text>
           <Text>Milk Yield: {cow["Milk_Yield"]}</Text>
           <Text>Breed: {cow["Breed"]}</Text>
@@ -96,11 +97,21 @@ export const AiRecommendationScreen = () => {
                 <View>
                   <TextInput
                     placeholder="Enter AI done date (YYYY-MM-DD)"
-                    value={aiDate}
-                    onChangeText={setAiDate}
+                    value={aiDates[cow._id] || ""}
+                    onChangeText={(text) =>
+        setAiDates((prev) => ({ ...prev, [cow._id]: text }))
+      }
                     style={{ borderWidth: 1, padding: 5, marginVertical: 5 }}
                   />
-                  <Button title="Mark AI as Done" onPress={() => markDone(cow, aiDate)} />
+                  <Button title="Mark AI as Done" onPress={() => {
+        console.log(
+          "Marking AI done for recommendation ID:",
+          cow.recommendation._id,
+          "with date:",
+          aiDates[cow._id]
+        );
+        markDone(cow, aiDates[cow._id]);
+      }} />
                 </View>
               )}
 
