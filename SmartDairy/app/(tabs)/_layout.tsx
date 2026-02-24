@@ -73,7 +73,7 @@ export default function LactationCurveHome() {
         );
 
       case "Anjana":
-        return <Aidata />;
+        return <AiHomeScreen />;
       case "Dinidi":
         return (
           <View className="flex-1 items-center justify-center bg-slate-50 px-6">

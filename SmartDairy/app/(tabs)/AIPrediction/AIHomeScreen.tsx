@@ -226,15 +226,37 @@ export default function AiHomeScreen() {
             </View>
 
             {/* AI Recommendation */}
-            <View style={styles.aiCard}>
-              <Text style={{ color: "white", fontWeight: "bold" }}>Recommended AI Date</Text>
-              <Text style={{ color: "white", fontSize: 16 }}>
-                {selectedCow.recommendation.recommended_next_ai
-                  ? new Date(selectedCow.recommendation.recommended_next_ai).toDateString()
-                  : "N/A"}
-              </Text>
-              <Calendar size={24} color="white" />
-            </View>
+            {/* AI / Pregnancy Info Card */}
+<View style={styles.aiCard}>
+  {selectedCow.recommendation.status === "PENDING" ? (
+    <>
+      <Text style={{ color: "white", fontWeight: "bold" }}>
+        Recommended AI Date
+      </Text>
+      <Text style={{ color: "white", fontSize: 16 }}>
+        {selectedCow.recommendation.recommended_next_ai
+          ? new Date(
+              selectedCow.recommendation.recommended_next_ai
+            ).toDateString()
+          : "N/A"}
+      </Text>
+    </>
+  ) : (
+    <>
+      <Text style={{ color: "white", fontWeight: "bold" }}>
+        Pregnancy Check Date
+      </Text>
+      <Text style={{ color: "white", fontSize: 16 }}>
+        {selectedCow.recommendation.pregnancy_check_date
+          ? new Date(
+              selectedCow.recommendation.pregnancy_check_date
+            ).toDateString()
+          : "Not Scheduled"}
+      </Text>
+    </>
+  )}
+  <Calendar size={24} color="white" />
+</View>
 
             {/* Pregnancy Prediction */}
             {selectedCow.recommendation.status === "COMPLETED" && (
@@ -265,10 +287,24 @@ export default function AiHomeScreen() {
                 )}
 
                 {selectedCow.recommendation.pregnancy_check_status && (
-                  <Text style={{ marginTop: 5 }}>
-                    Final Status: {selectedCow.recommendation.pregnancy_check_status}
-                  </Text>
-                )}
+  <View style={{ marginTop: 16 }}>
+    <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+      Final Status: {selectedCow.recommendation.pregnancy_check_status}
+    </Text>
+
+    {/* Show All Cow Details */}
+    <View style={{ marginTop: 12 }}>
+      <Text>Lactation No: {selectedCow["Lactation No"]}</Text>
+      <Text>Milk Yield: {selectedCow.Milk_Yield}</Text>
+      <Text>Breed: {selectedCow.Breed}</Text>
+      <Text>Milking/Dry: {selectedCow["Milking/Dry"]}</Text>
+      <Text>Hormonal Treatment: {selectedCow["Hormonal Treatment"]}</Text>
+      <Text>Estrus Cycle Length: {selectedCow["Estrus Cycle Length"]}</Text>
+      <Text>Last Calving Date: {selectedCow["Last Caving Date"]}</Text>
+      <Text>Age (Months): {selectedCow["E. Age (Month)"]}</Text>
+    </View>
+  </View>
+)}
               </View>
             )}
 

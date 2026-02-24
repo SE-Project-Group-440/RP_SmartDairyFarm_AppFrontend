@@ -5,7 +5,7 @@ import axios from "axios";
 =========================== */
 
 const API = axios.create({
-  baseURL: "http://10.35.236.205:8000/api/ai",
+  baseURL: "http://10.35.236.24:8000/api/ai",
   // ⚠ If using real device, use your PC IP
 });
 
@@ -16,7 +16,7 @@ const API = axios.create({
 export interface InputData {
   "Lactation No": number;
   "Milk_Yield": number;
-  "Breed": number;
+  "Breed": string;
   "Milking/Dry": string;
   "Hormonal Treatment": string;
   "Estrus Cycle Length": number;
