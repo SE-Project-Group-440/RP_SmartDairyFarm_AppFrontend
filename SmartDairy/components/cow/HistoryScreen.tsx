@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -19,37 +19,47 @@ interface HistoryScreenProps {
   onBack: () => void;
 }
 
+import { api } from "../../hooks/api";
+
 interface HistoryRecord {
   id: string;
-  date: string;
-  type: "milk" | "health" | "feed";
+  date: string; // YYYY-MM-DD
+  type: "milk" | "cow" ;
   cowName: string;
   value: string;
-  notes?: string;
+  notes?: string | null;
 }
 
-const mockHistory: HistoryRecord[] = [
-  { id: "1", date: "2025-12-27", type: "milk", cowName: "Lassie", value: "18.5L", notes: "Morning session" },
-  { id: "2", date: "2025-12-27", type: "milk", cowName: "Bella", value: "12.3L", notes: "Morning session" },
-  { id: "3", date: "2025-12-26", type: "milk", cowName: "Daisy", value: "20.1L", notes: "Evening session" },
-  { id: "4", date: "2025-12-26", type: "health", cowName: "Bella", value: "Check-up", notes: "Routine veterinary visit" },
-  { id: "5", date: "2025-12-25", type: "feed", cowName: "All Cows", value: "Feed adjustment", notes: "Increased concentrate by 0.5kg" },
-  { id: "6", date: "2025-12-25", type: "milk", cowName: "Lassie", value: "17.8L", notes: "Evening session" },
-  { id: "7", date: "2025-12-24", type: "milk", cowName: "Daisy", value: "19.5L", notes: "Morning session" },
-];
-
 export function HistoryScreen({ onBack }: HistoryScreenProps) {
-  const [filterType, setFilterType] = useState<"all" | "milk" | "health" | "feed">("all");
+  const [filterType, setFilterType] = useState<"all" | "milk" | "cow" >("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [records, setRecords] = useState<HistoryRecord[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const filteredHistory = mockHistory.filter((record) => {
-    const matchesType =
-      filterType === "all" || record.type === filterType;
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get("/cows/history/recent");
+        if (mounted && res.data && res.data.success) {
+          setRecords(res.data.data || []);
+        }
+      } catch (e) {
+        console.warn("Failed to load history", e);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    load();
+    return () => { mounted = false };
+  }, []);
 
+  const filteredHistory = records.filter((record) => {
+    const matchesType = filterType === "all" || (record.type === filterType) || (filterType === "milk" && record.type === "milk");
     const matchesSearch =
       record.cowName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       record.value.toLowerCase().includes(searchQuery.toLowerCase());
-
     return matchesType && matchesSearch;
   });
 
@@ -84,10 +94,8 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
     switch (type) {
       case "milk":
         return <Droplet size={20} color="#2563eb" />;
-      case "health":
-        return <TrendingUp size={20} color="#16a34a" />;
-      case "feed":
-        return <FileText size={20} color="#ea580c" />;
+      case "cow":
+        return <FileText size={20} color="#7c3aed" />;
     }
   };
 
@@ -95,10 +103,8 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
     switch (type) {
       case "milk":
         return "bg-blue-100 text-blue-700";
-      case "health":
-        return "bg-green-100 text-green-700";
-      case "feed":
-        return "bg-orange-100 text-orange-700";
+      case "cow":
+        return "bg-purple-100 text-purple-700";
     }
   };
 
@@ -149,10 +155,8 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
                   filterType === type
                     ? type === "milk"
                       ? "bg-blue-600"
-                      : type === "health"
-                      ? "bg-green-600"
-                      : type === "feed"
-                      ? "bg-orange-600"
+                      : type === "cow"
+                      ? "bg-purple-600"
                       : "bg-slate-700"
                     : "bg-white border-2 border-slate-200"
                 }`}
@@ -249,35 +253,22 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
 
         {/* Summary */}
         <View className="bg-white rounded-2xl p-5 border border-slate-100">
-          <Text className="text-slate-900 mb-4">
-            Summary
-          </Text>
+          <Text className="text-slate-900 mb-4">Summary</Text>
 
           <View className="flex-row justify-between text-center">
             <View className="flex-1">
               <Text className="text-2xl text-blue-600 mb-1">
-                {mockHistory.filter((r) => r.type === "milk").length}
+                {records.filter((r) => r.type === "milk").length}
               </Text>
-              <Text className="text-xs text-slate-600">
-                Milk Records
-              </Text>
+              <Text className="text-xs text-slate-600">Milk Records</Text>
             </View>
             <View className="flex-1">
-              <Text className="text-2xl text-green-600 mb-1">
-                {mockHistory.filter((r) => r.type === "health").length}
+              <Text className="text-2xl text-purple-600 mb-1">
+                {records.filter((r) => r.type === "cow").length}
               </Text>
-              <Text className="text-xs text-slate-600">
-                Health Checks
-              </Text>
+              <Text className="text-xs text-slate-600">Cows Added</Text>
             </View>
-            <View className="flex-1">
-              <Text className="text-2xl text-orange-600 mb-1">
-                {mockHistory.filter((r) => r.type === "feed").length}
-              </Text>
-              <Text className="text-xs text-slate-600">
-                Feed Updates
-              </Text>
-            </View>
+           
           </View>
         </View>
       </View>

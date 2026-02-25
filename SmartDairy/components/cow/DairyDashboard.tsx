@@ -272,47 +272,7 @@ export function DairyDashboard({
           <ChevronRight size={20} color="#94a3b8" />
         </Pressable>
 
-        {/* Recent Activity */}
-        <View className="bg-white rounded-2xl p-5 border border-slate-100">
-          <Text className="text-slate-900 mb-4">
-            Recent Activity
-          </Text>
-
-          <View className="space-y-3">
-            {mockCows.slice(0, 2).map((cow) => (
-              <Pressable
-                key={cow.id}
-                onPress={() => onCowSelect(cow.id)}
-                className="flex-row items-center gap-3 p-3 rounded-xl"
-              >
-                <View className="w-10 h-10 bg-amber-200 rounded-lg items-center justify-center">
-                  <Text className="text-lg">🐄</Text>
-                </View>
-
-                <View className="flex-1">
-                  <Text className="text-sm text-slate-900">
-                    {cow.name}
-                  </Text>
-                  <Text className="text-xs text-slate-500">
-                    {cow.milk}L today
-                  </Text>
-                </View>
-
-                <View
-                  className={`px-2 py-1 rounded-full ${
-                    cow.status === "healthy"
-                      ? "bg-green-100"
-                      : "bg-orange-100"
-                  }`}
-                >
-                  <Text className="text-xs">
-                    {cow.status === "healthy" ? "✓" : "⚠"}
-                  </Text>
-                </View>
-              </Pressable>
-            ))}
-          </View>
-        </View>
+       
       </View>
     </ScrollView>
   );
