@@ -116,7 +116,7 @@ export default function AiHomeScreen() {
       <Text
         style={[
           styles.badgeText,
-          { color: status === "PENDING" ? "#FB8C00" : "#2E7D32" },
+          { color: status === "PENDING" ? "#FB8C00" : "#16A34A" },
         ]}
       >
         {status}
@@ -154,7 +154,7 @@ export default function AiHomeScreen() {
       </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
-        {loading && <ActivityIndicator size="large" color="#2E7D32" />}
+        {loading && <ActivityIndicator size="large" color="#16A34A" />}
  
         {/* LIST VIEW */}
         {view === "list" && (
@@ -272,10 +272,10 @@ const styles = StyleSheet.create({
   backBtn: { flexDirection: "row", alignItems: "center", gap: 4 },
   backText: { fontWeight: "bold", marginLeft: 4 },
   headerTitleContainer: { flexDirection: "row", alignItems: "center", gap: 8 },
-  logoCircle: { width: 40, height: 40, borderRadius: 12, backgroundColor: "#2E7D32", justifyContent: "center", alignItems: "center" },
+  logoCircle: { width: 40, height: 40, borderRadius: 12, backgroundColor: "#16A34A", justifyContent: "center", alignItems: "center" },
   logoText: { color: "white", fontWeight: "bold", fontSize: 18 },
   appTitle: { fontWeight: "bold", fontSize: 16 },
-  appSubTitle: { fontSize: 10, color: "#2E7D32", fontWeight: "600" },
+  appSubTitle: { fontSize: 10, color: "#16A34A", fontWeight: "600" },
   headerIcons: { flexDirection: "row", gap: 12 },
   userCircle: { width: 32, height: 32, borderRadius: 16, backgroundColor: "#E0E0E0", justifyContent: "center", alignItems: "center" },
   cowCard: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "white", padding: 12, borderRadius: 20, marginBottom: 12 },
@@ -289,14 +289,14 @@ const styles = StyleSheet.create({
   card: { backgroundColor: "white", padding: 16, borderRadius: 20, marginBottom: 16 },
   sectionTitle: { fontWeight: "bold", fontSize: 16, marginBottom: 8 },
   input: { borderWidth: 1, borderColor: "#E0E0E0", borderRadius: 12, padding: 12, marginBottom: 12 },
-  saveBtn: { flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 8, backgroundColor: "#2E7D32", padding: 14, borderRadius: 12 },
+  saveBtn: { flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 8, backgroundColor: "#16A34A", padding: 14, borderRadius: 12 },
   saveBtnText: { color: "white", fontWeight: "bold" },
   detailHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
-  aiCard: { backgroundColor: "#2E7D32", borderRadius: 16, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  aiCard: { backgroundColor: "#16A34A", borderRadius: 16, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   successBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, backgroundColor: "#4CAF50", padding: 12, borderRadius: 12, marginRight: 8 },
   dangerBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, backgroundColor: "#E53935", padding: 12, borderRadius: 12 },
   btnText: { color: "white", fontWeight: "bold" },
-  fabBtn: { width: 56, height: 56, borderRadius: 28, backgroundColor: "#2E7D32", justifyContent: "center", alignItems: "center", marginBottom: 32 },
+  fabBtn: { width: 56, height: 56, borderRadius: 28, backgroundColor: "#16A34A", justifyContent: "center", alignItems: "center", marginBottom: 32 },
   searchContainer: {
   flexDirection: "row",
   alignItems: "center",
@@ -315,7 +315,7 @@ searchInput: {
 },
 summaryCard: {
   flex: 1,
-  backgroundColor: "#2E7D32",
+  backgroundColor: "#16A34A",
   padding: 12,
   borderRadius: 16,
   marginHorizontal: 4,
@@ -325,7 +325,7 @@ summaryNumber: { color: "white", fontSize: 18, fontWeight: "bold" },
 summaryLabel: { color: "white", fontSize: 12 },
 button: {
     width: "100%",
-    backgroundColor: "#2E7D32", 
+    backgroundColor: "#16A34A", 
     paddingVertical: 16,
     borderRadius: 24, 
     shadowColor: "#a7f3d0", 

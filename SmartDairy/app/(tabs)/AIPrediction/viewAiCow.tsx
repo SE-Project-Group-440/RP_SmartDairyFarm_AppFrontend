@@ -76,7 +76,7 @@ export default function ViewAiCow({
         <View
           style={[
             styles.iconCircle,
-            { backgroundColor: isPregnant ? "#2E7D32" : "#e11d48" },
+            { backgroundColor: isPregnant ? "#16A34A" : "#e11d48" },
           ]}
         >
           {isPregnant ? (
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   },
   infoValue: { fontWeight: "bold" },
   aiCard: {
-    backgroundColor: "#2E7D32",
+    backgroundColor: "#16A34A",
     borderRadius: 16,
     padding: 16,
     flexDirection: "row",
@@ -335,7 +335,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginTop: 8,
   },
-  progressFill: { height: 10, backgroundColor: "#2E7D32" },
+  progressFill: { height: 10, backgroundColor: "#16A34A" },
   successBtn: {
     flex: 1,
     backgroundColor: "#4CAF50",
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   saveBtn: {
-    backgroundColor: "#2E7D32",
+    backgroundColor: "#16A34A",
     padding: 12,
     borderRadius: 12,
     alignItems: "center",

@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   saveBtn: {
-    backgroundColor: "#2E7D32",
+    backgroundColor: "#16A34A",
     padding: 14,
     borderRadius: 12,
     alignItems: "center",
