@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Animated,
+  Image
 } from "react-native";
 import {
   Calendar,
@@ -57,10 +58,6 @@ export default function AiHomeScreen() {
     "E. Age (Month)": "",
   });
   const [aiDates, setAiDates] = useState<Record<string, string>>({});
-  const [showCalvingPicker, setShowCalvingPicker] = useState(false);
-  const [calvingDate, setCalvingDate] = useState<Date | null>(null);
-  const [showAiPicker, setShowAiPicker] = useState(false);
-  const [tempAiDate, setTempAiDate] = useState<Date | null>(null);
   useEffect(() => {
     fetchPending();
   }, []);
@@ -78,11 +75,6 @@ export default function AiHomeScreen() {
     }
   }, [selectedCow]);
 
-  const widthInterpolated = progressAnim.interpolate({
-    inputRange: [0, 100],
-    outputRange: ["0%", "100%"],
-  });
-  
   const handleSelectCow = (cow: any) => {
     setSelectedCow(cow);
     setView("detail");
@@ -109,14 +101,6 @@ export default function AiHomeScreen() {
     setView("add");
   };
 
-  const handleSave = async () => {
-    if (!formData.cowId) {
-      alert("Cow ID is required");
-      return;
-    }
-    await addCow(formData);
-    setView("list");
-  };
 
   const filteredCows = cows.filter((cow) =>
     cow.cowId?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -185,7 +169,7 @@ export default function AiHomeScreen() {
                   <Plus size={20} color="#fff" />
                 </View>
 
-                <Text style={styles.text}>Register New Cow</Text>
+                <Text style={styles.text}>Register New Cow For AI</Text>
               </View>
             </TouchableOpacity>
             <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 16 }}>
@@ -228,7 +212,12 @@ export default function AiHomeScreen() {
               >
                 <View style={styles.cowCardLeft}>
                   <View style={styles.cowIcon}>
-                    <Text style={{ fontSize: 24 }}>🐄</Text>
+                    
+                    <Image
+                      source={require("../../../assets/images/cow.png")}
+                      style={styles.cowImage}
+                      resizeMode="contain"
+                    />
                   </View>
                   <View>
                     <View style={styles.cowRow}>
@@ -304,14 +293,9 @@ const styles = StyleSheet.create({
   saveBtnText: { color: "white", fontWeight: "bold" },
   detailHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 },
   aiCard: { backgroundColor: "#2E7D32", borderRadius: 16, padding: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  progressBar: { width: "100%", height: 10, backgroundColor: "#E0E0E0", borderRadius: 5 },
-  progressFill: { height: 10, backgroundColor: "#2E7D32", borderRadius: 5 },
   successBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, backgroundColor: "#4CAF50", padding: 12, borderRadius: 12, marginRight: 8 },
   dangerBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, backgroundColor: "#E53935", padding: 12, borderRadius: 12 },
   btnText: { color: "white", fontWeight: "bold" },
-  bottomNav: { position: "absolute", bottom: 0, left: 0, right: 0, height: 64, flexDirection: "row", justifyContent: "space-around", alignItems: "center", backgroundColor: "white" },
-  navBtn: { flexDirection: "column", alignItems: "center" },
-  navText: { fontSize: 10, fontWeight: "bold" },
   fabBtn: { width: 56, height: 56, borderRadius: 28, backgroundColor: "#2E7D32", justifyContent: "center", alignItems: "center", marginBottom: 32 },
   searchContainer: {
   flexDirection: "row",
@@ -367,5 +351,9 @@ button: {
     fontWeight: "bold",
     fontSize: 16,
   },
+  cowImage: {
+  width: 24,
+  height: 24,
+},
  
 });

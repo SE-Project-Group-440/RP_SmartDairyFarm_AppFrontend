@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   Animated,
+  Image
 } from "react-native";
 import { Calendar, MoreHorizontal, CheckCircle2, XCircle } from "lucide-react-native";
 
@@ -135,10 +136,14 @@ export default function ViewAiCow({
       {/* HEADER */}
       <View style={styles.detailHeader}>
         <View style={styles.cowIcon}>
-            <Text style={{ fontSize: 24 }}>🐄</Text>
+            <Image
+                                  source={require("../../../assets/images/cow.png")}
+                                  style={styles.cowImage}
+                                  resizeMode="contain"
+                                />
         </View>
         <View>
-          <Text style={styles.cowId}>Cow Id: {cow.cowId}</Text>
+          <Text style={styles.cowId}>Cow - {cow.cowId}</Text>
         </View>
         <MoreHorizontal size={20} />
       </View>
@@ -385,4 +390,8 @@ finalTitle: {
 },
 iconCircle: { width: 48, height: 48, borderRadius: 24, justifyContent: "center", alignItems: "center", elevation: 4, },
 saveBtnText: { color: "white", fontWeight: "bold" },
+cowImage: {
+  width: 24,
+  height: 24,
+},
 });
