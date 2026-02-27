@@ -102,7 +102,7 @@ export const useAIStore = create<AIStore>((set) => ({
         ...cow,
         "Lactation No": Number(cow["Lactation No"]),
         "Milk_Yield": Number(cow["Milk_Yield"]),
-        "Breed": Number(cow["Breed"]),
+        "Breed": cow["Breed"],
         "Estrus Cycle Length": Number(cow["Estrus Cycle Length"]),
         "E. Age (Month)": Number(cow["E. Age (Month)"]),
       };
