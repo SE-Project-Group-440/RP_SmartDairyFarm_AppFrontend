@@ -13,7 +13,7 @@ import {
 export interface InputData {
   "Lactation No": number;
   "Milk_Yield": number;
-  "Breed": number;
+  "Breed": string;
   "Milking/Dry": string;
   "Hormonal Treatment": string;
   "Estrus Cycle Length": number;
@@ -41,7 +41,7 @@ export interface Cow {
   // flattening input_data into UI
   "Lactation No": number;
   "Milk_Yield": number;
-  "Breed": number;
+  "Breed": string;
   "Milking/Dry": string;
   "Hormonal Treatment": string;
   "Estrus Cycle Length": number;
