@@ -59,19 +59,8 @@ export default function LactationCurveHome() {
         return <ChatScreen />;
 
       case "Anjana":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <TrendingUp size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Anjana
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-        );
+        return <AiRecommendationScreen />;
+        return <AiRecommendationScreen />;
 
       case "Dinidi":
         return (
