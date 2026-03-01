@@ -58,8 +58,8 @@ export default function ChatScreen() {
     linearPCMIsFloat: false,
   },
   web: {
-  mimeType: "audio/webm",
-  bitsPerSecond: 128000,
+    mimeType: "audio/wav",
+    bitsPerSecond: 128000,
   },
 };
 

@@ -17,6 +17,7 @@ export async function askChat(query: string): Promise<ChatResponse> {
 
   if (!response.ok) {
     throw new Error("Failed to get answer from backend");
+    throw new Error("Failed to get answer from backend");
   }
 
   return response.json();
