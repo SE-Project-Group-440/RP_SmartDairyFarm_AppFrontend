@@ -14,6 +14,7 @@ import {
 } from "lucide-react-native";
 
 import { useRecommendationStore } from "../../Store/recommendationStore";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface AlertsRecommendationsScreenProps {
   onCowSelect: (cowId: string) => void;
@@ -24,6 +25,7 @@ export function AlertsRecommendationsScreen({
   onCowSelect,
   onBack,
 }: AlertsRecommendationsScreenProps) {
+  const { t } = useTranslations();
   const {
     recommendations,
     fetchAll,
@@ -51,14 +53,14 @@ export function AlertsRecommendationsScreen({
           className="mb-4 flex-row items-center gap-2"
         >
           <ArrowLeft size={20} color="#ffedd5" />
-          <Text className="text-orange-100">Back to Dashboard</Text>
+          <Text className="text-orange-100">{t('common', 'backToDashboard')}</Text>
         </Pressable>
 
         <Text className="text-2xl text-white mb-1">
-          Alerts & Recommendations
+          {t('alerts', 'alertsRecommendations')}
         </Text>
         <Text className="text-orange-100">
-          Stay informed and take action
+          {activeAlerts.length === 0 ? t('alerts', 'noAlerts') : "Stay informed and take action"}
         </Text>
       </View>
 

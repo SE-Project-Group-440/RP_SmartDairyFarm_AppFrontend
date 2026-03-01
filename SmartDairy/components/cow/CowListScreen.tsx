@@ -15,6 +15,7 @@ import {
 } from "lucide-react-native";
 
 import { useCowManageStore } from "../../Store/cowManageStore";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface CowListScreenProps {
   onCowSelect: (cowId: string) => void;
@@ -25,6 +26,7 @@ export function CowListScreen({
   onCowSelect,
   onBack,
 }: CowListScreenProps) {
+  const { t } = useTranslations();
   const { cows, fetchCows, isLoading } = useCowManageStore();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -78,15 +80,15 @@ export function CowListScreen({
         >
           <ArrowLeft size={20} color="#dcfce7" />
           <Text className="text-green-100">
-            Back to Dashboard
+            {t('cowList', 'backToDashboard')}
           </Text>
         </Pressable>
 
         <Text className="text-2xl text-white mb-1">
-          Manage Cows
+          {t('cowList', 'manageCows')}
         </Text>
         <Text className="text-green-100">
-          {cows.length} cows registered
+          {cows.length} {t('cowList', 'cowsRegistered')}
         </Text>
       </View>
 
@@ -100,7 +102,7 @@ export function CowListScreen({
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search by name or breed..."
+            placeholder={t('cowList', 'search')}
             className="pl-12 pr-4 py-3 bg-white border-2 border-slate-200 rounded-xl"
           />
         </View>
@@ -109,18 +111,18 @@ export function CowListScreen({
         <View className="flex-row items-center justify-between">
           <Text className="text-sm text-slate-600">
             {filteredCows.length}{" "}
-            {filteredCows.length === 1 ? "cow" : "cows"} found
+            {filteredCows.length === 1 ? t('cowList', 'cow') : t('cowList', 'cows')} {t('cowList', 'found')}
           </Text>
 
           <View className="flex-row gap-2">
             <View className="px-3 py-1 bg-green-100 rounded-full">
               <Text className="text-xs text-green-700">
-                {healthyCount} Healthy
+                {healthyCount} {t('cowList', 'healthy')}
               </Text>
             </View>
             <View className="px-3 py-1 bg-orange-100 rounded-full">
               <Text className="text-xs text-orange-700">
-                {warningCount} Monitor
+                {warningCount} {t('cowList', 'monitor')}
               </Text>
             </View>
           </View>
@@ -164,38 +166,38 @@ export function CowListScreen({
                         }`}
                       >
                         {cow.status === "Active"
-                          ? "✓ Healthy"
-                          : "⚠ Monitor"}
+                          ? `✓ ${t('cowList', 'healthy')}`
+                          : `⚠ ${t('cowList', 'monitor')}`}
                       </Text>
                     </View>
                   </View>
 
                   <View className="flex-row flex-wrap gap-y-2">
                     <Text className="w-1/2 text-sm text-slate-600">
-                      Age:{" "}
+                      {t('cowList', 'age')}: {" "}
                       <Text className="text-slate-900">
                         {calculateAgeInMonths(
                           cow.birthDate
                         )}{" "}
-                        months
+                        {t('cowList', 'months')}
                       </Text>
                     </Text>
                   <Text className="w-1/2 text-sm text-slate-600">
-  Lactation:{" "}
+  {t('cowList', 'lactation')}: {" "}
   <Text className="text-slate-900">
     {cow.lactationRound ?? "—"}
   </Text>
 </Text>
 
 <Text className="w-1/2 text-sm text-slate-600">
-  Day:{" "}
+  {t('cowList', 'day')}: {" "}
   <Text className="text-slate-900">
     {cow.lactationDay ?? "—"}
   </Text>
 </Text>
 
 <Text className="w-1/2 text-sm text-slate-600">
-  Avg Milk:{" "}
+  {t('cowList', 'avgMilk')}: {" "}
   <Text className="text-slate-900">
     {cow.avgMilk ? `${cow.avgMilk} L` : "—"}
   </Text>
@@ -213,7 +215,7 @@ export function CowListScreen({
                 >
                   <Eye size={16} color="white" />
                   <Text className="text-white text-sm">
-                    View Profile
+                    {t('cowList', 'viewProfile')}
                   </Text>
                 </Pressable>
 
@@ -233,10 +235,10 @@ export function CowListScreen({
           <View className="bg-white rounded-2xl p-8 items-center">
             <Text className="text-4xl mb-4">🔍</Text>
             <Text className="text-slate-900 mb-2">
-              No cows found
+              {t('cowList', 'noCowsFound')}
             </Text>
             <Text className="text-sm text-slate-600">
-              Try adjusting your search
+              {t('cowList', 'tryAdjustingSearch')}
             </Text>
           </View>
         )}

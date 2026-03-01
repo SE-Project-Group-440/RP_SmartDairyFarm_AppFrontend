@@ -20,6 +20,7 @@ interface HistoryScreenProps {
 }
 
 import { api } from "../../hooks/api";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface HistoryRecord {
   id: string;
@@ -31,6 +32,7 @@ interface HistoryRecord {
 }
 
 export function HistoryScreen({ onBack }: HistoryScreenProps) {
+  const { t } = useTranslations();
   const [filterType, setFilterType] = useState<"all" | "milk" | "cow" >("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [records, setRecords] = useState<HistoryRecord[]>([]);
@@ -56,7 +58,7 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
   }, []);
 
   const filteredHistory = records.filter((record) => {
-    const matchesType = filterType === "all" || (record.type === filterType) || (filterType === "milk" && record.type === "milk");
+    const matchesType = filterType === "all" || record.type === filterType;
     const matchesSearch =
       record.cowName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       record.value.toLowerCase().includes(searchQuery.toLowerCase());
@@ -118,15 +120,15 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
         >
           <ArrowLeft size={20} color="#cbd5f5" />
           <Text className="text-slate-300">
-            Back to Dashboard
+            {t('common', 'backToDashboard')}
           </Text>
         </Pressable>
 
         <Text className="text-2xl text-white mb-1">
-          History
+          {t('history', 'history')}
         </Text>
         <Text className="text-slate-300">
-          View past records and activities
+          {t('history', 'accessPastRecords')}
         </Text>
       </View>
 
@@ -139,7 +141,7 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search history..."
+            placeholder={t('history', 'searchPlaceholder')}
             className="pl-12 pr-4 py-3 bg-white border-2 border-slate-200 rounded-xl"
           />
         </View>
@@ -147,33 +149,38 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
         {/* Filters */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2">
-            {["all", "milk", "health", "feed"].map((type) => (
-              <Pressable
-                key={type}
-                onPress={() => setFilterType(type as any)}
-                className={`px-4 py-2 rounded-xl ${
-                  filterType === type
-                    ? type === "milk"
-                      ? "bg-blue-600"
-                      : type === "cow"
-                      ? "bg-purple-600"
-                      : "bg-slate-700"
-                    : "bg-white border-2 border-slate-200"
-                }`}
-              >
-                <Text
-                  className={
+            {["all", "milk", "cow"].map((type) => {
+              const labels: Record<string, string> = {
+                all: t('history', 'filterAll'),
+                milk: t('history', 'filterMilk'),
+                cow: t('history', 'filterCow'),
+              };
+              return (
+                <Pressable
+                  key={type}
+                  onPress={() => setFilterType(type as any)}
+                  className={`px-4 py-2 rounded-xl ${
                     filterType === type
-                      ? "text-white"
-                      : "text-slate-700"
-                  }
+                      ? type === "milk"
+                        ? "bg-blue-600"
+                        : type === "cow"
+                        ? "bg-purple-600"
+                        : "bg-slate-700"
+                      : "bg-white border-2 border-slate-200"
+                  }`}
                 >
-                  {type === "all"
-                    ? "All Records"
-                    : type.charAt(0).toUpperCase() + type.slice(1)}
-                </Text>
-              </Pressable>
-            ))}
+                  <Text
+                    className={
+                      filterType === type
+                        ? "text-white"
+                        : "text-slate-700"
+                    }
+                  >
+                    {labels[type]}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
         </ScrollView>
 
@@ -182,10 +189,10 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
           <View className="bg-white rounded-2xl p-8 items-center">
             <Text className="text-4xl mb-4">📋</Text>
             <Text className="text-slate-900 mb-2">
-              No records found
+              {t('common', 'noData')}
             </Text>
             <Text className="text-sm text-slate-600">
-              Try adjusting your filters
+              {t('history', 'tryAdjustingFilters')}
             </Text>
           </View>
         ) : (
@@ -231,7 +238,9 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
                             )}`}
                           >
                             <Text className="text-xs">
-                              {record.type}
+                              {record.type === "milk"
+                                ? t('history', 'recordTypeMilk')
+                                : t('history', 'recordTypeCow')}
                             </Text>
                           </View>
                         </View>
@@ -253,20 +262,24 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
 
         {/* Summary */}
         <View className="bg-white rounded-2xl p-5 border border-slate-100">
-          <Text className="text-slate-900 mb-4">Summary</Text>
+          <Text className="text-slate-900 mb-4">{t('history', 'summary')}</Text>
 
           <View className="flex-row justify-between text-center">
             <View className="flex-1">
               <Text className="text-2xl text-blue-600 mb-1">
                 {records.filter((r) => r.type === "milk").length}
               </Text>
-              <Text className="text-xs text-slate-600">Milk Records</Text>
+              <Text className="text-xs text-slate-600">
+                {t('history', 'milkRecords')}
+              </Text>
             </View>
             <View className="flex-1">
               <Text className="text-2xl text-purple-600 mb-1">
                 {records.filter((r) => r.type === "cow").length}
               </Text>
-              <Text className="text-xs text-slate-600">Cows Added</Text>
+              <Text className="text-xs text-slate-600">
+                {t('history', 'cowsAdded')}
+              </Text>
             </View>
            
           </View>

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { ArrowLeft, Camera } from "lucide-react-native";
 import { useCowStore } from "../../Store/cowStore";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface AddCowScreenProps {
   onBack: () => void;
@@ -26,6 +27,7 @@ const breeds = [
 ];
 
 export function AddCowScreen({ onBack }: AddCowScreenProps) {
+  const { t } = useTranslations();
   const { createCow, isCreating } = useCowStore();
 
   const [formData, setFormData] = useState({
@@ -104,15 +106,15 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
           >
             <ArrowLeft size={20} color="#dcfce7" />
             <Text className="text-green-100">
-              Back to Dashboard
+              {t('common', 'back')}
             </Text>
           </Pressable>
 
           <Text className="text-2xl text-white mb-1">
-            Add New Cow
+            {t('addCow', 'addNewCow')}
           </Text>
           <Text className="text-green-100">
-            Register a new cow to your farm
+            {t('addCow', 'registerNewCow')}
           </Text>
         </View>
 
@@ -122,20 +124,20 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
           {/* Basic Info */}
           <View className="bg-white rounded-2xl p-6 border border-slate-100 space-y-4">
             <Text className="text-slate-900">
-              Basic Information
+              {t('addCow', 'basicInformation')}
             </Text>
 
             {/* Name */}
             <View>
               <Text className="text-sm text-slate-600 mb-2">
-                Cow Name *
+                {t('addCow', 'cowName')} {t('addCow', 'required')}
               </Text>
               <TextInput
                 value={formData.name}
                 onChangeText={(v) =>
                   setFormData({ ...formData, name: v })
                 }
-                placeholder="e.g., Raththi"
+                placeholder={`${t('addCow', 'example')} Raththi`}
                 className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
               />
             </View>
@@ -143,7 +145,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
             {/* Breed */}
             <View>
               <Text className="text-sm text-slate-600 mb-2">
-                Breed *
+                {t('addCow', 'breed')} {t('addCow', 'required')}
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View className="flex-row gap-2">
@@ -177,7 +179,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
             {/* Birth Date */}
             <View>
               <Text className="text-sm text-slate-600 mb-2">
-                Birth Date *
+                {t('addCow', 'birthDate')} {t('addCow', 'required')}
               </Text>
               <TextInput
                 value={formData.birthDate}
@@ -195,14 +197,14 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
             {/* Color */}
             <View>
               <Text className="text-sm text-slate-600 mb-2">
-                Color (Optional)
+                {t('addCow', 'color')} {t('addCow', 'optional')}
               </Text>
               <TextInput
                 value={formData.color}
                 onChangeText={(v) =>
                   setFormData({ ...formData, color: v })
                 }
-                placeholder="e.g., Black"
+                placeholder={`${t('addCow', 'example')} Black`}
                 className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
               />
             </View>
@@ -210,7 +212,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
             {/* Weight */}
             <View>
               <Text className="text-sm text-slate-600 mb-2">
-                Weight (kg, optional)
+                {t('addCow', 'weight')} {t('addCow', 'kg')} {t('addCow', 'optional')}
               </Text>
               <TextInput
                 value={formData.weight}
@@ -218,7 +220,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
                   setFormData({ ...formData, weight: v })
                 }
                 keyboardType="numeric"
-                placeholder="e.g., 450"
+                placeholder={`${t('addCow', 'example')} 450`}
                 className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
               />
             </View>
@@ -241,13 +243,13 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
                   : "text-slate-500"
               }`}
             >
-              {isCreating ? "Saving..." : "Add Cow"}
+              {isCreating ? t('addCow', 'saving') : t('addCow', 'addCow')}
             </Text>
           </Pressable>
 
           {!isFormValid && (
             <Text className="text-center text-sm text-slate-500">
-              * Name, Breed, and Birth Date are required
+              {t('addCow', 'requiredFields')}
             </Text>
           )}
         </View>
@@ -261,7 +263,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
               <Text className="text-4xl">⚠️</Text>
             </View>
             <Text className="text-xl text-slate-900 mb-3 font-semibold">
-              Failed to Add Cow
+              {t('addCow', 'failedToAddCow')}
             </Text>
             <Text className="text-sm text-slate-600 text-center mb-6">
               {errorMessage}
@@ -270,7 +272,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
               onPress={() => setShowError(false)}
               className="bg-red-600 px-6 py-3 rounded-xl"
             >
-              <Text className="text-white font-semibold">Try Again</Text>
+              <Text className="text-white font-semibold">{t('common', 'tryAgain')}</Text>
             </Pressable>
           </View>
         </View>
@@ -284,10 +286,10 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
               <Text className="text-4xl">🐄</Text>
             </View>
             <Text className="text-xl text-slate-900 mb-2">
-              Cow Added Successfully!
+              {t('addCow', 'cowAddedSuccessfully')}
             </Text>
             <Text className="text-sm text-slate-600 text-center">
-              {formData.name} has been registered
+              {formData.name} {t('addCow', 'hasBeenRegistered')}
             </Text>
           </View>
         </View>

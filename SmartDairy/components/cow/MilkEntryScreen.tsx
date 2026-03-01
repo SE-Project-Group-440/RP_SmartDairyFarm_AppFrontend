@@ -11,6 +11,7 @@ import { ArrowLeft, Check, Droplet } from "lucide-react-native";
 
 import { useCowListStore } from "../../Store/cowStore";
 import { api } from "../../hooks/api";
+import { useTranslations } from "@/hooks/useTranslations";
 
 type MilkSlot = "morning" | "evening";
 
@@ -19,6 +20,7 @@ interface MilkEntryScreenProps {
 }
 
 export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
+  const { t } = useTranslations();
   const { cows, fetchCows } = useCowListStore();
 
   const [cowId, setCowId] = useState<string | null>(null);
@@ -169,23 +171,23 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
           className="flex-row items-center gap-2 mb-6"
         >
           <ArrowLeft size={20} color="#334155" />
-          <Text className="text-slate-700">Back</Text>
+          <Text className="text-slate-700">{t('common', 'back')}</Text>
         </Pressable>
 
-        <Text className="text-2xl mb-6">Milk Entry</Text>
+        <Text className="text-2xl mb-6">{t('milkEntry', 'milkEntry')}</Text>
 
-        <Text className="text-sm text-slate-600 mb-2">Select Cow</Text>
+        <Text className="text-sm text-slate-600 mb-2">{t('milkEntry', 'selectCow')}</Text>
         <Pressable
           onPress={() => setShowCowModal(true)}
           className="bg-white border rounded-xl p-4 mb-6"
         >
-          <Text>{cowName || "Tap to select cow"}</Text>
+          <Text>{cowName || t('milkEntry', 'tapToSelectCow')}</Text>
         </Pressable>
 
         {milkSlot === "evening" && morningMilk !== null && (
           <View className="bg-blue-100 rounded-xl p-3 mb-4">
             <Text className="text-blue-700">
-              Morning Milk:{" "}
+              {t('milkEntry', 'morningMilk')}: {" "}
               <Text className="font-semibold">{morningMilk} L</Text>
             </Text>
           </View>
@@ -194,8 +196,8 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         <View className="mb-4">
           <Text className="text-sm text-slate-600 mb-1">
             {milkSlot === "morning"
-              ? "Morning Milk (L)"
-              : "Evening Milk (L)"}
+              ? t('milkEntry', 'morningMilk')
+              : t('milkEntry', 'eveningMilk')} {t('milkEntry', 'milkUnit')}
           </Text>
 
           <TextInput
@@ -208,7 +210,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         </View>
 
         <TextInput
-          placeholder="Notes (optional)"
+          placeholder={`${t('milkEntry', 'notes')} ${t('milkEntry', 'optional')}`}
           value={notes}
           onChangeText={setNotes}
           className="bg-white border rounded-xl p-4 mb-6"
@@ -216,9 +218,9 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         />
 
         <View className="mb-6">
-          <Text className="text-sm text-slate-600 mb-2">Calving Date (if new cycle)</Text>
+          <Text className="text-sm text-slate-600 mb-2">{t('milkEntry', 'calvingDate')} {t('milkEntry', 'ifNewCycle')}</Text>
           <TextInput
-            placeholder="YYYY-MM-DD (optional)"
+            placeholder={t('milkEntry', 'dateFormat')}
             value={calvingDate}
             onChangeText={setCalvingDate}
             className="bg-white border rounded-xl p-4"
@@ -233,8 +235,8 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
           <Droplet color="white" />
           <Text className="text-white text-lg">
             {milkSlot === "morning"
-              ? "Save Morning Milk"
-              : "Save Evening Milk"}
+              ? t('milkEntry', 'saveMorningMilk')
+              : t('milkEntry', 'saveEveningMilk')}
           </Text>
         </Pressable>
       </ScrollView>
@@ -243,7 +245,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
       <Modal visible={showCowModal} animationType="slide">
         <View className="flex-1 bg-white px-6 pt-12">
           <TextInput
-            placeholder="Search cow..."
+            placeholder={t('milkEntry', 'searchCow')}
             value={search}
             onChangeText={setSearch}
             className="border rounded-xl px-4 py-2 mb-4"
@@ -279,7 +281,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
           <View className="bg-white p-6 rounded-3xl w-full">
             <View className="items-center mb-4">
               <Text className="text-5xl mb-3">⚠️</Text>
-              <Text className="text-2xl font-bold text-red-600 text-center">Error</Text>
+              <Text className="text-2xl font-bold text-red-600 text-center">{t('common', 'error')}</Text>
             </View>
             
             <View className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6">
@@ -292,7 +294,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               <View className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
                 <Text className="text-sm text-blue-900">
                   <Text className="font-bold">💡 Tip: </Text>
-                  Enter the calving date in the "Calving Date" field above to start a new lactation cycle.
+                  {t('milkEntry', 'calvingDate')} {t('milkEntry', 'ifNewCycle')}
                 </Text>
               </View>
             )}
@@ -301,7 +303,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               onPress={() => setShowError(false)}
               className="bg-red-600 py-4 rounded-xl items-center"
             >
-              <Text className="text-white font-bold text-lg">Dismiss</Text>
+              <Text className="text-white font-bold text-lg">{t('common', 'dismiss')}</Text>
             </Pressable>
           </View>
         </View>
@@ -314,18 +316,18 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
             <View className="items-center mb-4">
               <Check size={48} color="#16a34a" />
               <Text className="text-xl font-semibold text-slate-900">
-                Milk Entry Saved!
+                {t('milkEntry', 'milkEntrySaved')}
               </Text>
             </View>
             <Text className="text-sm text-slate-600 text-center mb-6">
-              Milk data recorded successfully.
+              {t('milkEntry', 'milkDataRecorded')}
             </Text>
 
             <Pressable
               onPress={() => setSuccess(false)}
               className="bg-green-600 py-3 rounded-xl items-center"
             >
-              <Text className="text-white font-semibold">Done</Text>
+              <Text className="text-white font-semibold">{t('common', 'done')}</Text>
             </Pressable>
           </View>
         </View>
@@ -336,7 +338,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
   <View className="flex-1 bg-black/40 justify-center items-center">
     <View className="bg-white p-6 rounded-3xl w-[90%]">
       <Text className="text-xl font-semibold mb-2 text-center">
-        Recommendation
+        {t('milkEntry', 'recommendation')}
       </Text>
 
       <Text className="text-base font-medium mb-2">
@@ -366,7 +368,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         onPress={() => setShowRecommendation(false)}
         className="bg-green-600 py-3 rounded-xl items-center mt-4"
       >
-        <Text className="text-white font-semibold">Got it</Text>
+        <Text className="text-white font-semibold">{t('milkEntry', 'gotIt')}</Text>
       </Pressable>
     </View>
   </View>

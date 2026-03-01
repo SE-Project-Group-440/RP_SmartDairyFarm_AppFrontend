@@ -14,7 +14,8 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const data = await loginRequest(email, password);
-      await login({ email }, data.token);
+      // data should contain token and user info
+      await login(data.user, data.token);
       router.replace("/(tabs)");
     } catch (err: any) {
       setError(err.message || "Login failed");
