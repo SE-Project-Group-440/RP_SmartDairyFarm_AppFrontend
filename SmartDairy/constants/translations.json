@@ -143,7 +143,9 @@
       "cowsAdded": "Cows Added",
       "recordTypeMilk": "Milk",
       "recordTypeCow": "Cow",
-      "searchPlaceholder": "Search by cow name or value..."
+      "searchPlaceholder": "Search by cow name or value...",
+      "today": "Today",
+      "yesterday": "Yesterday"
     }
   },
   "sinhala": {
@@ -290,7 +292,9 @@
       "cowsAdded": "එක් කරන ලද ගවුන්",
       "recordTypeMilk": "කිරි",
       "recordTypeCow": "ගවයෙක්",
-      "searchPlaceholder": "ගවගේ නම හෝ අගය අනුව සොයන්න..."
+      "searchPlaceholder": "ගවගේ නම හෝ අගය අනුව සොයන්න...",
+      "today": "අධ",
+      "yesterday": "ඊය්ගිමහින්"
     }
   },
   "tamil": {
@@ -437,7 +441,9 @@
       "cowsAdded": "சேர்க்கப்பட்ட பசுக்கள்",
       "recordTypeMilk": "பால்",
       "recordTypeCow": "பசு",
-      "searchPlaceholder": "பசுவின் பெயர் அல்லது மதிப்পு மூலம் தேடுக..."
+      "searchPlaceholder": "பசு பெயர் அல்லது மதிப்பு மூலம் தேடுங்கள்...",
+      "today": "இன்று",
+      "yesterday": "நன்னாடக்கன்"
     }
   }
 }

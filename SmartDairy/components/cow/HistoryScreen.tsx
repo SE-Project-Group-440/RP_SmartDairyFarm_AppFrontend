@@ -82,8 +82,8 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    if (date.toDateString() === today.toDateString()) return "Today";
-    if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+    if (date.toDateString() === today.toDateString()) return t('history', 'today');
+    if (date.toDateString() === yesterday.toDateString()) return t('history', 'yesterday');
 
     return date.toLocaleDateString("en-US", {
       month: "short",
