@@ -9,6 +9,7 @@ import {
   Image
 } from "react-native";
 import { Calendar, MoreHorizontal, CheckCircle2, XCircle } from "lucide-react-native";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface Props {
   cow: any;
@@ -33,6 +34,7 @@ export default function ViewAiCow({
   const FinalStatusHighlight = ({ cow }: { cow: any }) => {
     const scaleAnim = useRef(new Animated.Value(0.95)).current;
     const opacityAnim = useRef(new Animated.Value(0)).current;
+    
   
     useEffect(() => {
       if (
@@ -87,7 +89,7 @@ export default function ViewAiCow({
         </View>
   
         <View>
-          <Text style={styles.finalLabel}>Final Result</Text>
+          <Text style={styles.finalLabel}>{t('addAiCow', 'finalResult')}</Text>
           <Text
             style={[
               styles.finalTitle,
@@ -96,14 +98,14 @@ export default function ViewAiCow({
             ]}
           >
             {isPregnant
-              ? "Pregnant"
-              : "Not Pregnant"}
+              ? t('addAiCow', 'pregnant')
+              : t('addAiCow', 'notPregnant')}
           </Text>
         </View>
       </Animated.View>
     );
   };
-    
+    const { t } = useTranslations();
 
   useEffect(() => {
     if (cow?.recommendation?.pregnancy_probability) {
@@ -148,31 +150,31 @@ export default function ViewAiCow({
         <MoreHorizontal size={20} />
       </View>
 
-      <Text style={styles.sectionTitle}>Cow Information</Text>
+      <Text style={styles.sectionTitle}>{t('addAiCow', 'viewtitle')}</Text>
 
       <FinalStatusHighlight cow={cow} />
 
       <View style={styles.row}>
-        <InfoBox label="Breed" value={cow?.Breed} />
-        <InfoBox label="Age (Months)" value={cow?.["E. Age (Month)"]} />
+        <InfoBox label={t('addAiCow', 'breed')} value={t('addAiCow', cow?.Breed)} />
+        <InfoBox label={t('addAiCow', 'ageMonths')} value={cow?.["E. Age (Month)"]} />
       </View>
 
       <View style={styles.row}>
-        <InfoBox label="Lactation No" value={cow?.["Lactation No"]} />
-        <InfoBox label="Milk Yield" value={cow?.Milk_Yield} />
+        <InfoBox label={t('addAiCow', 'lactationNo')} value={cow?.["Lactation No"]} />
+        <InfoBox label={t('addAiCow', 'milkYield')} value={cow?.Milk_Yield} />
       </View>
 
       <View style={styles.row}>
-        <InfoBox label="Estrus Cycle Length" value={cow?.["Estrus Cycle Length"]} />
-        <InfoBox label="Hormonal Treatment" value={cow?.["Hormonal Treatment"]} />
+        <InfoBox label={t('addAiCow', 'estrusCycle')} value={cow?.["Estrus Cycle Length"]} />
+        <InfoBox label={t('addAiCow', 'hormonalTreatment')} value={t('addAiCow', cow?.["Hormonal Treatment"])} />
       </View>
                   
       <View style={styles.row}>
-        <InfoBox label="Previous AI Dates" value={cow?.["Previous AI Dates"]} />
-        <InfoBox label="Last Calving Date" value={cow?.["Last Caving Date"]} />
+        <InfoBox label={t('addAiCow', 'previousAiDates')} value={cow?.["Previous AI Dates"]} />
+        <InfoBox label={t('addAiCow', 'lastCalvingDate')} value={cow?.["Last Caving Date"]} />
       </View>
       <View style={styles.row}>
-        <InfoBox label="Milking/Dry" value={cow?.["Milking/Dry"]} />      
+        <InfoBox label={t('addAiCow', 'milkingDry')} value={t('addAiCow', cow?.["Milking/Dry"])} />      
       </View>
 
       {/* AI / Pregnancy Card */}
@@ -181,7 +183,7 @@ export default function ViewAiCow({
           {cow.recommendation.status === "PENDING" && (
             <>
               <View>
-                <Text style={styles.aiLabel}>Recommended AI Date</Text>
+                <Text style={styles.aiLabel}>{t('addAiCow', 'recommendAiDate')}</Text>
                 <Text style={styles.aiValue}>
                   {cow.recommendation.recommended_next_ai
                     ? new Date(
@@ -197,7 +199,7 @@ export default function ViewAiCow({
           {cow.recommendation.status === "COMPLETED" && (
             <>
               <View>
-                <Text style={styles.aiLabel}>Pregnancy Check Date</Text>
+                <Text style={styles.aiLabel}>{t('addAiCow', 'pregnancyCheckDate')}</Text>
                 <Text style={styles.aiValue}>
                   {cow.recommendation.pregnancy_check_date
                     ? new Date(
@@ -217,14 +219,14 @@ export default function ViewAiCow({
                       
                       {cow.recommendation.pregnancy_check_status === "PREGNANT" && (
                         <View style={styles.row}>
-                          <InfoBox label="AI Date" value={
+                          <InfoBox label={t('addAiCow', 'aiDate')} value={
                             cow.recommendation.recommended_next_ai
                               ? new Date(cow.recommendation.recommended_next_ai)
                                   .toISOString()
                                   .split("T")[0]
                               : "-"
                           } />
-                          <InfoBox label="Pregnancy Checked Date" value={
+                          <InfoBox label={t('addAiCow', 'pregnancyCheckDate')} value={
                             cow.recommendation.pregnancy_check_date
                               ? new Date(cow.recommendation.pregnancy_check_date)
                                   .toISOString()
@@ -240,10 +242,10 @@ export default function ViewAiCow({
                   {/* Pregnancy Prediction */}
                   {cow.recommendation.status === "COMPLETED" && (
                     <View style={{ marginTop: 16 }}>
-                      <Text style={{ fontWeight: "bold", marginBottom: 8 }}>Pregnancy Prediction</Text>
+                      <Text style={{ fontWeight: "bold", marginBottom: 8 }}>{t('addAiCow', 'pregnancyPrediction')}</Text>
                       <View style={styles.row}>
-                        <InfoBox label="Probability" value={`${cow.recommendation.pregnancy_probability || 0}%`} />
-                        <InfoBox label="Risk Level" value={cow.recommendation.risk_level || "-"} />   
+                        <InfoBox label={t('addAiCow', 'probability')} value={`${cow.recommendation.pregnancy_probability || 0}%`} />
+                        <InfoBox label={t('addAiCow', 'riskLevel')} value={t('addAiCow', cow.recommendation.risk_level || "-")} />   
                       </View>
                       
                       {!cow.recommendation.pregnancy_check_status && (
@@ -254,7 +256,7 @@ export default function ViewAiCow({
                               confirmPregnancyStatus(cow.recommendation._id, "PREGNANT")
                             }
                           >
-                            <Text style={styles.btnText}>Pregnant</Text>
+                            <Text style={styles.btnText}>{t('addAiCow', 'pregnant')}</Text>
                           </TouchableOpacity>
                           <TouchableOpacity
                             style={styles.dangerBtn}
@@ -262,7 +264,7 @@ export default function ViewAiCow({
                               confirmPregnancyStatus(cow.recommendation._id, "NOT_PREGNANT")
                             }
                           >
-                            <Text style={styles.btnText}>Not Pregnant</Text>
+                            <Text style={styles.btnText}>{t('addAiCow', 'notPregnant')}</Text>
                           </TouchableOpacity>
                         </View>
                       )}  
@@ -272,7 +274,7 @@ export default function ViewAiCow({
                   {cow.recommendation.status === "PENDING" && (
                     <View style={{ marginTop: 16 }}>
                       <TextInput
-                        placeholder="Enter AI done date (YYYY-MM-DD)"
+                        placeholder={t('addAiCow', 'enterAiDate')}
                         value={aiDates[cow._id] || ""}
                         onChangeText={(text) =>
                           setAiDates((prev) => ({ ...prev, [cow._id]: text }))
@@ -285,7 +287,7 @@ export default function ViewAiCow({
                           markDone(cow, aiDates[cow._id])
                         }
                       >
-                        <Text style={styles.saveBtnText}>Mark AI as Done</Text>
+                        <Text style={styles.saveBtnText}>{t('addAiCow', 'markAIDone')}</Text>
                       </TouchableOpacity>
                     </View>
                   )}

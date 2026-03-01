@@ -9,6 +9,7 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Plus } from "lucide-react-native";
+import { useTranslations } from '@/hooks/useTranslations';
 
 interface Props {
   addCow: (data: any) => Promise<void>;
@@ -33,6 +34,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
   const [calvingDate, setCalvingDate] = useState<Date | null>(null);
   const [showAiPicker, setShowAiPicker] = useState(false);
   const [tempAiDate, setTempAiDate] = useState<Date | null>(null);
+  const { t } = useTranslations();
 
   const handleSave = async () => {
     if (!formData.cowId) {
@@ -46,9 +48,9 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Add New Cow For AI Monitoring</Text>
+      <Text style={styles.title}>{t('addAiCow', 'addtitle')}</Text>
 
-      <Text style={styles.label}>Cow ID</Text>
+      <Text style={styles.label}>{t('addAiCow', 'cowId')}</Text>
       <TextInput
         style={styles.input}
         value={formData.cowId}
@@ -56,7 +58,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
           setFormData({ ...formData, cowId: text })
         }
       />
-      <Text style={styles.label}>Lactation No</Text>
+      <Text style={styles.label}>{t('addAiCow', 'lactationNo')}</Text>
                   <TextInput
                     keyboardType="numeric"
                     value={formData["Lactation No"]}
@@ -66,7 +68,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
                     style={styles.input}
                   />
 
-      <Text style={styles.label}>Breed</Text>
+      <Text style={styles.label}>{t('addAiCow', 'breed')}</Text>
       <View style={styles.pickerWrapper}>
         <Picker
           selectedValue={formData.Breed}
@@ -74,14 +76,14 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
             setFormData({ ...formData, Breed: value })
           }
         >
-          <Picker.Item label="Select Breed..." value="" />
-          <Picker.Item label="Jersey" value="Jersey" />
-          <Picker.Item label="Friesian" value="Friesian" />
-          <Picker.Item label="Crossbreed" value="Crossbreed" />
+          <Picker.Item label={t('addAiCow', 'selectBreed')} value="" />
+          <Picker.Item label={t('addAiCow', 'jersey')} value="Jersey" />
+          <Picker.Item label={t('addAiCow', 'friesian')} value="Friesian" />
+          <Picker.Item label={t('addAiCow', 'crossbreed')} value="Crossbreed" />
         </Picker>
       </View>
 
-      <Text style={styles.label}>Milking / Dry</Text>
+      <Text style={styles.label}>{t('addAiCow', 'milkingDry')}</Text>
                   <View style={styles.pickerWrapper}>
                     <Picker
                       selectedValue={formData["Milking/Dry"]}
@@ -89,13 +91,13 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
                         setFormData({ ...formData, "Milking/Dry": value })
                       }
                     >
-                      <Picker.Item label="Select..." value="" />
-                      <Picker.Item label="Milking" value="Milking" />
-                      <Picker.Item label="Dry" value="Dry" />
+                      <Picker.Item label={t('addAiCow', 'select')} value="" />
+                      <Picker.Item label={t('addAiCow', 'milking')} value="Milking" />
+                      <Picker.Item label={t('addAiCow', 'dry')} value="Dry" />
                     </Picker>
                   </View>
 
-        <Text style={styles.label}>Hormonal Treatment</Text>
+        <Text style={styles.label}>{t('addAiCow', 'hormonalTreatment')}</Text>
                     <View style={styles.pickerWrapper}>
                       <Picker
                         selectedValue={formData["Hormonal Treatment"]}
@@ -103,13 +105,13 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
                           setFormData({ ...formData, "Hormonal Treatment": value })
                         }
                       >
-                        <Picker.Item label="Select..." value="" />
-                        <Picker.Item label="Yes" value="Yes" />
-                        <Picker.Item label="No" value="No" />
+                        <Picker.Item label={t('addAiCow', 'select')} value="" />
+                        <Picker.Item label={t('addAiCow', 'yes')} value="Yes" />
+                        <Picker.Item label={t('addAiCow', 'no')} value="No" />
                       </Picker>
                     </View>
 
-      <Text style={styles.label}>Milk Yield</Text>
+      <Text style={styles.label}>{t('addAiCow', 'milkYield')}</Text>
       <TextInput
         keyboardType="numeric"
         style={styles.input}
@@ -118,7 +120,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
           setFormData({ ...formData, Milk_Yield: text })
         }
       />
-      <Text style={styles.label}>Estrus Cycle Length</Text>
+      <Text style={styles.label}>{t('addAiCow', 'estrusCycle')}</Text>
                   <TextInput
                     keyboardType="numeric"
                     value={formData["Estrus Cycle Length"]}
@@ -127,7 +129,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
                     }
                     style={styles.input}
                   />
-        <Text style={styles.label}>Age in Months</Text>
+        <Text style={styles.label}>{t('addAiCow', 'ageMonths')}</Text>
                     <TextInput
                       keyboardType="numeric"
                       value={formData["E. Age (Month)"]}
@@ -136,14 +138,14 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
                       }
                       style={styles.input}
                     />
-                    <Text style={styles.label}>Previous AI Dates</Text>
+                    <Text style={styles.label}>{t('addAiCow', 'previousAiDates')}</Text>
         
                     {/* Add Button */}
                     <TouchableOpacity
                       style={[styles.saveBtn, { marginBottom: 12 }]}
                       onPress={() => setShowAiPicker(true)}
                     >
-                      <Text style={styles.saveBtnText}>Add AI Date</Text>
+                      <Text style={styles.saveBtnText}>{t('addAiCow', 'addAiDate')}</Text>
                     </TouchableOpacity>
         {formData["Previous AI Dates"]?.map((date: string, index: number) => (
               <View
@@ -168,7 +170,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
                     });
                   }}
                 >
-                  <Text style={{ color: "red" }}>Remove</Text>
+                  <Text style={{ color: "red" }}>{t('addAiCow', 'remove')}</Text>
                 </TouchableOpacity>
               </View>
             ))}
@@ -197,7 +199,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
               />
             )}
 
-      <Text style={styles.label}>Last Calving Date</Text>
+      <Text style={styles.label}>{t('addAiCow', 'lastCalvingDate')}</Text>
       <TouchableOpacity
         style={styles.input}
         onPress={() => setShowPicker(true)}
@@ -205,7 +207,7 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
         <Text>
           {calvingDate
             ? calvingDate.toISOString().split("T")[0]
-            : "Select Date"}
+            : t('addAiCow', 'selectDate')}
         </Text>
       </TouchableOpacity>
 
@@ -231,12 +233,12 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
 
       <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
         <Plus size={18} color="white" />
-        <Text style={styles.saveBtnText}>Save Record</Text>
+        <Text style={styles.saveBtnText}>{t('addAiCow', 'saveRecord')}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={onCancel} style={{ marginTop: 10 }}>
         <Text style={{ textAlign: "center", color: "gray" }}>
-          Cancel
+          {t('addAiCow', 'cancel')}
         </Text>
       </TouchableOpacity>
     </View>

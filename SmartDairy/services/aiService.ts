@@ -5,7 +5,7 @@ import axios from "axios";
 =========================== */
 
 const API = axios.create({
-  baseURL: "http://10.109.230.24:8000/api/ai",
+  baseURL: "http://10.98.42.24:8000/api/ai",
   // ⚠ If using real device, use your PC IP
 });
 

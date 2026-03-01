@@ -30,6 +30,7 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import ViewAiCow from "./viewAiCow";
 import AddAiCow from "./AddAiCow";
+import { useTranslations } from '@/hooks/useTranslations';
 
 
 export default function AiHomeScreen() {
@@ -41,6 +42,7 @@ export default function AiHomeScreen() {
     fetchPending,
     loading,
   } = useAIStore();
+  const { t } = useTranslations();
 
   const [view, setView] = useState<"list" | "detail" | "add">("list");
   const [selectedCow, setSelectedCow] = useState<any>(null);
@@ -106,23 +108,29 @@ export default function AiHomeScreen() {
     cow.cowId?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const StatusBadge = ({ status }: { status: string }) => (
-    <View
+  const StatusBadge = ({ statusKey }: { statusKey: string }) => (
+  <View
+    style={[
+      styles.badge,
+      {
+        backgroundColor:
+          statusKey === "PENDING" ? "#FFE0B2" : "#A5D6A7",
+      },
+    ]}
+  >
+    <Text
       style={[
-        styles.badge,
-        { backgroundColor: status === "PENDING" ? "#FFE0B2" : "#A5D6A7" },
+        styles.badgeText,
+        {
+          color:
+            statusKey === "PENDING" ? "#FB8C00" : "#16A34A",
+        },
       ]}
     >
-      <Text
-        style={[
-          styles.badgeText,
-          { color: status === "PENDING" ? "#FB8C00" : "#16A34A" },
-        ]}
-      >
-        {status}
-      </Text>
-    </View>
-  );
+      {t("addAiCow", statusKey)}
+    </Text>
+  </View>
+);
   
 
   return (
@@ -169,25 +177,25 @@ export default function AiHomeScreen() {
                   <Plus size={20} color="#fff" />
                 </View>
 
-                <Text style={styles.text}>Register New Cow For AI</Text>
+                <Text style={styles.text}>{t('addAiCow', 'title')}</Text>
               </View>
             </TouchableOpacity>
             <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 16 }}>
               <View style={styles.summaryCard}>
                 <Text style={styles.summaryNumber}>{cows.length}</Text>
-                <Text style={styles.summaryLabel}>Total Cows</Text>
+                <Text style={styles.summaryLabel}>{t('addAiCow', 'totalCows')}</Text>
               </View>
               <View style={styles.summaryCard}>
                 <Text style={styles.summaryNumber}>
                   {cows.filter(c => c.recommendation.pregnancy_check_status === "PREGNANT").length}
                 </Text>
-                <Text style={styles.summaryLabel}>Pregnant</Text>
+                <Text style={styles.summaryLabel}>{t('addAiCow', 'pregnant')}</Text>
               </View>
               <View style={styles.summaryCard}>
                 <Text style={styles.summaryNumber}>
                   {cows.filter(c => c.recommendation.status === "PENDING").length}
                 </Text>
-                <Text style={styles.summaryLabel}>AI Due</Text>
+              <Text style={styles.summaryLabel}>{t('addAiCow', 'aiDue')}</Text>
               </View>
             </View>
 
@@ -195,7 +203,7 @@ export default function AiHomeScreen() {
             <View style={styles.searchContainer}>
               <Search size={18} color="#9E9E9E" style={{ marginRight: 8 }} />
               <TextInput
-                placeholder="Search cow ID..."
+                placeholder= {t('addAiCow', 'searchByCowId')}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 style={styles.searchInput}
@@ -222,10 +230,10 @@ export default function AiHomeScreen() {
                   <View>
                     <View style={styles.cowRow}>
                       <Text style={styles.cowId}>{cow.cowId}</Text>
-                      <StatusBadge status={cow.recommendation.status} />
+                      <StatusBadge statusKey={cow.recommendation.status} />
                     </View>
                     <Text style={styles.cowSubtitle}>
-                      Last AI:{" "}
+                      {t('addAiCow', 'lastAi')}:{" "}
                       {cow.recommendation.recommended_next_ai
                         ? new Date(
                             cow.recommendation.recommended_next_ai
