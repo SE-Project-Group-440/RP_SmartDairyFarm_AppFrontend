@@ -1,11 +1,9 @@
-// frontend/services/chatService.ts
 import { Platform } from "react-native";
 
-export const API_URL = "http://10.98.42.24:8000/chat"; // replace with your FastAPI machine IP
-
+export const API_URL = "http://10.98.42.24:8000/chat"; 
 export interface ChatResponse {
   answer: string;
-  audioUri?: string; // optional if backend sends pre-generated audio
+  audioUri?: string; 
 }
 
 export async function askChat(query: string): Promise<ChatResponse> {
@@ -17,18 +15,15 @@ export async function askChat(query: string): Promise<ChatResponse> {
 
   if (!response.ok) {
     throw new Error("Failed to get answer from backend");
-    throw new Error("Failed to get answer from backend");
   }
 
   return response.json();
 }
 
-// frontend/services/speechService.ts
 export async function speechToText(fileUri: string): Promise<string> {
   const formData = new FormData();
 
   if (Platform.OS === "web") {
-    // Web needs blob fetch
     const response = await fetch(fileUri);
     const blob = await response.blob();
 
@@ -52,7 +47,7 @@ export async function speechToText(fileUri: string): Promise<string> {
   }
 
   const data = await res.json();
-  return data.text; // Google STT backend will return {"text": "...recognized text..."}
+  return data.text; 
 }
 
 
