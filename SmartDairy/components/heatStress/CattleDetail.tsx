@@ -14,6 +14,7 @@ interface CattleDetailProps {
   onStatusChange: (id: string, status: 'active' | 'inactive') => void;
 }
 
+
 export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
 
   const [mode, setMode] = useState<'AUTO' | 'MANUAL'>('AUTO');
