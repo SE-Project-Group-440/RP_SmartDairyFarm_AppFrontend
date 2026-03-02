@@ -11,6 +11,7 @@ import { ArrowLeft, Check, Droplet } from "lucide-react-native";
 
 import { useCowListStore } from "../../Store/cowStore";
 import { api } from "../../hooks/api";
+import { useTranslations } from "@/hooks/useTranslations";
 
 type MilkSlot = "morning" | "evening";
 
@@ -19,6 +20,7 @@ interface MilkEntryScreenProps {
 }
 
 export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
+  const { t } = useTranslations();
   const { cows, fetchCows } = useCowListStore();
 
   const [cowId, setCowId] = useState<string | null>(null);
@@ -39,6 +41,8 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // ✅ NEW
   const [showRecommendation, setShowRecommendation] = useState(false);
@@ -54,15 +58,29 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
   }, [search, cows]);
 
   const syncTodayMilk = async (cowId: string) => {
-    try {
-      const res = await api.get(`/milk/today/${cowId}`);
+  try {
+    const res = await api.get(`/milk/today/${cowId}`);
 
-      if (res.data?.morning && !res.data?.evening) {
-        setMilkSlot("evening");
-        setMorningMilk(res.data.morning);
-      }
-    } catch {}
-  };
+    const todayMilk = res.data;
+
+    if (todayMilk?.morning && !todayMilk?.evening) {
+      // Morning exists, evening not yet entered
+      setMilkSlot("evening");
+      setMorningMilk(todayMilk.morning);
+    } 
+    else if (todayMilk?.morning && todayMilk?.evening) {
+      // Both already entered → reset to morning for next day
+      resetForm();
+    } 
+    else {
+      // Nothing entered yet
+      setMilkSlot("morning");
+      setMorningMilk(null);
+    }
+  } catch (error) {
+    console.log("No milk data for today");
+  }
+};
 
   const handleSubmit = async () => {
     if (!cowId || !milkValue) return;
@@ -70,6 +88,26 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
 
     try {
       setIsSubmitting(true);
+      setErrorMessage("");
+
+      
+       if (calvingDate) {
+        try {
+          await api.post("/lact/", {
+            cowId,
+            calvingDate,
+            healthStatus: "Healthy",
+            lactationRound: 1, 
+          });
+          console.log("New lactation cycle created and predictions generating...");
+        } catch (cycleErr: any) {
+          const cycleErrMsg = cycleErr?.response?.data?.error || "Failed to create lactation cycle";
+          setErrorMessage(cycleErrMsg);
+          setShowError(true);
+          setIsSubmitting(false);
+          return;
+        }
+      }
 
       const payload: any = {
         cowId,
@@ -105,9 +143,13 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         resetForm();
       }
     } catch (err: any) {
-      if (err?.response?.data?.message?.includes("Calving date")) {
-        setShowCalvingModal(true);
-      }
+      const errorMsg =  err?.response?.data?.error || err?.response?.data?.message || err?.message || "Failed to save milk entry";
+      setErrorMessage(errorMsg);
+      setShowError(true);
+
+      resetForm();
+      setCowId(null);
+      setCowName("");
     } finally {
       setIsSubmitting(false);
     }
@@ -129,23 +171,23 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
           className="flex-row items-center gap-2 mb-6"
         >
           <ArrowLeft size={20} color="#334155" />
-          <Text className="text-slate-700">Back</Text>
+          <Text className="text-slate-700">{t('common', 'back')}</Text>
         </Pressable>
 
-        <Text className="text-2xl mb-6">Milk Entry</Text>
+        <Text className="text-2xl mb-6">{t('milkEntry', 'milkEntry')}</Text>
 
-        <Text className="text-sm text-slate-600 mb-2">Select Cow</Text>
+        <Text className="text-sm text-slate-600 mb-2">{t('milkEntry', 'selectCow')}</Text>
         <Pressable
           onPress={() => setShowCowModal(true)}
           className="bg-white border rounded-xl p-4 mb-6"
         >
-          <Text>{cowName || "Tap to select cow"}</Text>
+          <Text>{cowName || t('milkEntry', 'tapToSelectCow')}</Text>
         </Pressable>
 
         {milkSlot === "evening" && morningMilk !== null && (
           <View className="bg-blue-100 rounded-xl p-3 mb-4">
             <Text className="text-blue-700">
-              Morning Milk:{" "}
+              {t('milkEntry', 'morningMilk')}: {" "}
               <Text className="font-semibold">{morningMilk} L</Text>
             </Text>
           </View>
@@ -154,8 +196,8 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         <View className="mb-4">
           <Text className="text-sm text-slate-600 mb-1">
             {milkSlot === "morning"
-              ? "Morning Milk (L)"
-              : "Evening Milk (L)"}
+              ? t('milkEntry', 'morningMilk')
+              : t('milkEntry', 'eveningMilk')} {t('milkEntry', 'milkUnit')}
           </Text>
 
           <TextInput
@@ -168,12 +210,22 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         </View>
 
         <TextInput
-          placeholder="Notes (optional)"
+          placeholder={`${t('milkEntry', 'notes')} ${t('milkEntry', 'optional')}`}
           value={notes}
           onChangeText={setNotes}
           className="bg-white border rounded-xl p-4 mb-6"
           multiline
         />
+
+        <View className="mb-6">
+          <Text className="text-sm text-slate-600 mb-2">{t('milkEntry', 'calvingDate')} {t('milkEntry', 'ifNewCycle')}</Text>
+          <TextInput
+            placeholder={t('milkEntry', 'dateFormat')}
+            value={calvingDate}
+            onChangeText={setCalvingDate}
+            className="bg-white border rounded-xl p-4"
+          />
+        </View>
 
         <Pressable
           disabled={isSubmitting || !milkValue || Number(milkValue) <= 0}
@@ -183,8 +235,8 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
           <Droplet color="white" />
           <Text className="text-white text-lg">
             {milkSlot === "morning"
-              ? "Save Morning Milk"
-              : "Save Evening Milk"}
+              ? t('milkEntry', 'saveMorningMilk')
+              : t('milkEntry', 'saveEveningMilk')}
           </Text>
         </Pressable>
       </ScrollView>
@@ -193,7 +245,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
       <Modal visible={showCowModal} animationType="slide">
         <View className="flex-1 bg-white px-6 pt-12">
           <TextInput
-            placeholder="Search cow..."
+            placeholder={t('milkEntry', 'searchCow')}
             value={search}
             onChangeText={setSearch}
             className="border rounded-xl px-4 py-2 mb-4"
@@ -223,25 +275,35 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         </View>
       </Modal>
 
-      {/* Calving Modal */}
-      <Modal visible={showCalvingModal} transparent animationType="fade">
-        <View className="flex-1 bg-black/40 justify-center items-center">
-          <View className="bg-white p-6 rounded-3xl w-[90%]">
-            <Text className="text-lg mb-3">Enter Calving Date</Text>
-            <TextInput
-              placeholder="YYYY-MM-DD"
-              value={calvingDate}
-              onChangeText={setCalvingDate}
-              className="border rounded-xl p-4 mb-4"
-            />
+      {/* Error Modal */}
+      <Modal visible={showError} transparent animationType="fade">
+        <View className="flex-1 bg-black/40 justify-center items-center px-4">
+          <View className="bg-white p-6 rounded-3xl w-full">
+            <View className="items-center mb-4">
+              <Text className="text-5xl mb-3">⚠️</Text>
+              <Text className="text-2xl font-bold text-red-600 text-center">{t('common', 'error')}</Text>
+            </View>
+            
+            <View className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6">
+              <Text className="text-base text-red-900 text-center font-semibold">
+                {errorMessage}
+              </Text>
+            </View>
+
+            {errorMessage.includes("Calving date") && (
+              <View className="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
+                <Text className="text-sm text-blue-900">
+                  <Text className="font-bold">💡 Tip: </Text>
+                  {t('milkEntry', 'calvingDate')} {t('milkEntry', 'ifNewCycle')}
+                </Text>
+              </View>
+            )}
+            
             <Pressable
-              onPress={() => {
-                setShowCalvingModal(false);
-                handleSubmit();
-              }}
-              className="bg-green-600 py-3 rounded-xl items-center"
+              onPress={() => setShowError(false)}
+              className="bg-red-600 py-4 rounded-xl items-center"
             >
-              <Text className="text-white">Confirm</Text>
+              <Text className="text-white font-bold text-lg">{t('common', 'dismiss')}</Text>
             </Pressable>
           </View>
         </View>
@@ -253,16 +315,19 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
           <View className="bg-white p-6 rounded-3xl w-[90%]">
             <View className="items-center mb-4">
               <Check size={48} color="#16a34a" />
-              <Text className="text-xl font-semibold">
-                Saved Successfully
+              <Text className="text-xl font-semibold text-slate-900">
+                {t('milkEntry', 'milkEntrySaved')}
               </Text>
             </View>
+            <Text className="text-sm text-slate-600 text-center mb-6">
+              {t('milkEntry', 'milkDataRecorded')}
+            </Text>
 
             <Pressable
               onPress={() => setSuccess(false)}
-              className="bg-green-600 py-3 rounded-xl items-center mt-4"
+              className="bg-green-600 py-3 rounded-xl items-center"
             >
-              <Text className="text-white font-semibold">Done</Text>
+              <Text className="text-white font-semibold">{t('common', 'done')}</Text>
             </Pressable>
           </View>
         </View>
@@ -273,7 +338,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
   <View className="flex-1 bg-black/40 justify-center items-center">
     <View className="bg-white p-6 rounded-3xl w-[90%]">
       <Text className="text-xl font-semibold mb-2 text-center">
-        Recommendation
+        {t('milkEntry', 'recommendation')}
       </Text>
 
       <Text className="text-base font-medium mb-2">
@@ -303,7 +368,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         onPress={() => setShowRecommendation(false)}
         className="bg-green-600 py-3 rounded-xl items-center mt-4"
       >
-        <Text className="text-white font-semibold">Got it</Text>
+        <Text className="text-white font-semibold">{t('milkEntry', 'gotIt')}</Text>
       </Pressable>
     </View>
   </View>

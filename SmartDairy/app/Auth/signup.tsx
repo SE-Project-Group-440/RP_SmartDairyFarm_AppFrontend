@@ -36,7 +36,7 @@ export default function Signup() {
   const handleSignup = async () => {
     try {
       const data = await signupRequest(form);
-      await login({ email: form.email }, data.token);
+      await login(data.user, data.token);
       router.replace("/(tabs)");
     } catch (err: any) {
       alert(err.message || "Signup failed");
