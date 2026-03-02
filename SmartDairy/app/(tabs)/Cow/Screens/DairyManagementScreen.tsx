@@ -5,7 +5,7 @@ import { AddCowScreen } from "../../../../components/cow/AddCowScreen";
 import { CowListScreen } from "../../../../components/cow/CowListScreen";
 import CowProfileScreen from "../../Cow/Screens/CowProfileScreen";
 import { MilkEntryScreen } from "../../../../components/cow/MilkEntryScreen";
-import { AnalyticsForecastingScreen } from "../../../../components/cow/AnalyticsForecastingScreen";
+import  AnalyticsForecastingScreen  from "../../../../components/cow/AnalyticsForecastingScreen";
 import { AlertsRecommendationsScreen } from "../../../../components/cow/AlertsRecommendationsScreen";
 import { HistoryScreen } from "../../../../components/cow/HistoryScreen";
 
@@ -64,7 +64,6 @@ export default function DairyManagementScreen({
       );
 
     case "analytics":
-    case "forecasting":
       return (
         <AnalyticsForecastingScreen
           onBack={() => onNavigate("dashboard")}
