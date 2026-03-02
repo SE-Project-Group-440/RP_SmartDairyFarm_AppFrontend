@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //const LOCAL_IP = "172.28.1.99"; 
 const LOCAL_IP = "192.168.1.15"; 
-//const LOCAL_IP = "192.168.100.238"; 
+//const LOCAL_IP = "192.168.138.238"; 
 
 const BASE_URL =
   Platform.OS === "web"
@@ -19,7 +19,7 @@ export const api = axios.create({
   },
 });
 
-// 🔐 Attach token to every request
+//token
 api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
@@ -33,7 +33,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// 🚨 Optional: handle unauthorized responses globally
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {

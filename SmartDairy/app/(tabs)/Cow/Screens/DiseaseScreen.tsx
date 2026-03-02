@@ -109,7 +109,7 @@ export default function DiseaseScreen() {
       const baseURL =
         Platform.OS === "android" || Platform.OS === "ios"
           ? "http://192.168.1.15:8000"
-          : "http://192.168.1.15:8000"; // Update to your backend URL
+          : "http://192.168.1.15:8000"; 
 
       const res = await axios.post(
         `${baseURL}/cattle/disease/predict`,

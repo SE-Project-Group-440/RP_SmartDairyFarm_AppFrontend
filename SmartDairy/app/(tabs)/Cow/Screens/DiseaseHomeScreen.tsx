@@ -10,7 +10,7 @@ interface DiseaseHomeScreenProps {
 
 export default function DiseaseHomeScreen({ onNavigate }: DiseaseHomeScreenProps) {
   const goToPrediction = () => {
-    Keyboard.dismiss(); // Prevents aria-hidden warnings
+    Keyboard.dismiss(); 
     onNavigate("prediction");
     console.log("Navigating to DiseaseScreen");
   };
