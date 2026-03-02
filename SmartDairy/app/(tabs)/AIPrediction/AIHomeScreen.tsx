@@ -267,8 +267,6 @@ export default function AiHomeScreen() {
           />
         )}
       </ScrollView>
-
-      
     </View>
   );
 }

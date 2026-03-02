@@ -59,14 +59,14 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
         }
       />
       <Text style={styles.label}>{t('addAiCow', 'lactationNo')}</Text>
-                  <TextInput
-                    keyboardType="numeric"
-                    value={formData["Lactation No"]}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, "Lactation No": text })
-                    }
-                    style={styles.input}
-                  />
+      <TextInput
+        keyboardType="numeric"
+        value={formData["Lactation No"]}
+        onChangeText={(text) =>
+          setFormData({ ...formData, "Lactation No": text })
+        }
+        style={styles.input}
+      />
 
       <Text style={styles.label}>{t('addAiCow', 'breed')}</Text>
       <View style={styles.pickerWrapper}>
@@ -84,32 +84,32 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
       </View>
 
       <Text style={styles.label}>{t('addAiCow', 'milkingDry')}</Text>
-                  <View style={styles.pickerWrapper}>
-                    <Picker
-                      selectedValue={formData["Milking/Dry"]}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, "Milking/Dry": value })
-                      }
-                    >
-                      <Picker.Item label={t('addAiCow', 'select')} value="" />
-                      <Picker.Item label={t('addAiCow', 'milking')} value="Milking" />
-                      <Picker.Item label={t('addAiCow', 'dry')} value="Dry" />
-                    </Picker>
-                  </View>
+      <View style={styles.pickerWrapper}>
+        <Picker
+          selectedValue={formData["Milking/Dry"]}
+          onValueChange={(value) =>
+            setFormData({ ...formData, "Milking/Dry": value })
+          }
+        >
+          <Picker.Item label={t('addAiCow', 'select')} value="" />
+          <Picker.Item label={t('addAiCow', 'milking')} value="Milking" />
+          <Picker.Item label={t('addAiCow', 'dry')} value="Dry" />
+        </Picker>
+      </View>
 
-        <Text style={styles.label}>{t('addAiCow', 'hormonalTreatment')}</Text>
-                    <View style={styles.pickerWrapper}>
-                      <Picker
-                        selectedValue={formData["Hormonal Treatment"]}
-                        onValueChange={(value) =>
-                          setFormData({ ...formData, "Hormonal Treatment": value })
-                        }
-                      >
-                        <Picker.Item label={t('addAiCow', 'select')} value="" />
-                        <Picker.Item label={t('addAiCow', 'yes')} value="Yes" />
-                        <Picker.Item label={t('addAiCow', 'no')} value="No" />
-                      </Picker>
-                    </View>
+      <Text style={styles.label}>{t('addAiCow', 'hormonalTreatment')}</Text>
+      <View style={styles.pickerWrapper}>
+        <Picker
+          selectedValue={formData["Hormonal Treatment"]}
+          onValueChange={(value) =>
+            setFormData({ ...formData, "Hormonal Treatment": value })
+          }
+        >
+          <Picker.Item label={t('addAiCow', 'select')} value="" />
+          <Picker.Item label={t('addAiCow', 'yes')} value="Yes" />
+          <Picker.Item label={t('addAiCow', 'no')} value="No" />
+        </Picker>
+      </View>
 
       <Text style={styles.label}>{t('addAiCow', 'milkYield')}</Text>
       <TextInput
@@ -121,83 +121,82 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
         }
       />
       <Text style={styles.label}>{t('addAiCow', 'estrusCycle')}</Text>
-                  <TextInput
-                    keyboardType="numeric"
-                    value={formData["Estrus Cycle Length"]}
-                    onChangeText={(text) =>
-                      setFormData({ ...formData, "Estrus Cycle Length": text })
-                    }
-                    style={styles.input}
-                  />
-        <Text style={styles.label}>{t('addAiCow', 'ageMonths')}</Text>
-                    <TextInput
-                      keyboardType="numeric"
-                      value={formData["E. Age (Month)"]}
-                      onChangeText={(text) =>
-                        setFormData({ ...formData, "E. Age (Month)": text })
-                      }
-                      style={styles.input}
-                    />
-                    <Text style={styles.label}>{t('addAiCow', 'previousAiDates')}</Text>
+      <TextInput
+        keyboardType="numeric"
+        value={formData["Estrus Cycle Length"]}
+        onChangeText={(text) =>
+          setFormData({ ...formData, "Estrus Cycle Length": text })
+        }
+        style={styles.input}
+      />
+      <Text style={styles.label}>{t('addAiCow', 'ageMonths')}</Text>
+      <TextInput
+        keyboardType="numeric"
+        value={formData["E. Age (Month)"]}
+        onChangeText={(text) =>
+          setFormData({ ...formData, "E. Age (Month)": text })
+        }
+        style={styles.input}
+      />
+      <Text style={styles.label}>{t('addAiCow', 'previousAiDates')}</Text>
         
-                    {/* Add Button */}
-                    <TouchableOpacity
-                      style={[styles.saveBtn, { marginBottom: 12 }]}
-                      onPress={() => setShowAiPicker(true)}
-                    >
-                      <Text style={styles.saveBtnText}>{t('addAiCow', 'addAiDate')}</Text>
-                    </TouchableOpacity>
-        {formData["Previous AI Dates"]?.map((date: string, index: number) => (
-              <View
-                key={index}
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginBottom: 6,
-                  padding: 8,
-                  backgroundColor: "#E8F5E9",
-                  borderRadius: 8,
-                }}
-              >
-                <Text>{date}</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    const updated = [...formData["Previous AI Dates"]];
-                    updated.splice(index, 1);
-                    setFormData({
-                      ...formData,
-                      "Previous AI Dates": updated,
-                    });
-                  }}
-                >
-                  <Text style={{ color: "red" }}>{t('addAiCow', 'remove')}</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+      {/* Add Button */}
+      <TouchableOpacity
+        style={[styles.saveBtn, { marginBottom: 12 }]}
+        onPress={() => setShowAiPicker(true)}
+      >
+        <Text style={styles.saveBtnText}>{t('addAiCow', 'addAiDate')}</Text>
+      </TouchableOpacity>
+      {formData["Previous AI Dates"]?.map((date: string, index: number) => (
+        <View
+          key={index}
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 6,
+            padding: 8,
+            backgroundColor: "#E8F5E9",
+            borderRadius: 8,
+          }}
+        >
+          <Text>{date}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              const updated = [...formData["Previous AI Dates"]];
+              updated.splice(index, 1);
+              setFormData({
+                ...formData,
+                "Previous AI Dates": updated,
+              });
+            }}
+          >
+            <Text style={{ color: "red" }}>{t('addAiCow', 'remove')}</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
 
-            {/* Date Picker */}
-            {showAiPicker && (
-              <DateTimePicker
-                value={tempAiDate || new Date()}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  setShowAiPicker(false);
-                  if (selectedDate) {
-                    const formatted =
-                      selectedDate.toISOString().split("T")[0];
-
-                    setFormData({
-                      ...formData,
-                      "Previous AI Dates": [
-                        ...formData["Previous AI Dates"],
-                        formatted,
-                      ],
-                    });
-                  }
-                }}
-              />
-            )}
+      {/* Date Picker */}
+      {showAiPicker && (
+        <DateTimePicker
+          value={tempAiDate || new Date()}
+          mode="date"
+          display="default"
+          onChange={(event, selectedDate) => {
+            setShowAiPicker(false);
+            if (selectedDate) {
+              const formatted =
+              selectedDate.toISOString().split("T")[0];
+              setFormData({
+                ...formData,
+                "Previous AI Dates": [
+                  ...formData["Previous AI Dates"],
+                  formatted,
+                ],
+              });
+            }
+          }}
+        />
+      )}
 
       <Text style={styles.label}>{t('addAiCow', 'lastCalvingDate')}</Text>
       <TouchableOpacity

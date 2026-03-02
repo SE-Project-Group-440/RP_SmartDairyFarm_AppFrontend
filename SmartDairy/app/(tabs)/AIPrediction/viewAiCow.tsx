@@ -32,26 +32,26 @@ export default function ViewAiCow({
     
   const progressAnim = useRef(new Animated.Value(0)).current;
   const FinalStatusHighlight = ({ cow }: { cow: any }) => {
-    const scaleAnim = useRef(new Animated.Value(0.95)).current;
-    const opacityAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const opacityAnim = useRef(new Animated.Value(0)).current;
     
   
-    useEffect(() => {
-      if (
-        cow?.recommendation?.pregnancy_check_status === "PREGNANT" ||
-        cow?.recommendation?.pregnancy_check_status === "NOT_PREGNANT"
-      ) {
-        Animated.parallel([
-          Animated.spring(scaleAnim, {
-            toValue: 1,
-            useNativeDriver: true,
-          }),
-          Animated.timing(opacityAnim, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]).start();
+  useEffect(() => {
+    if (
+      cow?.recommendation?.pregnancy_check_status === "PREGNANT" ||
+      cow?.recommendation?.pregnancy_check_status === "NOT_PREGNANT"
+    ) {
+      Animated.parallel([
+      Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+    }),
+      Animated.timing(opacityAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+      }),
+      ]).start();
       }
     }, [cow]);
   
@@ -105,7 +105,7 @@ export default function ViewAiCow({
       </Animated.View>
     );
   };
-    const { t } = useTranslations();
+  const { t } = useTranslations();
 
   useEffect(() => {
     if (cow?.recommendation?.pregnancy_probability) {
@@ -139,10 +139,10 @@ export default function ViewAiCow({
       <View style={styles.detailHeader}>
         <View style={styles.cowIcon}>
             <Image
-                                  source={require("../../../assets/images/cow.png")}
-                                  style={styles.cowImage}
-                                  resizeMode="contain"
-                                />
+              source={require("../../../assets/images/cow.png")}
+              style={styles.cowImage}
+              resizeMode="contain"
+            />
         </View>
         <View>
           <Text style={styles.cowId}>Cow - {cow.cowId}</Text>
@@ -177,7 +177,6 @@ export default function ViewAiCow({
         <InfoBox label={t('addAiCow', 'milkingDry')} value={t('addAiCow', cow?.["Milking/Dry"])} />      
       </View>
 
-      {/* AI / Pregnancy Card */}
       {cow.recommendation.pregnancy_check_status !== "PREGNANT" && (
         <View style={styles.aiCard}>
           {cow.recommendation.status === "PENDING" && (
@@ -215,82 +214,79 @@ export default function ViewAiCow({
       )}
 
       {cow.recommendation.pregnancy_check_status && (
-                    <View style={{ marginTop: 16 }}>
-                      
-                      {cow.recommendation.pregnancy_check_status === "PREGNANT" && (
-                        <View style={styles.row}>
-                          <InfoBox label={t('addAiCow', 'aiDate')} value={
-                            cow.recommendation.recommended_next_ai
-                              ? new Date(cow.recommendation.recommended_next_ai)
-                                  .toISOString()
-                                  .split("T")[0]
-                              : "-"
-                          } />
-                          <InfoBox label={t('addAiCow', 'pregnancyCheckDate')} value={
-                            cow.recommendation.pregnancy_check_date
-                              ? new Date(cow.recommendation.pregnancy_check_date)
-                                  .toISOString()
-                                  .split("T")[0]
-                              : "-"
-                          }
-                          />
-                          
-                        </View>
-                      )}
-                    </View>
-                  )}
-                  {/* Pregnancy Prediction */}
-                  {cow.recommendation.status === "COMPLETED" && (
-                    <View style={{ marginTop: 16 }}>
-                      <Text style={{ fontWeight: "bold", marginBottom: 8 }}>{t('addAiCow', 'pregnancyPrediction')}</Text>
-                      <View style={styles.row}>
-                        <InfoBox label={t('addAiCow', 'probability')} value={`${cow.recommendation.pregnancy_probability || 0}%`} />
-                        <InfoBox label={t('addAiCow', 'riskLevel')} value={t('addAiCow', cow.recommendation.risk_level || "-")} />   
-                      </View>
-                      
-                      {!cow.recommendation.pregnancy_check_status && (
-                        <View style={{ flexDirection: "row", marginTop: 8 }}>
-                          <TouchableOpacity
-                            style={styles.successBtn}
-                            onPress={() =>
-                              confirmPregnancyStatus(cow.recommendation._id, "PREGNANT")
-                            }
-                          >
-                            <Text style={styles.btnText}>{t('addAiCow', 'pregnant')}</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            style={styles.dangerBtn}
-                            onPress={() =>
-                              confirmPregnancyStatus(cow.recommendation._id, "NOT_PREGNANT")
-                            }
-                          >
-                            <Text style={styles.btnText}>{t('addAiCow', 'notPregnant')}</Text>
-                          </TouchableOpacity>
-                        </View>
-                      )}  
-                    </View>
-                  )}
-      
-                  {cow.recommendation.status === "PENDING" && (
-                    <View style={{ marginTop: 16 }}>
-                      <TextInput
-                        placeholder={t('addAiCow', 'enterAiDate')}
-                        value={aiDates[cow._id] || ""}
-                        onChangeText={(text) =>
-                          setAiDates((prev) => ({ ...prev, [cow._id]: text }))
-                        }
-                        style={styles.input}
-                      />
-                      <TouchableOpacity
-                        style={styles.saveBtn}
-                        onPress={() =>
-                          markDone(cow, aiDates[cow._id])
-                        }
-                      >
-                        <Text style={styles.saveBtnText}>{t('addAiCow', 'markAIDone')}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  )}
+        <View style={{ marginTop: 16 }}>
+          {cow.recommendation.pregnancy_check_status === "PREGNANT" && (
+            <View style={styles.row}>
+              <InfoBox label={t('addAiCow', 'aiDate')} value={
+                cow.recommendation.recommended_next_ai
+                ? new Date(cow.recommendation.recommended_next_ai)
+                .toISOString()
+                .split("T")[0]
+                : "-"
+              } />
+              <InfoBox label={t('addAiCow', 'pregnancyCheckDate')} value={
+                cow.recommendation.pregnancy_check_date
+                ? new Date(cow.recommendation.pregnancy_check_date)
+                .toISOString()
+                .split("T")[0]
+                : "-"
+              }
+              />
+            </View>
+          )}
+        </View>
+      )}
+      {/* Pregnancy Prediction */}
+      {cow.recommendation.status === "COMPLETED" && (
+        <View style={{ marginTop: 16 }}>
+          <Text style={{ fontWeight: "bold", marginBottom: 8 }}>{t('addAiCow', 'pregnancyPrediction')}</Text>
+          <View style={styles.row}>
+            <InfoBox label={t('addAiCow', 'probability')} value={`${cow.recommendation.pregnancy_probability || 0}%`} />
+            <InfoBox label={t('addAiCow', 'riskLevel')} value={t('addAiCow', cow.recommendation.risk_level || "-")} />   
+          </View>
+            
+          {!cow.recommendation.pregnancy_check_status && (
+            <View style={{ flexDirection: "row", marginTop: 8 }}>
+              <TouchableOpacity
+                style={styles.successBtn}
+                  onPress={() =>
+                  confirmPregnancyStatus(cow.recommendation._id, "PREGNANT")
+                }
+              >
+                <Text style={styles.btnText}>{t('addAiCow', 'pregnant')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.dangerBtn}
+                onPress={() =>
+                  confirmPregnancyStatus(cow.recommendation._id, "NOT_PREGNANT")
+                }
+              >
+                <Text style={styles.btnText}>{t('addAiCow', 'notPregnant')}</Text>
+              </TouchableOpacity>
+            </View>
+          )}  
+        </View>
+      )}
+      {cow.recommendation.status === "PENDING" && (
+        <View style={{ marginTop: 16 }}>
+          <TextInput
+            placeholder={t('addAiCow', 'enterAiDate')}
+            value={aiDates[cow._id] || ""}
+            onChangeText={(text) =>
+              setAiDates((prev) => ({ ...prev, [cow._id]: text }))
+            }
+            style={styles.input}
+          />
+          <TouchableOpacity
+            style={styles.saveBtn}
+            onPress={() =>
+              markDone(cow, aiDates[cow._id])
+            }
+          >
+           <Text style={styles.saveBtnText}>{t('addAiCow', 'markAIDone')}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }

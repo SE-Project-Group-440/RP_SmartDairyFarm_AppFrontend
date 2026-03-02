@@ -5,11 +5,6 @@ import {
   fetchPendingCows,
   confirmPregnancy,
 } from "../services/aiService";
-
-/* ===========================
-   TYPES
-=========================== */
-
 export interface InputData {
   "Lactation No": number;
   "Milk_Yield": number;
@@ -38,7 +33,7 @@ export interface Cow {
   _id: string;
   cowId: string;
   recommendation: Recommendation;
-  // flattening input_data into UI
+  // flattening input data 
   "Lactation No": number;
   "Milk_Yield": number;
   "Breed": string;
@@ -62,17 +57,11 @@ interface AIStore {
   ) => Promise<void>;
 }
 
-/* ===========================
-   STORE
-=========================== */
-
+//store
 export const useAIStore = create<AIStore>((set) => ({
   cows: [],
   loading: false,
 
-  /* ===========================
-     FETCH PENDING
-  =========================== */
   fetchPending: async () => {
     set({ loading: true });
     try {
@@ -92,9 +81,6 @@ export const useAIStore = create<AIStore>((set) => ({
     }
   },
 
-  /* ===========================
-     ADD COW + GET RECOMMENDATION
-  =========================== */
   addCow: async (cow) => {
     set({ loading: true });
     try {
@@ -130,9 +116,6 @@ export const useAIStore = create<AIStore>((set) => ({
     }
   },
 
-  /* ===========================
-     MARK AI DONE
-  =========================== */
   markDone: async (cow, ai_date) => {
     set({ loading: true });
     try {
@@ -154,9 +137,6 @@ export const useAIStore = create<AIStore>((set) => ({
     }
   },
 
-  /* ===========================
-     CONFIRM PREGNANCY
-  =========================== */
   confirmPregnancyStatus: async (recommendationId, status) => {
     set({ loading: true });
     try {
