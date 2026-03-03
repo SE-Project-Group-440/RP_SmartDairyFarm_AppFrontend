@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Defs, Ellipse, Path, RadialGradient, Stop } from 'react-native-svg';
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface CattleBody3DProps {
   thiIndex: number;
@@ -8,6 +9,8 @@ interface CattleBody3DProps {
 }
 
 export function CattleBody3D({ thiIndex, stressLevel }: CattleBody3DProps) {
+
+  const { t } = useTranslations();
 
   // 🔥 THI-based color logic (structure unchanged)
   const getHeatColor = (thi: number) => {
@@ -105,7 +108,9 @@ export function CattleBody3D({ thiIndex, stressLevel }: CattleBody3DProps) {
 
       <View style={styles.labelContainer}>
         <View style={styles.label}>
-          <Text style={styles.labelText}>Heat Map View</Text>
+          <Text style={styles.labelText}>
+            {t('cattleHeat', 'heatMapView')}
+          </Text>
         </View>
       </View>
 
@@ -113,19 +118,27 @@ export function CattleBody3D({ thiIndex, stressLevel }: CattleBody3DProps) {
       <View style={styles.legendContainer}>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: '#22c55e' }]} />
-          <Text style={styles.legendText}>Low</Text>
+          <Text style={styles.legendText}>
+            {t('cattleHeat', 'low')}
+          </Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: '#eab308' }]} />
-          <Text style={styles.legendText}>Moderate</Text>
+          <Text style={styles.legendText}>
+            {t('cattleHeat', 'moderate')}
+          </Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: '#f97316' }]} />
-          <Text style={styles.legendText}>High</Text>
+          <Text style={styles.legendText}>
+            {t('cattleHeat', 'high')}
+          </Text>
         </View>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: '#dc2626' }]} />
-          <Text style={styles.legendText}>Critical</Text>
+          <Text style={styles.legendText}>
+            {t('cattleHeat', 'critical')}
+          </Text>
         </View>
       </View>
     </View>

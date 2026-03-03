@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { Cattle } from '../../app/(tabs)/cattleHeat/Screens/CattleListScreen';
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface CattleListProps {
   cattleData: Cattle[];
@@ -10,6 +11,7 @@ interface CattleListProps {
 export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
 
   // 🔥 THI-based stress resolver
+  const { t } = useTranslations();
   const getStressLevelFromTHI = (thi: number) => {
     if (thi >= 88) return 'Critical';
     if (thi >= 79) return 'High';
@@ -46,17 +48,17 @@ export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.greetingRow}>
-              <Text style={styles.greetingText}>Good Evening</Text>
+              <Text style={styles.greetingText}>{t('cattleHeat', 'goodEvening')}  </Text>
               <Text style={styles.moonIcon}>🌙</Text>
               <Text style={styles.greetingText}>Manujaya</Text>
             </View>
-            <Text style={styles.subHeaderText}>Dairy Farm Management</Text>
+            <Text style={styles.subHeaderText}>{t('cattleHeat', 'dairyFarmManagement')}</Text>
           </View>
         </View>
 
         {/* Content */}
         <View style={styles.content}>
-          <Text style={styles.sectionTitle}>Heat Stress Monitoring</Text>
+          <Text style={styles.sectionTitle}>{t('cattleHeat', 'heatStressMonitoring')}</Text>
 
           <View style={styles.grid}>
             {cattleData.map((cattle) => {
@@ -80,9 +82,6 @@ export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
                     <View style={styles.cattleIcon}>
                       <Text style={styles.cattleIconText}>🐄</Text>
                     </View>
-
-                    {/* Cattle Name */}
-                    <Text style={styles.cattleName}>{cattle.name}</Text>
 
                     {/* THI */}
                     <Text style={styles.temperature}>THI - {cattle.thi}</Text>

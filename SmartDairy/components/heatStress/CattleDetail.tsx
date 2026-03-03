@@ -7,6 +7,7 @@ import {
   setAutoMode,
   setManualMode
 } from "../../services/cattleHeatApi";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface CattleDetailProps {
   cattle: Cattle;
@@ -20,6 +21,7 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
   const [mode, setMode] = useState<'AUTO' | 'MANUAL'>('AUTO');
   const [sprinklerOn, setSprinklerOn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const { t } = useTranslations();  
 
   // ✅ Fetch sprinkler status from backend
   useEffect(() => {
@@ -121,7 +123,9 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
               </TouchableOpacity>
               <View style={styles.headerTextContainer}>
                 <Text style={styles.headerTitle}>{cattle.id}</Text>
-                <Text style={styles.headerSubtitle}>Heat Stress Details</Text>
+                <Text style={styles.headerSubtitle}>
+                  {t('cattleHeat', 'heatStressDetails')}
+                </Text>
               </View>
             </View>
 
@@ -129,13 +133,15 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
             {mode === "AUTO" && (
               <View style={styles.autoAlertBox}>
                 <Text style={styles.autoAlertText}>
-                  Sprinkler is automatically controlled by prediction system.
+                  {t('cattleHeat', 'sprinklerAutoMessage')}
                 </Text>
               </View>
             )}
 
             <View style={styles.statusContainer}>
-              <Text style={styles.statusLabel}>Sprinkler System</Text>
+              <Text style={styles.statusLabel}>
+                {t('cattleHeat', 'sprinklerSystem')}
+              </Text>
               <View style={[
                 styles.statusBadge,
                 { backgroundColor: sprinklerOn ? '#86efac' : '#d1d5db' }
@@ -144,7 +150,9 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
                   styles.statusBadgeText,
                   { color: sprinklerOn ? '#166534' : '#374151' }
                 ]}>
-                  {sprinklerOn ? 'Running' : 'Stopped'}
+                  {sprinklerOn
+                      ? t('cattleHeat', 'running')
+                      : t('cattleHeat', 'stopped')}
                 </Text>
               </View>
             </View>
@@ -156,11 +164,15 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
 
           {/* Heat Section */}
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Cattlle Heat Stress</Text>
+            <Text style={styles.cardTitle}>
+              {t('cattleHeat', 'cattleHeatStress')}
+            </Text>
             <CattleBody3D thiIndex={cattle.thi} stressLevel={cattle.stressLevel} />
             <View style={styles.tempDisplay}>
               <Text style={styles.tempValue}>{cattle.envTemp}°C</Text>
-              <Text style={styles.tempLabel}>Current Body Temperature</Text>
+             <Text style={styles.cardTitle}>
+                {t('cattleHeat', 'currentBodyTemperature')}
+              </Text>
             </View>
           </View>
 
@@ -168,7 +180,9 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
           <View style={styles.card}>
             <View style={styles.stressHeader}>
               <Text style={styles.alertIcon}>⚠️</Text>
-              <Text style={styles.cardTitle}>Stress Level</Text>
+              <Text style={styles.cardTitle}>
+                {t('cattleHeat', 'stressLevel')}
+              </Text>
             </View>
 
             <View style={styles.stressRow}>
@@ -201,7 +215,9 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
 
           {/* 🔥 AUTO / MANUAL CONTROL */}
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Sprinkler Control</Text>
+            <Text style={styles.cardTitle}>
+              {t('cattleHeat', 'sprinklerControl')}
+            </Text>
 
             <View style={{ flexDirection: 'row', gap: 10, marginBottom: 15 }}>
               <TouchableOpacity
@@ -211,7 +227,9 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
                 ]}
                 onPress={handleAutoMode}
               >
-                <Text style={styles.toggleText}>AUTO</Text>
+                <Text style={styles.toggleText}>
+                  {t('cattleHeat', 'auto')}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -221,7 +239,9 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
                 ]}
                 onPress={handleManualMode}
               >
-                <Text style={styles.toggleText}>MANUAL</Text>
+                <Text style={styles.toggleText}>
+                  {t('cattleHeat', 'manual')}
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -235,14 +255,16 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
                   ]}
                 >
                   <Text style={styles.toggleText}>
-                    {sprinklerOn ? 'Stop Water Flow' : 'Start Water Flow'}
+                    {sprinklerOn
+                      ? t('cattleHeat', 'stopWater')
+                      : t('cattleHeat', 'startWater')}
                   </Text>
                 </TouchableOpacity>
 
                 <Text style={styles.toggleHint}>
                   {sprinklerOn
-                    ? 'Click to stop sprinkler system'
-                    : 'Click to activate sprinkler system'}
+                    ? t('cattleHeat', 'clickToStop')
+                    : t('cattleHeat', 'clickToStart')}
                 </Text>
               </>
             )}
