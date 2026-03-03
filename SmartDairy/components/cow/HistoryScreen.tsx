@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -19,37 +19,49 @@ interface HistoryScreenProps {
   onBack: () => void;
 }
 
+import { api } from "../../hooks/api";
+import { useTranslations } from "@/hooks/useTranslations";
+
 interface HistoryRecord {
   id: string;
-  date: string;
-  type: "milk" | "health" | "feed";
+  date: string; // YYYY-MM-DD
+  type: "milk" | "cow" ;
   cowName: string;
   value: string;
-  notes?: string;
+  notes?: string | null;
 }
 
-const mockHistory: HistoryRecord[] = [
-  { id: "1", date: "2025-12-27", type: "milk", cowName: "Lassie", value: "18.5L", notes: "Morning session" },
-  { id: "2", date: "2025-12-27", type: "milk", cowName: "Bella", value: "12.3L", notes: "Morning session" },
-  { id: "3", date: "2025-12-26", type: "milk", cowName: "Daisy", value: "20.1L", notes: "Evening session" },
-  { id: "4", date: "2025-12-26", type: "health", cowName: "Bella", value: "Check-up", notes: "Routine veterinary visit" },
-  { id: "5", date: "2025-12-25", type: "feed", cowName: "All Cows", value: "Feed adjustment", notes: "Increased concentrate by 0.5kg" },
-  { id: "6", date: "2025-12-25", type: "milk", cowName: "Lassie", value: "17.8L", notes: "Evening session" },
-  { id: "7", date: "2025-12-24", type: "milk", cowName: "Daisy", value: "19.5L", notes: "Morning session" },
-];
-
 export function HistoryScreen({ onBack }: HistoryScreenProps) {
-  const [filterType, setFilterType] = useState<"all" | "milk" | "health" | "feed">("all");
+  const { t } = useTranslations();
+  const [filterType, setFilterType] = useState<"all" | "milk" | "cow" >("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [records, setRecords] = useState<HistoryRecord[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const filteredHistory = mockHistory.filter((record) => {
-    const matchesType =
-      filterType === "all" || record.type === filterType;
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const res = await api.get("/cows/history/recent");
+        if (mounted && res.data && res.data.success) {
+          setRecords(res.data.data || []);
+        }
+      } catch (e) {
+        console.warn("Failed to load history", e);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+    load();
+    return () => { mounted = false };
+  }, []);
 
+  const filteredHistory = records.filter((record) => {
+    const matchesType = filterType === "all" || record.type === filterType;
     const matchesSearch =
       record.cowName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       record.value.toLowerCase().includes(searchQuery.toLowerCase());
-
     return matchesType && matchesSearch;
   });
 
@@ -70,8 +82,8 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
 
-    if (date.toDateString() === today.toDateString()) return "Today";
-    if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
+    if (date.toDateString() === today.toDateString()) return t('history', 'today');
+    if (date.toDateString() === yesterday.toDateString()) return t('history', 'yesterday');
 
     return date.toLocaleDateString("en-US", {
       month: "short",
@@ -84,10 +96,8 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
     switch (type) {
       case "milk":
         return <Droplet size={20} color="#2563eb" />;
-      case "health":
-        return <TrendingUp size={20} color="#16a34a" />;
-      case "feed":
-        return <FileText size={20} color="#ea580c" />;
+      case "cow":
+        return <FileText size={20} color="#7c3aed" />;
     }
   };
 
@@ -95,10 +105,8 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
     switch (type) {
       case "milk":
         return "bg-blue-100 text-blue-700";
-      case "health":
-        return "bg-green-100 text-green-700";
-      case "feed":
-        return "bg-orange-100 text-orange-700";
+      case "cow":
+        return "bg-purple-100 text-purple-700";
     }
   };
 
@@ -112,15 +120,15 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
         >
           <ArrowLeft size={20} color="#cbd5f5" />
           <Text className="text-slate-300">
-            Back to Dashboard
+            {t('common', 'backToDashboard')}
           </Text>
         </Pressable>
 
         <Text className="text-2xl text-white mb-1">
-          History
+          {t('history', 'history')}
         </Text>
         <Text className="text-slate-300">
-          View past records and activities
+          {t('history', 'accessPastRecords')}
         </Text>
       </View>
 
@@ -133,7 +141,7 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search history..."
+            placeholder={t('history', 'searchPlaceholder')}
             className="pl-12 pr-4 py-3 bg-white border-2 border-slate-200 rounded-xl"
           />
         </View>
@@ -141,35 +149,38 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
         {/* Filters */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2">
-            {["all", "milk", "health", "feed"].map((type) => (
-              <Pressable
-                key={type}
-                onPress={() => setFilterType(type as any)}
-                className={`px-4 py-2 rounded-xl ${
-                  filterType === type
-                    ? type === "milk"
-                      ? "bg-blue-600"
-                      : type === "health"
-                      ? "bg-green-600"
-                      : type === "feed"
-                      ? "bg-orange-600"
-                      : "bg-slate-700"
-                    : "bg-white border-2 border-slate-200"
-                }`}
-              >
-                <Text
-                  className={
+            {["all", "milk", "cow"].map((type) => {
+              const labels: Record<string, string> = {
+                all: t('history', 'filterAll'),
+                milk: t('history', 'filterMilk'),
+                cow: t('history', 'filterCow'),
+              };
+              return (
+                <Pressable
+                  key={type}
+                  onPress={() => setFilterType(type as any)}
+                  className={`px-4 py-2 rounded-xl ${
                     filterType === type
-                      ? "text-white"
-                      : "text-slate-700"
-                  }
+                      ? type === "milk"
+                        ? "bg-blue-600"
+                        : type === "cow"
+                        ? "bg-purple-600"
+                        : "bg-slate-700"
+                      : "bg-white border-2 border-slate-200"
+                  }`}
                 >
-                  {type === "all"
-                    ? "All Records"
-                    : type.charAt(0).toUpperCase() + type.slice(1)}
-                </Text>
-              </Pressable>
-            ))}
+                  <Text
+                    className={
+                      filterType === type
+                        ? "text-white"
+                        : "text-slate-700"
+                    }
+                  >
+                    {labels[type]}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
         </ScrollView>
 
@@ -178,10 +189,10 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
           <View className="bg-white rounded-2xl p-8 items-center">
             <Text className="text-4xl mb-4">📋</Text>
             <Text className="text-slate-900 mb-2">
-              No records found
+              {t('common', 'noData')}
             </Text>
             <Text className="text-sm text-slate-600">
-              Try adjusting your filters
+              {t('history', 'tryAdjustingFilters')}
             </Text>
           </View>
         ) : (
@@ -227,7 +238,9 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
                             )}`}
                           >
                             <Text className="text-xs">
-                              {record.type}
+                              {record.type === "milk"
+                                ? t('history', 'recordTypeMilk')
+                                : t('history', 'recordTypeCow')}
                             </Text>
                           </View>
                         </View>
@@ -249,35 +262,26 @@ export function HistoryScreen({ onBack }: HistoryScreenProps) {
 
         {/* Summary */}
         <View className="bg-white rounded-2xl p-5 border border-slate-100">
-          <Text className="text-slate-900 mb-4">
-            Summary
-          </Text>
+          <Text className="text-slate-900 mb-4">{t('history', 'summary')}</Text>
 
           <View className="flex-row justify-between text-center">
             <View className="flex-1">
               <Text className="text-2xl text-blue-600 mb-1">
-                {mockHistory.filter((r) => r.type === "milk").length}
+                {records.filter((r) => r.type === "milk").length}
               </Text>
               <Text className="text-xs text-slate-600">
-                Milk Records
+                {t('history', 'milkRecords')}
               </Text>
             </View>
             <View className="flex-1">
-              <Text className="text-2xl text-green-600 mb-1">
-                {mockHistory.filter((r) => r.type === "health").length}
+              <Text className="text-2xl text-purple-600 mb-1">
+                {records.filter((r) => r.type === "cow").length}
               </Text>
               <Text className="text-xs text-slate-600">
-                Health Checks
+                {t('history', 'cowsAdded')}
               </Text>
             </View>
-            <View className="flex-1">
-              <Text className="text-2xl text-orange-600 mb-1">
-                {mockHistory.filter((r) => r.type === "feed").length}
-              </Text>
-              <Text className="text-xs text-slate-600">
-                Feed Updates
-              </Text>
-            </View>
+           
           </View>
         </View>
       </View>
