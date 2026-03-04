@@ -10,7 +10,8 @@
       "error": "Error",
       "success": "Success",
       "loading": "Loading...",
-      "noData": "No data available"
+      "noData": "No data available",
+      "health": "Health"
     },
     "profile": {
       "myProfile": "My Profile",
@@ -237,7 +238,8 @@
       "error": "ගැටලුවක්",
       "success": "සාර්ථකයි",
       "loading": "පූරණය වෙමින්...",
-      "noData": "දත්ත නැත"
+      "noData": "දත්ත නැත",
+      "health": "සෞඛ්‍යය"
     },
     "profile": {
       "myProfile": "මගේ පැතිකඩ",
@@ -456,7 +458,7 @@
   "tamil": {
     "common": {
       "back": "பின்னோக்கு",
-      "backToDashboard": "டேஷ்போர்டுக்கு பின்னோக்கு",
+      "backToDashboard": "டேஷ்போர்டுக்கு பின்னோक்கு",
       "save": "சேமிக்க",
       "done": "முடிந்தது",
       "dismiss": "நிராகரிக்க",
@@ -464,7 +466,8 @@
       "error": "பிழை",
       "success": "வெற்றி",
       "loading": "ஏற்றுகிறது...",
-      "noData": "தரவு இல்லை"
+      "noData": "தரவு இல்லை",
+      "health": "சுகாதாரம்"
     },
     "profile": {
       "myProfile": "என்னுடைய சுயவிவரம்",

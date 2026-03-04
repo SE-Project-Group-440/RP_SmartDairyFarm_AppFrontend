@@ -9,7 +9,7 @@ import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 
 import  DairyManagementScreen  from "./Screens/DairyManagementScreen";
 import ProfileScreen from "./Screens/ProfileScreen";
-import DiseaseScreen from "./Screens/DiseaseScreen";
+import DiseaseScreen from "../Disease/Screens/DiseaseScreen";
 
 export type MainTab =
   | "dairy"

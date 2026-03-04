@@ -2,6 +2,8 @@ import { View, Text, Pressable, ScrollView, Keyboard } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useTranslation from "../../../../hooks/useTranslation";
 
+type IconName = keyof typeof Ionicons.glyphMap;
+
 
 export type DiseaseScreen = "home" | "prediction";
 
@@ -52,25 +54,25 @@ return (
           {
             label: t("disease", "cows"),
             value: "24",
-            icon: "paw",
+            icon: "paw" as IconName,
             color: "#16a34a",
           },
           {
             label: t("disease", "lastCheck"),
             value: "1min",
-            icon: "time",
+            icon: "time" as IconName,
             color: "#2563eb",
           },
           {
             label: t("disease", "alerts"),
             value: "2", 
-            icon: "alert-circle",
+            icon: "alert-circle" as IconName,
             color: "#dc2626",
           },
           {
             label: t("disease", "healthy"),
             value: "22",
-            icon: "heart",
+            icon: "heart" as IconName,
             color: "#059669",
           },
         ].map((item, index) => (

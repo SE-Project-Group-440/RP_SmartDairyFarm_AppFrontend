@@ -17,7 +17,6 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import useTranslation from "../../../../hooks/useTranslation";
 import { translateInstructionArray } from "../../../../utils/careInstructionTranslator";
-import { useLanguageStore } from "../../../../Store/language.store";
 
 // Types for better type safety
 interface DiseaseInfo {
