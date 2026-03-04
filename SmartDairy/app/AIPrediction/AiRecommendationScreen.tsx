@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { useAIStore } from "../../../Store/aiStore";
+import { useAIStore } from "../../Store/aiStore";
 
 export const AiRecommendationScreen = () => {
   const {

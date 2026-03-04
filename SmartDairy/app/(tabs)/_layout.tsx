@@ -6,12 +6,12 @@ import {
 } from "react-native";
 import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {AiRecommendationScreen} from "./AIPrediction/AiRecommendationScreen";
-import AiHomeScreen from "./AIPrediction/AIHomeScreen";
+import {AiRecommendationScreen} from "../AIPrediction/AiRecommendationScreen";
+import AiHomeScreen from "../AIPrediction/AIHomeScreen";
 
 
 import { DairyManagementScreen } from "../(tabs)/Cow/Screens/DairyManagementScreen";
-import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
+import  ProfileScreen  from "./Cow/Screens/ProfileScreen";
 
 export type MainTab =
   | "dairy"

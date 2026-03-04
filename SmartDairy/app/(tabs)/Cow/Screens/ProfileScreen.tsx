@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import {
   Globe,
@@ -14,10 +15,14 @@ import {
   ChevronRight,
   LogOut,
   Settings,
+  Layout,
 } from "lucide-react-native";
 import { useAuthStore } from '@/Store/auth.store';
 import { useLanguageStore, type Language } from '@/Store/language.store';
 import { useTranslations } from '@/hooks/useTranslations';
+import { router} from "expo-router";
+import { Brain } from "lucide-react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProfileScreen() {
   const [darkMode, setDarkMode] = useState(false);
@@ -27,6 +32,7 @@ export default function ProfileScreen() {
   const { t } = useTranslations();
   const [syncStatus, setSyncStatus] =
     useState<"synced" | "syncing" | "offline">("synced");
+    const navigation = useNavigation();
   
 
   return (
@@ -251,6 +257,32 @@ export default function ProfileScreen() {
             {t('profile', 'version')} 1.0.2 • {t('profile', 'builtWith')}
           </Text>
         </View>
+        {/* AI Monitoring */}
+{/* AI Monitoring */}
+<View>
+  <View className="flex-row items-center gap-2 mb-3">
+    <Layout size={20} color="#0f172a" />
+    <Text className="text-slate-900 text-base">
+      AI Monitoring
+    </Text>
+  </View>
+
+  <Pressable
+    onPress={() => navigation.navigate("AIPrediction/AIHomeScreen" as never)}
+    className="bg-white rounded-2xl border border-slate-100 p-4 flex-row justify-between items-center"
+  >
+    <View className="flex-row items-center gap-3">
+      <View className="w-10 h-10 bg-green-100 rounded-xl items-center justify-center">
+        <Brain size={20} color="#16A34A" />
+      </View>
+      <Text className="text-slate-900 font-medium">
+        Monitor Cow Reproduction
+      </Text>
+    </View>
+
+    <ChevronRight size={20} color="#94a3b8" />
+  </Pressable>
+</View>
 
         {/* Logout */}
         <Pressable

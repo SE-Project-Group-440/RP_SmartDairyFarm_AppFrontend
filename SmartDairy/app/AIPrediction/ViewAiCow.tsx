@@ -139,7 +139,7 @@ export default function ViewAiCow({
       <View style={styles.detailHeader}>
         <View style={styles.cowIcon}>
             <Image
-              source={require("../../../assets/images/cow.png")}
+              source={require("../../assets/images/cow.png")}
               style={styles.cowImage}
               resizeMode="contain"
             />

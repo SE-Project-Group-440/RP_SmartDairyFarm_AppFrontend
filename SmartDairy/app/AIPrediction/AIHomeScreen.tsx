@@ -25,15 +25,15 @@ import {
   Search,
   CheckCircle2,
 } from "lucide-react-native";
-import { useAIStore } from "../../../Store/aiStore"; // your Zustand store
+import { useAIStore } from "../../Store/aiStore"; // your Zustand store
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import ViewAiCow from "./viewAiCow";
+import ViewAiCow from "./ViewAiCow";
 import AddAiCow from "./AddAiCow";
 import { useTranslations } from '@/hooks/useTranslations';
 
 
-export default function AiHomeScreen() {
+export default function AIHomeScreen() {
   const {
     cows,
     addCow,
@@ -222,7 +222,7 @@ export default function AiHomeScreen() {
                   <View style={styles.cowIcon}>
                     
                     <Image
-                      source={require("../../../assets/images/cow.png")}
+                      source={require("../../assets/images/cow.png")}
                       style={styles.cowImage}
                       resizeMode="contain"
                     />
