@@ -204,7 +204,26 @@
       "monitoring": "Monitoring",
       "prevention": "Prevention",
       "diseaseInfo": "Disease Information",
-      "noCareInstructions": "No specific care instructions available for this prediction."
+      "noCareInstructions": "No specific care instructions available for this prediction.",
+      
+      "homeTitle": "Healthy Cows, Better Yield 🐄",
+      "homeSubtitle": "AI-Powered Disease Detection",
+      "cows": "Cows",
+      "lastCheck": "Last Check",
+      "alerts": "Alerts",
+      "healthy": "Healthy",
+      "cowsNeedAttention": "cows need attention",
+      "cowsShowingSymptoms": "showing symptoms",
+      "quickActions": "Quick Actions",
+      "uploadCattleImage": "Upload Cattle Image",
+      "takeOrUploadPhoto": "Take or upload photo",
+      "uploadMedicalReport": "Upload Medical Report",
+      "scanOrUploadReport": "Scan or upload report",
+      "diseasePrediction": "Disease Prediction",
+      "aiPoweredAnalysis": "AI-powered analysis",
+      "healthHistory": "Health History",
+      "viewPastRecords": "View past records",
+      "startDiseasePrediction": "🔍 Start Disease Prediction"
     }
   },
   "sinhala": {
@@ -412,7 +431,26 @@
       "monitoring": "අධීක්ෂණය",
       "prevention": "වැලැක්වීම",
       "diseaseInfo": "රෝග තොරතුරු",
-      "noCareInstructions": "මෙම පූර්වකථනය සඳහා විශේෂ සත්කාර උපදෙස් නොමැත."
+      "noCareInstructions": "මෙම පූර්වකථනය සඳහා විශේෂ සත්කාර උපදෙස් නොමැත.",
+      
+      "homeTitle": "සෞඛ්‍ය සම්පන්න ගවයන්, වඩා හොඳ අස්වැන්න 🐄",
+      "homeSubtitle": "AI-ශක්තිමත් රෝග නිර්ණය",
+      "cows": "ගවයන්",
+      "lastCheck": "අවසන් පරීක්ෂණය",
+      "alerts": "අනතුරු ඇඟවීම්",
+      "healthy": "සෞඛ්‍ය සම්පන්න",
+      "cowsNeedAttention": "ගවයන්ට අවධානය අවශ්‍යයි",
+      "cowsShowingSymptoms": "රෝග ලක්ෂණ පෙන්වයි",
+      "quickActions": "ක්ෂණික ක්‍රියා",
+      "uploadCattleImage": "ගව ප්‍රතිමාව උඩුගත කරන්න",
+      "takeOrUploadPhoto": "ඡායාරූපයක් ගන්න හෝ උඩුගත කරන්න",
+      "uploadMedicalReport": "වෛද්‍ය වාර්තාව උඩුගත කරන්න",
+      "scanOrUploadReport": "වාර්තාව ස්කෑන් කරන්න හෝ උඩුගත කරන්න",
+      "diseasePrediction": "රෝග පූර්වකථනය",
+      "aiPoweredAnalysis": "AI-ශක්තිමත් විශ්ලේෂණය",
+      "healthHistory": "සෞඛ්‍ය ඉතිහාසය",
+      "viewPastRecords": "පැරණි වාර්තා බලන්න",
+      "startDiseasePrediction": "🔍 රෝග පූර්වකථනය ආරම්භ කරන්න"
     }
   },
   "tamil": {
@@ -620,7 +658,26 @@
       "monitoring": "கண்காணிப்பு", 
       "prevention": "தடுப்பு",
       "diseaseInfo": "நோய் தகவல்",
-      "noCareInstructions": "இந்த முன்கணிப்புக்கு குறிப்பிட்ட பராமரிப்பு வழிமுறைகள் கிடைக்கவில்லை."
+      "noCareInstructions": "இந்த முன்கணிப்புக்கு குறிப்பிட்ட பராமரிப்பு வழிமுறைகள் கிடைக்கவில்லை.",
+      
+      "homeTitle": "ஆரோக்கியமான பசுக்கள், சிறந்த மகசூல் 🐄",
+      "homeSubtitle": "AI-சக்தி வாய்ந்த நோய் கண்டறிதல்",
+      "cows": "பசுக்கள்",
+      "lastCheck": "கடைசி சோதனை",
+      "alerts": "எச்சரிக்கைகள்",
+      "healthy": "ஆரோக்கியமான",
+      "cowsNeedAttention": "பசுக்களுக்கு கவனம் தேவை",
+      "cowsShowingSymptoms": "அறிகுறிகளைக் காட்டுகிறது",
+      "quickActions": "விரைவு நடவடிக்கைகள்",
+      "uploadCattleImage": "கால்நடை படத்தை அப்லோட் செய்க",
+      "takeOrUploadPhoto": "புகைப்படம் எடுக்க அல்லது அப்லோड் செய்க",
+      "uploadMedicalReport": "மருத்துவ அறிக்கையை அப்லோட் செய்க",
+      "scanOrUploadReport": "அறிக்கையை ஸ்கேன் செய்க அல்லது அப்லோড் செய்க",
+      "diseasePrediction": "நோய் முன்கணிப்பு",
+      "aiPoweredAnalysis": "AI-சக்தி வாய்ந்த பகுப்பாய்வு",
+      "healthHistory": "சுகாதார வரலாறு",
+      "viewPastRecords": "கடந்தகால பதிவுகளைப் பார்க்க",
+      "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"
     }
   }
 }
