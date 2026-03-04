@@ -15,6 +15,9 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import useTranslation from "../../../../hooks/useTranslation";
+import { translateInstructionArray } from "../../../../utils/careInstructionTranslator";
+import { useLanguageStore } from "../../../../Store/language.store";
 
 // Types for better type safety
 interface DiseaseInfo {
@@ -56,12 +59,49 @@ const uriToBlob = async (uri: string): Promise<Blob> => {
 };
 
 export default function DiseaseScreen() {
+  const { t, language } = useTranslation();
   const [image, setImage] = useState<any>(null);
   const [report, setReport] = useState<any>(null);
   const [symptoms, setSymptoms] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PredictionResult | null>(null);
   const navigation = useNavigation();
+
+  // Helper function to translate disease names
+  const getDiseaseTranslation = (disease: string): string => {
+    const diseaseKey = disease?.toLowerCase();
+    if (diseaseKey?.includes('fmd') || diseaseKey?.includes('foot') || diseaseKey?.includes('mouth')) {
+      return t("disease", "fmd");
+    }
+    if (diseaseKey?.includes('lsd') || diseaseKey?.includes('lumpy') || diseaseKey?.includes('skin')) {
+      return t("disease", "lsd");
+    }
+    if (diseaseKey?.includes('healthy') || diseaseKey?.includes('normal')) {
+      return t("disease", "healthy");
+    }
+    return disease; // Return original if no match
+  };
+
+  // Helper function to translate care section titles
+  const translateSectionTitle = (title: string): string => {
+    const titleKey = title?.toLowerCase();
+    if (titleKey?.includes('immediate')) {
+      return t("disease", "immediateActions");
+    }
+    if (titleKey?.includes('care') || titleKey?.includes('treatment')) {
+      return t("disease", "careAndTreatment");
+    }
+    if (titleKey?.includes('vector')) {
+      return t("disease", "vectorControl");
+    }
+    if (titleKey?.includes('monitoring')) {
+      return t("disease", "monitoring");
+    }
+    if (titleKey?.includes('prevention')) {
+      return t("disease", "prevention");
+    }
+    return title; // Return original if no match
+  };
 
   /* -------------------- Pick Cattle Image -------------------- */
   const pickImage = async () => {
@@ -96,7 +136,7 @@ export default function DiseaseScreen() {
     try {
       const token = await AsyncStorage.getItem("token");
       if (!token) {
-        Alert.alert("Authentication Error", "Token not found");
+        Alert.alert(t("disease", "authenticationError"), t("disease", "tokenNotFound"));
         return;
       }
 
@@ -139,7 +179,7 @@ export default function DiseaseScreen() {
   /* -------------------- Submit -------------------- */
   const handleSubmit = async () => {
     if (!image && !report && !symptoms) {
-      Alert.alert("Provide at least one input!");
+      Alert.alert(t("disease", "provideAtLeastOneInput"));
       return;
     }
 
@@ -180,7 +220,7 @@ export default function DiseaseScreen() {
 
       const token = await AsyncStorage.getItem("token");
       if (!token) {
-        Alert.alert("Authentication Error", "Token not found");
+        Alert.alert(t("disease", "authenticationError"), t("disease", "tokenNotFound"));
         return;
       }
 
@@ -247,8 +287,8 @@ export default function DiseaseScreen() {
     } catch (err: any) {
       console.error('Disease prediction error:', err);
       Alert.alert(
-        "Prediction Failed",
-        err.response?.data?.message || err.message || "Server error"
+        t("common", "error"),
+        err.response?.data?.message || err.message || t("disease", "predictionFailed")
       );
     } finally {
       setLoading(false);
@@ -270,10 +310,10 @@ export default function DiseaseScreen() {
 
         <View className="flex-1">
           <Text className="text-white text-lg font-semibold text-center">
-            Disease Prediction
+            {t("disease", "diseaseDetection")}
           </Text>
           <Text className="text-green-100 text-center mt-1 text-sm">
-            Upload information for AI analysis
+            {t("disease", "uploadImage")} {t("disease", "enterSymptoms")}
           </Text>
         </View>
       </View>
@@ -294,9 +334,9 @@ export default function DiseaseScreen() {
 
         {/* Section 1: Image */}
         <View className="bg-white p-4 rounded-xl mb-4 shadow-sm">
-          <Text className="font-semibold mb-1">1. Cattle Image</Text>
+          <Text className="font-semibold mb-1">1. {t("disease", "imageUpload")}</Text>
           <Text className="text-xs text-slate-500 mb-3">
-            Upload a clear image of visible symptoms
+            {t("disease", "uploadImage")}
           </Text>
 
           <Pressable
@@ -304,9 +344,9 @@ export default function DiseaseScreen() {
             className="bg-green-100 border border-green-300 rounded-lg py-3 items-center mb-3 flex-row justify-center"
           >
             <Text className="text-green-700 font-medium mr-2">
-              📷 Take Photo
+              📷 {t("disease", "takePhoto")}
             </Text>
-            {image && <Text className="text-green-700 font-bold">✅ Uploaded</Text>}
+            {image && <Text className="text-green-700 font-bold">✅ {t("disease", "imageSelected")}</Text>}
           </Pressable>
 
           <Pressable
@@ -314,17 +354,17 @@ export default function DiseaseScreen() {
             className="bg-blue-50 border border-blue-300 rounded-lg py-3 items-center flex-row justify-center"
           >
             <Text className="text-blue-700 font-medium mr-2">
-              ⬆ Upload from Gallery
+              ⬆ {t("disease", "selectFromGallery")}
             </Text>
-            {image && <Text className="text-green-700 font-bold">✅ Uploaded</Text>}
+            {image && <Text className="text-green-700 font-bold">✅ {t("disease", "imageSelected")}</Text>}
           </Pressable>
         </View>
 
         {/* Section 2: Report */}
         <View className="bg-white p-4 rounded-xl mb-4 shadow-sm">
-          <Text className="font-semibold mb-1">2. Medical Report (Optional)</Text>
+          <Text className="font-semibold mb-1">2. {t("disease", "bloodReportUpload")}</Text>
           <Text className="text-xs text-slate-500 mb-3">
-            AI will extract key values from your report
+            {t("disease", "uploadBloodReport")}
           </Text>
 
           <Pressable
@@ -332,21 +372,21 @@ export default function DiseaseScreen() {
             className="bg-purple-50 border border-purple-300 rounded-lg py-3 items-center flex-row justify-center"
           >
             <Text className="text-purple-700 font-medium mr-2">
-              📄 Upload Report
+              📄 {t("disease", "selectBloodReport")}
             </Text>
-            {report && <Text className="text-green-700 font-bold">✅ Uploaded</Text>}
+            {report && <Text className="text-green-700 font-bold">✅ {t("disease", "bloodReportSelected")}</Text>}
           </Pressable>
         </View>
 
         {/* Section 3: Symptoms */}
         <View className="bg-white p-4 rounded-xl mb-4 shadow-sm">
-          <Text className="font-semibold mb-1">3. Symptoms</Text>
+          <Text className="font-semibold mb-1">3. {t("disease", "symptoms")}</Text>
           <Text className="text-xs text-slate-500 mb-2">
-            Select all visible symptoms
+            {t("disease", "enterSymptoms")}
           </Text>
 
           <TextInput
-            placeholder="Select symptoms..."
+            placeholder={t("disease", "symptomsPlaceholder")}
             placeholderTextColor="#94a3b8"
             value={symptoms}
             onChangeText={setSymptoms}
@@ -358,7 +398,7 @@ export default function DiseaseScreen() {
         {!image && !report && !symptoms && (
           <View className="bg-orange-50 border border-orange-300 rounded-lg p-3 mb-4">
             <Text className="text-orange-700 text-xs">
-              ⚠ Please provide at least one input: cattle image, medical report, or symptoms
+              ⚠ {t("disease", "provideAtLeastOneInput")}
             </Text>
           </View>
         )}
@@ -387,10 +427,15 @@ export default function DiseaseScreen() {
           }`}
         >
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <View className="flex-row items-center">
+              <ActivityIndicator color="#fff" />
+              <Text className="text-white font-semibold text-base ml-2">
+                {t("disease", "analyzing")}
+              </Text>
+            </View>
           ) : (
             <Text className="text-white font-semibold text-base">
-              🔍 Predict Disease
+              🔍 {t("disease", "analyzeNow")}
             </Text>
           )}
         </Pressable>
@@ -400,16 +445,16 @@ export default function DiseaseScreen() {
           <View className="bg-white p-5 rounded-2xl shadow-sm mb-10">
             {/* Header */}
             <Text className="text-center text-green-700 text-xl font-bold mb-4">
-              🐄 Disease Prediction Result
+              🐄 {t("disease", "results")}
             </Text>
 
             {/* Main Prediction */}
             <View className="bg-green-50 border border-green-300 rounded-xl p-4 mb-4">
               <Text className="text-xs text-slate-500 mb-1">
-                Final Decision
+                {t("disease", "finalDecision")}
               </Text>
               <Text className="text-lg font-bold text-green-700">
-                {result.final_decision || result.prediction || 'Unknown'}
+                {getDiseaseTranslation(result.final_decision || result.prediction || t("disease", "healthy"))}
               </Text>
             </View>
 
@@ -417,10 +462,10 @@ export default function DiseaseScreen() {
             {result.image_prediction && (
               <View className="bg-blue-50 border border-blue-300 rounded-xl p-4 mb-4">
                 <Text className="text-xs text-slate-500 mb-1">
-                  Image Analysis Result
+                  {t("disease", "imageAnalysis")}
                 </Text>
                 <Text className="text-base font-semibold text-blue-700">
-                  {result.image_prediction}
+                  {getDiseaseTranslation(result.image_prediction)}
                 </Text>
               </View>
             )}
@@ -429,7 +474,7 @@ export default function DiseaseScreen() {
             {result.blood_report && (
               <View className="bg-gray-50 border border-gray-300 rounded-xl p-4 mb-4">
                 <Text className="text-xs text-slate-500 mb-2">
-                  📋 Blood Report Analysis
+                  📋 {t("disease", "bloodReportAnalysis")}
                 </Text>
                 <ScrollView className="max-h-48">
                   <Text selectable className="text-xs leading-5 text-gray-700">
@@ -442,6 +487,13 @@ export default function DiseaseScreen() {
             {/* Care Instructions */}
             {result.hasCareInstructions && result.careInstructions && (
               <View>
+                {/* Care Instructions Header */}
+                <View className="bg-indigo-50 border border-indigo-300 rounded-xl p-4 mb-4">
+                  <Text className="text-indigo-700 font-semibold text-base text-center">
+                    📋 {t("disease", "careInstructions")}
+                  </Text>
+                </View>
+
                 {/* ================= DISEASE INFO ================= */}
                 {result.careInstructions.diseaseInfo && (
                   <View className="mb-4">
@@ -459,12 +511,12 @@ export default function DiseaseScreen() {
                 {result.careInstructions.immediateActions && (
                   <View className="bg-red-50 border border-red-300 rounded-xl p-4 mb-4">
                     <Text className="font-semibold text-red-700 mb-2">
-                      {result.careInstructions.immediateActions.title}
+                      {translateSectionTitle(result.careInstructions.immediateActions.title)}
                     </Text>
                     {result.careInstructions.immediateActions.actions?.map(
                       (item: string, index: number) => (
                         <Text key={index} className="text-sm text-red-800 mb-1">
-                          • {item}
+                          • {translateInstructionArray([item], language)[0]}
                         </Text>
                       )
                     )}
@@ -475,12 +527,12 @@ export default function DiseaseScreen() {
                 {result.careInstructions.care && (
                   <View className="bg-blue-50 border border-blue-300 rounded-xl p-4 mb-4">
                     <Text className="font-semibold text-blue-700 mb-2">
-                      {result.careInstructions.care.title}
+                      {translateSectionTitle(result.careInstructions.care.title)}
                     </Text>
                     {result.careInstructions.care.treatments?.map(
                       (item: string, index: number) => (
                         <Text key={index} className="text-sm text-blue-800 mb-1">
-                          • {item}
+                          • {translateInstructionArray([item], language)[0]}
                         </Text>
                       )
                     )}
@@ -491,12 +543,12 @@ export default function DiseaseScreen() {
                 {result.careInstructions.vectorControl && (
                   <View className="bg-purple-50 border border-purple-300 rounded-xl p-4 mb-4">
                     <Text className="font-semibold text-purple-700 mb-2">
-                      {result.careInstructions.vectorControl.title}
+                      {translateSectionTitle(result.careInstructions.vectorControl.title)}
                     </Text>
                     {result.careInstructions.vectorControl.measures?.map(
                       (item: string, index: number) => (
                         <Text key={index} className="text-sm text-purple-800 mb-1">
-                          • {item}
+                          • {translateInstructionArray([item], language)[0]}
                         </Text>
                       )
                     )}
@@ -507,12 +559,12 @@ export default function DiseaseScreen() {
                 {result.careInstructions.monitoring && (
                   <View className="bg-yellow-50 border border-yellow-300 rounded-xl p-4 mb-4">
                     <Text className="font-semibold text-yellow-700 mb-2">
-                      {result.careInstructions.monitoring.title}
+                      {translateSectionTitle(result.careInstructions.monitoring.title)}
                     </Text>
                     {result.careInstructions.monitoring.symptoms?.map(
                       (item: string, index: number) => (
                         <Text key={index} className="text-sm text-yellow-800 mb-1">
-                          • {item}
+                          • {translateInstructionArray([item], language)[0]}
                         </Text>
                       )
                     )}
@@ -523,12 +575,12 @@ export default function DiseaseScreen() {
                 {result.careInstructions.prevention && (
                   <View className="bg-green-50 border border-green-300 rounded-xl p-4 mb-4">
                     <Text className="font-semibold text-green-700 mb-2">
-                      {result.careInstructions.prevention.title}
+                      {translateSectionTitle(result.careInstructions.prevention.title)}
                     </Text>
                     {result.careInstructions.prevention.measures?.map(
                       (item: string, index: number) => (
                         <Text key={index} className="text-sm text-green-800 mb-1">
-                          • {item}
+                          • {translateInstructionArray([item], language)[0]}
                         </Text>
                       )
                     )}
@@ -541,7 +593,7 @@ export default function DiseaseScreen() {
             {!result.hasCareInstructions && (
               <View className="bg-gray-50 border border-gray-300 rounded-xl p-4">
                 <Text className="text-gray-600 text-sm text-center">
-                  ℹ️ No specific care instructions available for this prediction.
+                  ℹ️ {t("disease", "noCareInstructions")}
                 </Text>
               </View>
             )}
