@@ -1,14 +1,17 @@
 import axios from "axios";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
 
-//const LOCAL_IP = "172.28.1.99"; 
-const LOCAL_IP = "192.168.1.15"; 
-//const LOCAL_IP = "192.168.100.238"; 
+// Get Expo host IP automatically
+const LOCAL_IP = Constants.expoConfig?.hostUri?.split(":")[0];
 
+// Determine correct backend URL
 const BASE_URL =
   Platform.OS === "web"
     ? "http://localhost:8000"
+    : Platform.OS === "android"
+    ? `http://${LOCAL_IP}:8000`
     : `http://${LOCAL_IP}:8000`;
 
 export const api = axios.create({
@@ -19,7 +22,7 @@ export const api = axios.create({
   },
 });
 
-// 🔐 Attach token to every request
+// Attach token automatically
 api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
@@ -30,10 +33,10 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => Promise.reject(error)
 );
 
-// 🚨 Optional: handle unauthorized responses globally
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -42,5 +45,5 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
