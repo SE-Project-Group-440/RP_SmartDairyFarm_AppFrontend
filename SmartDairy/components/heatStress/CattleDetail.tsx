@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Alert } from 'react-native';
 import type { Cattle } from '../../app/(tabs)/cattleHeat/Screens/CattleListScreen';
 import { CattleBody3D } from './CattleBody3D';
 import {
@@ -27,6 +27,16 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
   useEffect(() => {
     fetchStatus();
   }, [cattle.id]);
+
+  useEffect(() => {
+  if (cattle.bodyTemp > 39) {
+    Alert.alert(
+      "⚠️ High Body Temperature",
+      `Cattle ${cattle.id} body temperature is ${cattle.bodyTemp}°C.\nImmediate consideration recommended.`,
+      [{ text: "OK" }]
+    );
+  }
+}, [cattle.bodyTemp]);
 
   const fetchStatus = async () => {
   try {

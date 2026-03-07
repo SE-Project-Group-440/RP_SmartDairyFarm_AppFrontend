@@ -48,9 +48,7 @@ export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.greetingRow}>
-              <Text style={styles.greetingText}>{t('cattleHeat', 'goodEvening')}  </Text>
-              <Text style={styles.moonIcon}>🌙</Text>
-              <Text style={styles.greetingText}>Manujaya</Text>
+              <Text style={styles.greetingText}>{t('cattleHeat', 'cattleHeader')}  </Text>
             </View>
             <Text style={styles.subHeaderText}>{t('cattleHeat', 'dairyFarmManagement')}</Text>
           </View>

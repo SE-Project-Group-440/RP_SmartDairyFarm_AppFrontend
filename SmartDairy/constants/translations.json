@@ -175,7 +175,8 @@
       "goodEvening": "Good Evening",
       "dairyFarmManagement": "Dairy Farm Management",
       "heatMapView": "Heat Map View",
-      "thiLabel": "THI"
+      "thiLabel": "THI",
+      "cattleHeader": "Cattle Heat Stress Prediction"
     }
   },
   "sinhala": {
@@ -354,7 +355,8 @@
       "goodEvening": "සුභ සන්ධ්‍යාවක්",
       "dairyFarmManagement": "කිරි ගොවිපල කළමනාකරණය",
       "heatMapView": "උෂ්ණතා සිතියම් දර්ශනය",
-      "thiLabel": "THI"
+      "thiLabel": "THI",
+      "cattleHeader": "ගව තාප පීඩන පුරෝකථනය"
     }
   },
   "tamil": {
@@ -533,7 +535,8 @@
       "goodEvening": "மாலை வணக்கம்",
       "dairyFarmManagement": "பால் பண்ணை மேலாண்மை",
       "heatMapView": "வெப்ப வரைபட காட்சி",
-      "thiLabel": "THI"
+      "thiLabel": "THI",
+      "cattleHeader": "கால்நடை வெப்ப அழுத்த கணிப்பு"
     }
   }
 }
