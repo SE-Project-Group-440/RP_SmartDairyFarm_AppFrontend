@@ -16,11 +16,15 @@ import {
   Settings,
 } from "lucide-react-native";
 import { useAuthStore } from '@/Store/auth.store';
+import { useLanguageStore, type Language } from '@/Store/language.store';
+import { useTranslations } from '@/hooks/useTranslations';
 
 export default function ProfileScreen() {
-  const [language, setLanguage] = useState("english");
   const [darkMode, setDarkMode] = useState(false);
   const logout = useAuthStore((s) => s.logout);
+  const currentLanguage = useLanguageStore((s) => s.language);
+  const setLanguage = useLanguageStore((s) => s.setLanguage);
+  const { t } = useTranslations();
   const [syncStatus, setSyncStatus] =
     useState<"synced" | "syncing" | "offline">("synced");
   
@@ -39,16 +43,16 @@ export default function ProfileScreen() {
               Manujaya Perera
             </Text>
             <Text className="text-slate-300">
-              Farmer • Since 2020
+              {t('profile', 'farmer')} • {t('profile', 'since')} 2020
             </Text>
           </View>
         </View>
 
         <View className="flex-row bg-white/10 rounded-xl p-4">
           {[
-            { label: "Cows", value: "3" },
-            { label: "Records", value: "1,245" },
-            { label: "Days Active", value: "156" },
+            { label: t('profile', 'cows'), value: "3" },
+            { label: t('profile', 'records'), value: "1,245" },
+            { label: t('profile', 'daysActive'), value: "156" },
           ].map((item, i) => (
             <View key={i} className="flex-1 items-center">
               <Text className="text-xl text-white mb-1">
@@ -68,7 +72,7 @@ export default function ProfileScreen() {
           <View className="flex-row items-center gap-2 mb-3">
             <Globe size={20} color="#0f172a" />
             <Text className="text-slate-900 text-base">
-              Language / භාෂාව / மொழி
+              {t('profile', 'language')}
             </Text>
           </View>
 
@@ -80,11 +84,11 @@ export default function ProfileScreen() {
             ].map((lang, index) => (
               <Pressable
                 key={lang.id}
-                onPress={() => setLanguage(lang.id)}
+                onPress={() => setLanguage(lang.id as Language)}
                 className={`flex-row justify-between items-center p-4 ${
                   index !== 2 ? "border-b border-slate-100" : ""
                 } ${
-                  language === lang.id
+                  currentLanguage === lang.id
                     ? "bg-green-50"
                     : ""
                 }`}
@@ -96,7 +100,7 @@ export default function ProfileScreen() {
                   </Text>
                 </View>
 
-                {language === lang.id && (
+                {currentLanguage === lang.id && (
                   <View className="w-6 h-6 bg-green-600 rounded-full items-center justify-center">
                     <Text className="text-white text-xs">✓</Text>
                   </View>
@@ -111,7 +115,7 @@ export default function ProfileScreen() {
           <View className="flex-row items-center gap-2 mb-3">
             <Settings size={20} color="#0f172a" />
             <Text className="text-slate-900 text-base">
-              Appearance
+              {t('profile', 'appearance')}
             </Text>
           </View>
 
@@ -134,10 +138,10 @@ export default function ProfileScreen() {
 
                 <View>
                   <Text className="text-slate-900">
-                    Dark Mode
+                    {t('profile', 'darkMode')}
                   </Text>
                   <Text className="text-sm text-slate-500">
-                    Better for night use
+                    {t('profile', 'betterForNight')}
                   </Text>
                 </View>
               </View>
@@ -167,7 +171,7 @@ export default function ProfileScreen() {
           <View className="flex-row items-center gap-2 mb-3">
             <Database size={20} color="#0f172a" />
             <Text className="text-slate-900 text-base">
-              Data & Sync
+              {t('profile', 'dataSync')}
             </Text>
           </View>
 
@@ -181,27 +185,27 @@ export default function ProfileScreen() {
 
                   <View>
                     <Text className="text-slate-900">
-                      Sync Status
+                      {t('profile', 'syncStatus')}
                     </Text>
                     <Text className="text-sm text-slate-500">
-                      ✅ All data synced
+                      {t('profile', 'allDataSynced')}
                     </Text>
                   </View>
                 </View>
 
                 <Text className="text-green-600 text-sm">
-                  Sync Now
+                  {t('profile', 'syncNow')}
                 </Text>
               </View>
 
               <Text className="text-xs text-slate-500">
-                Last synced: 5 minutes ago
+                {t('profile', 'lastSynced')}: 5 minutes ago
               </Text>
             </View>
 
             <Pressable className="flex-row justify-between items-center p-4">
               <Text className="text-slate-700">
-                Backup Data
+                {t('profile', 'backupData')}
               </Text>
               <ChevronRight size={20} color="#94a3b8" />
             </Pressable>
@@ -213,15 +217,15 @@ export default function ProfileScreen() {
           <View className="flex-row items-center gap-2 mb-3">
             <HelpCircle size={20} color="#0f172a" />
             <Text className="text-slate-900 text-base">
-              Help & Support
+              {t('profile', 'help')}
             </Text>
           </View>
 
           <View className="bg-white rounded-2xl border border-slate-100 overflow-hidden">
             {[
-              "User Guide 📚",
-              "Video Tutorials 🎥",
-              "Contact Support 💬",
+              t('profile', 'userGuide'),
+              t('profile', 'videoTutorials'),
+              t('profile', 'contactSupport'),
             ].map((item, i) => (
               <Pressable
                 key={i}
@@ -241,10 +245,10 @@ export default function ProfileScreen() {
         {/* App Info */}
         <View className="bg-slate-100 rounded-2xl p-4 items-center">
           <Text className="text-sm text-slate-600">
-            Smart Farm App
+            {t('profile', 'appInfo')}
           </Text>
           <Text className="text-xs text-slate-500">
-            Version 1.0.2 • Built with ❤️ for farmers
+            {t('profile', 'version')} 1.0.2 • {t('profile', 'builtWith')}
           </Text>
         </View>
 
@@ -255,7 +259,7 @@ export default function ProfileScreen() {
 >
   <LogOut size={20} color="#dc2626" />
   <Text className="text-red-600 font-medium">
-    Log Out
+    {t('profile', 'logout')}
   </Text>
 </Pressable>
 
