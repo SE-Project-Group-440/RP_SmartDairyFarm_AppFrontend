@@ -17,6 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import useTranslation from "../../../../hooks/useTranslation";
 import { translateInstructionArray } from "../../../../utils/careInstructionTranslator";
+import { api } from "../../../../hooks/api";
 
 // Types for better type safety
 interface DiseaseInfo {
@@ -61,10 +62,39 @@ export default function DiseaseScreen() {
   const { t, language } = useTranslation();
   const [image, setImage] = useState<any>(null);
   const [report, setReport] = useState<any>(null);
-  const [symptoms, setSymptoms] = useState("");
+  const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<PredictionResult | null>(null);
   const navigation = useNavigation();
+
+  // Predefined symptoms based on the ML model
+  const availableSymptoms = [
+    // FMD symptoms (weight 2)
+    { id: 'salivation', label: t("disease", "salivation") || 'Salivation', category: 'FMD' },
+    { id: 'blisters', label: t("disease", "blisters") || 'Blisters', category: 'FMD' },
+    // FMD symptoms (weight 1)
+    { id: 'fever', label: t("disease", "fever") || 'Fever', category: 'FMD' },
+    { id: 'lameness', label: t("disease", "lameness") || 'Lameness', category: 'FMD' },
+    // LSD symptoms (weight 2)
+    { id: 'nodules', label: t("disease", "nodules") || 'Nodules', category: 'LSD' },
+    { id: 'skin lesions', label: t("disease", "skinLesions") || 'Skin Lesions', category: 'LSD' },
+    // LSD symptoms (weight 1)
+    { id: 'swollen lymph nodes', label: t("disease", "swollenLymphNodes") || 'Swollen Lymph Nodes', category: 'LSD' },
+    { id: 'nasal discharge', label: t("disease", "nasalDischarge") || 'Nasal Discharge', category: 'LSD' },
+    // Common symptom (weight 1 for both)
+    { id: 'reduced appetite', label: t("disease", "reducedAppetite") || 'Reduced Appetite', category: 'Both' },
+  ];
+
+  // Function to toggle symptom selection
+  const toggleSymptom = (symptomId: string) => {
+    setSelectedSymptoms(prev => {
+      if (prev.includes(symptomId)) {
+        return prev.filter(id => id !== symptomId);
+      } else {
+        return [...prev, symptomId];
+      }
+    });
+  };
 
   // Helper function to translate disease names
   const getDiseaseTranslation = (disease: string): string => {
@@ -139,20 +169,9 @@ export default function DiseaseScreen() {
         return;
       }
 
-      const baseURL =
-        Platform.OS === "android" || Platform.OS === "ios"
-          ? "http://192.168.1.15:8000"
-          : "http://192.168.1.15:8000";
-
-      // Based on your backend setup: app.use("/cattle", cattleDiseaseRoutes)
-      const correctEndpoint = `${baseURL}/cattle/disease/care/${diseaseType}`;
-
-      console.log(`Trying correct endpoint: ${correctEndpoint}`);
-      const res = await axios.get(correctEndpoint, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        timeout: 10000,
+      console.log(`Fetching care instructions for: ${diseaseType}`);
+      const res = await api.get(`/cattle/disease/care/${diseaseType}`, {
+        timeout: 15000, // 15 seconds for care instructions
       });
 
       console.log('Care instructions response:', res.data);
@@ -177,7 +196,7 @@ export default function DiseaseScreen() {
 
   /* -------------------- Submit -------------------- */
   const handleSubmit = async () => {
-    if (!image && !report && !symptoms) {
+    if (!image && !report && selectedSymptoms.length === 0) {
       Alert.alert(t("disease", "provideAtLeastOneInput"));
       return;
     }
@@ -212,7 +231,11 @@ export default function DiseaseScreen() {
       }
     }
 
-    if (symptoms) formData.append("symptoms", symptoms);
+    // Convert selected symptoms array to string for backend
+    if (selectedSymptoms.length > 0) {
+      const symptomsString = selectedSymptoms.join(', ');
+      formData.append("symptoms", symptomsString);
+    }
 
     try {
       setLoading(true);
@@ -223,26 +246,18 @@ export default function DiseaseScreen() {
         return;
       }
 
-      const baseURL =
-        Platform.OS === "android" || Platform.OS === "ios"
-          ? "http://192.168.1.15:8000"
-          : "http://192.168.1.15:8000"; 
+      // Use the configured API instance with extended timeout for ML operations
+      console.log('Attempting disease prediction...');
+      console.log('Form data prepared with image:', !!image, 'report:', !!report, 'symptoms:', selectedSymptoms.length > 0, 'selected symptoms:', selectedSymptoms);
 
-      // Based on your backend setup: app.use("/cattle", cattleDiseaseRoutes)
-      const correctEndpoint = `${baseURL}/cattle/disease/predict`;
-
-      console.log('Attempting to connect to:', correctEndpoint);
-      console.log('Form data prepared with image:', !!image, 'report:', !!report, 'symptoms:', !!symptoms);
-
-      const res = await axios.post(correctEndpoint, formData, {
+      const res = await api.post('/cattle/disease/predict', formData, {
         headers: {
-          Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
-        timeout: 10000, // 10 second timeout
+        timeout: 60000, // 60 seconds for ML model inference
       });
       
-      console.log('✅ Success with correct endpoint:', correctEndpoint);
+      console.log('✅ Disease prediction successful');
 
       // Handle the backend response structure
       if (res.data.success && res.data.data) {
@@ -285,9 +300,24 @@ export default function DiseaseScreen() {
       }
     } catch (err: any) {
       console.error('Disease prediction error:', err);
+      
+      let errorMessage = t("disease", "predictionFailed");
+      
+      if (err.code === 'ECONNABORTED') {
+        errorMessage = "Request timed out. The AI model is taking longer than expected. Please try again.";
+      } else if (err.response?.status === 404) {
+        errorMessage = "Disease prediction service not found. Please contact support.";
+      } else if (err.response?.status === 500) {
+        errorMessage = "Server error occurred. Please try again later.";
+      } else if (err.message?.includes('Network Error')) {
+        errorMessage = "Network connection failed. Please check your internet connection.";
+      } else if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      }
+      
       Alert.alert(
         t("common", "error"),
-        err.response?.data?.message || err.message || t("disease", "predictionFailed")
+        errorMessage
       );
     } finally {
       setLoading(false);
@@ -380,21 +410,51 @@ export default function DiseaseScreen() {
         {/* Section 3: Symptoms */}
         <View className="bg-white p-4 rounded-xl mb-4 shadow-sm">
           <Text className="font-semibold mb-1">3. {t("disease", "symptoms")}</Text>
-          <Text className="text-xs text-slate-500 mb-2">
-            {t("disease", "enterSymptoms")}
+          <Text className="text-xs text-slate-500 mb-3">
+            Select observed symptoms (multiple selection allowed)
           </Text>
 
-          <TextInput
-            placeholder={t("disease", "symptomsPlaceholder")}
-            placeholderTextColor="#94a3b8"
-            value={symptoms}
-            onChangeText={setSymptoms}
-            className="border border-slate-200 rounded-lg px-3 py-2 text-sm"
-          />
+          {/* Selected Symptoms Count */}
+          {selectedSymptoms.length > 0 && (
+            <View className="bg-green-50 border border-green-200 rounded-lg p-2 mb-3">
+              <Text className="text-green-700 text-xs font-medium">
+                ✅ {selectedSymptoms.length} symptom{selectedSymptoms.length > 1 ? 's' : ''} selected: {selectedSymptoms.join(', ')}
+              </Text>
+            </View>
+          )}
+
+          {/* Symptoms Grid */}
+          <View className="flex-row flex-wrap gap-2">
+            {availableSymptoms.map((symptom) => {
+              const isSelected = selectedSymptoms.includes(symptom.id);
+              
+              return (
+                <Pressable
+                  key={symptom.id}
+                  onPress={() => toggleSymptom(symptom.id)}
+                  className={`px-3 py-2 rounded-lg border-2 flex-row items-center ${
+                    isSelected
+                      ? 'bg-green-100 border-green-300'
+                      : 'bg-gray-50 border-gray-200'
+                  }`}
+                >
+                  <Text 
+                    className={`text-xs font-medium ${
+                      isSelected
+                        ? 'text-green-700'
+                        : 'text-gray-600'
+                    }`}
+                  >
+                    {isSelected ? '✓ ' : ''}{symptom.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
 
         {/* Warning */}
-        {!image && !report && !symptoms && (
+        {!image && !report && selectedSymptoms.length === 0 && (
           <View className="bg-orange-50 border border-orange-300 rounded-lg p-3 mb-4">
             <Text className="text-orange-700 text-xs">
               ⚠ {t("disease", "provideAtLeastOneInput")}
@@ -402,17 +462,6 @@ export default function DiseaseScreen() {
           </View>
         )}
 
-        {/* Backend info */}
-        <View className="bg-blue-50 border border-blue-300 rounded-lg p-3 mb-4">
-          <Text className="text-blue-700 text-xs font-semibold mb-1">
-            ℹ️ How predictions work:
-          </Text>
-          <Text className="text-blue-600 text-xs">
-            1. AI analyzes your inputs → Gets disease prediction{'\n'}
-            2. App automatically fetches care instructions for the predicted disease{'\n'}
-            3. Shows complete results with treatment guidance
-          </Text>
-        </View>
 
         {/* Submit */}
         <Pressable
@@ -420,7 +469,7 @@ export default function DiseaseScreen() {
           className={`rounded-xl py-4 items-center mb-4 ${
             loading
               ? "bg-green-400"
-              : image || report || symptoms
+              : image || report || selectedSymptoms.length > 0
               ? "bg-green-600"
               : "bg-slate-300"
           }`}
