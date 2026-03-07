@@ -10,10 +10,12 @@ export async function askChat(query: string): Promise<ChatResponse> {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query }),
   });
 
   if (!response.ok) {
+    throw new Error("Failed to get answer from backend");
     throw new Error("Failed to get answer from backend");
   }
 

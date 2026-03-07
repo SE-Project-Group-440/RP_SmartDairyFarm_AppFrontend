@@ -8,9 +8,9 @@ import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 
-import { DairyManagementScreen } from "../(tabs)/Cow/Screens/DairyManagementScreen";
-import { ProfileScreen } from "../(tabs)/Cow/Screens/ProfileScreen";
-import {AiRecommendationScreen} from "../(tabs)/AIPrediction/AiRecommendationScreen";
+import DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen";
+import ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
+
 
 export type MainTab =
   | "dairy"
@@ -60,7 +60,20 @@ export default function LactationCurveHome() {
         return <ChatScreen />;
 
       case "Anjana":
-        return <AiRecommendationScreen />;
+         return (
+          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
+            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
+              <TrendingUp size={40} color="#94a3b8" />
+            </View>
+            <Text className="text-slate-900 mb-1">
+              Dinidi
+            </Text>
+            <Text className="text-slate-600 text-sm">
+              Coming Soon
+            </Text>
+          </View>
+      );
+
 
       case "Dinidi":
         return (

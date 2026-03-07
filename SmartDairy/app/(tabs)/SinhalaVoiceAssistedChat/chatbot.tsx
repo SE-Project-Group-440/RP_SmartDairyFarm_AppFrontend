@@ -104,7 +104,7 @@ export default function ChatScreen() {
   await sound.pauseAsync();
   setPlayingId(null);
 } else {
-  // If audio already finished
+  // If audio already finished → restart
   if (
     status.durationMillis &&
     status.positionMillis >= status.durationMillis
@@ -161,18 +161,22 @@ const playFromBeginning = async (msg: Message) => {
   // Start recording
 const startRecording = async () => {
   try {
-   
+    // 1️⃣ Ask permission
     await Audio.requestPermissionsAsync();
+
+    // 2️⃣ Set audio mode
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
     });
 
-    // Create recording instance
+    // 3️⃣ Create recording instance
     const rec = new Audio.Recording();
+
+    // 4️⃣ Use YOUR custom recordingOptions (this is the key fix)
     await rec.prepareToRecordAsync(recordingOptions);
 
-    //Start recording
+    // 5️⃣ Start recording
     await rec.startAsync();
 
     setRecording(rec);
@@ -188,13 +192,13 @@ const stopRecording = async () => {
   if (!recording) return;
 
   await recording.stopAndUnloadAsync();
-  const uri = recording.getURI(); 
+  const uri = recording.getURI(); // must exist
   setRecording(null);
   setIsRecording(false);
 
   if (uri) {
     try {
-      console.log("Sending audio URI to backend:", uri);  
+      console.log("Sending audio URI to backend:", uri);  // debug
       const text = await speechToText(uri);
       setInputText(text);
     } catch (err) {
@@ -225,7 +229,7 @@ const stopRecording = async () => {
         id: Date.now() + 1,
         text: data.answer,
         isUser: false,
-        audioUri: data.audioUri, 
+        audioUri: data.audioUri, // backend should send pre-generated audio URL
       };
       setMessages((prev) => [...prev, botMsg]);
 
@@ -259,15 +263,15 @@ const stopRecording = async () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-         <Text style={styles.headerTitle}> කිරි ගොවිතැන් උපදේශක</Text>
+  <Text style={styles.headerTitle}> කිරි ගොවිතැන් උපදේශක</Text>
 
-        <TouchableOpacity onPress={clearChat} style={styles.trashBtn}>
-          <Image
-            source={require("../../../assets/images/trash.png")}
-            style={styles.trashIcon}
-          />
-        </TouchableOpacity>
-      </View>
+  <TouchableOpacity onPress={clearChat} style={styles.trashBtn}>
+    <Image
+      source={require("../../../assets/images/trash.png")}
+      style={styles.trashIcon}
+    />
+  </TouchableOpacity>
+</View>
 
       <ScrollView
         style={styles.chatContainer}
@@ -294,47 +298,50 @@ const stopRecording = async () => {
               </View>
 
               {!msg.isUser && msg.audioUri && (
-                <View style={styles.audioControls}>
-                  {/* PLAY / PAUSE */}
-                  <TouchableOpacity
-                    onPress={() => playPauseAudio(msg)}
-                    style={[
-                      styles.audioBtn,
-                      playingId === msg.id && styles.audioBtnActive,
-                    ]}
-                  >
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                      <Image
-                        source={
-                          playingId === msg.id
-                            ? require("../../../assets/images/pause.png")
-                            : require("../../../assets/images/play.png")
-                        }
-                        style={{ width: 18, height: 18, marginRight: 6 }}
-                      />
+  <View style={styles.audioControls}>
+  {/* PLAY / PAUSE */}
+  <TouchableOpacity
+    onPress={() => playPauseAudio(msg)}
+    style={[
+      styles.audioBtn,
+      playingId === msg.id && styles.audioBtnActive,
+    ]}
+  >
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <Image
+        source={
+          playingId === msg.id
+            ? require("../../../assets/images/pause.png")
+            : require("../../../assets/images/play.png")
+        }
+        style={{ width: 18, height: 18, marginRight: 6 }}
+      />
 
-                      <Text style={styles.audioText}>
-                        {playingId === msg.id ? "නවත්වන්න" : "සවන් දෙන්න"}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
+      <Text style={styles.audioText}>
+        {playingId === msg.id ? "නවත්වන්න" : "සවන් දෙන්න"}
+      </Text>
+    </View>
+  </TouchableOpacity>
 
-                  {/* RESTART */}
-                  <TouchableOpacity
-                    onPress={() => playFromBeginning(msg)}
-                    style={[styles.audioBtn, { marginLeft: 10 }]}
-                  >
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                      <Image
-                        source={require("../../../assets/images/restart.png")}
-                        style={{ width: 18, height: 18, marginRight: 6 }}
-                      />
+  {/* RESTART */}
+  <TouchableOpacity
+    onPress={() => playFromBeginning(msg)}
+    style={[styles.audioBtn, { marginLeft: 10 }]}
+  >
+    <View style={{ flexDirection: "row", alignItems: "center" }}>
+      <Image
+        source={require("../../../assets/images/restart.png")}
+        style={{ width: 18, height: 18, marginRight: 6 }}
+      />
 
-                      <Text style={styles.audioText}>මුල සිට</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              )}
+      <Text style={styles.audioText}>මුල සිට</Text>
+    </View>
+  </TouchableOpacity>
+</View>
+
+
+)}
+
             </View>
 
             {msg.isUser && (
@@ -349,60 +356,68 @@ const stopRecording = async () => {
       </ScrollView>
 
       <View style={styles.inputSection}>
-        <Text style={styles.quickTitle}>ඉක්මන් ප්‍රශ්න</Text>
+         <Text style={styles.quickTitle}>ඉක්මන් ප්‍රශ්න</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 10 }}>
-          {quickQuestions.map((q, i) => (
-            <TouchableOpacity
-              key={i}
-              onPress={() => sendMessage(q)}
-              style={styles.quickBtn}
-            >
-              <Text style={{ color: "#047857", fontSize: 12 }}>{q}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-        <View style={styles.inputRow}>
-          <TextInput
-            style={styles.textInput}
-            value={inputText}
-            onChangeText={setInputText}
-            placeholder="ඔබගේ ප්‍රශ්නය මෙහි සටහන් කරන්න..."
-          />
+  {quickQuestions.map((q, i) => (
+    <TouchableOpacity
+      key={i}
+      onPress={() => sendMessage(q)}
+      style={styles.quickBtn}
+    >
+      <Text style={{ color: "#047857", fontSize: 12 }}>{q}</Text>
+    </TouchableOpacity>
+  ))}
+</ScrollView>
+<View style={styles.inputRow}>
+  <TextInput
+    style={styles.textInput}
+    value={inputText}
+    onChangeText={setInputText}
+    placeholder="ඔබගේ ප්‍රශ්නය මෙහි සටහන් කරන්න..."
+  />
 
-          <TouchableOpacity
-            onPress={() => sendMessage()}
-            style={styles.sendBtn}
-          >
-            <Image source={require("../../../assets/images/send.png")}/>  
-          </TouchableOpacity>
+  <TouchableOpacity
+    onPress={() => sendMessage()}
+    style={styles.sendBtn}
+  >
+    <Image
+                source={require("../../../assets/images/send.png")}
+                
+              />
+    
+  </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={isRecording ? stopRecording : startRecording}
-            style={[
-              styles.micBtn,
-              {
-                backgroundColor: isRecording ? "#ef4444" : "#bbf7d0", 
-              },
-            ]}
-          >
-            <Image
-              source={
-                isRecording
-                  ? require("../../../assets/images/stop.png")
-                  : require("../../../assets/images/mic.png")
-              }
-              style={{ width: 24, height: 24}} 
-            />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.footerText}>
-          නොමිලේ ලබාදෙන කෘතිම බුද්ධි උපදේශකයෙකි. වැදගත් තීරණ සඳහා විශේෂඥ සහාය පතන්න.
-        </Text>
+  <TouchableOpacity
+  onPress={isRecording ? stopRecording : startRecording}
+  style={[
+    styles.micBtn,
+    {
+      backgroundColor: isRecording ? "#ef4444" : "#bbf7d0", 
+    },
+  ]}
+>
+  <Image
+    source={
+      isRecording
+        ? require("../../../assets/images/stop.png")
+        : require("../../../assets/images/mic.png")
+    }
+    style={{ width: 24, height: 24}} // optional: tint to make it visible on colored bg
+  />
+</TouchableOpacity>
+
+
+</View>
+<Text style={styles.footerText}>
+  නොමිලේ ලබාදෙන කෘතිම බුද්ධි උපදේශකයෙකි. වැදගත් තීරණ සඳහා විශේෂඥ සහාය පතන්න.
+</Text>
+      
       </View>
     </SafeAreaView>
   );
 }
 
+/** ---------------- Styles ---------------- */
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#f1f5f9" },
   header: { padding: 20, backgroundColor: "#16a34a",flexDirection: "row",             
@@ -445,64 +460,66 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
   },
-  audioControls: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 6,
-  },
+audioControls: {
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: 6,
+},
 
-  audioBtn: {
-    
-    height: 42,
-    borderRadius: 20,
-    backgroundColor: "#dcfce7",
-    justifyContent: "center",
-    alignItems: "center",
-    padding:4,
-    elevation: 3, 
-
-    shadowColor: "#000", 
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-  },
-
-  audioBtnActive: {
-    backgroundColor: "#f87171",
-  },
-
-  audioIcon: {
-    fontSize: 12,
-  },
-  footerText: {
-    textAlign: "center",
-    fontSize: 10,
-    color: "#94a3b8", 
-    marginTop: 8,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    opacity: 0.6,
-  },
-
-  audioText: {
+audioBtn: {
   
-    fontSize: 13,
-    fontWeight: "200",
-  },
-  trashBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 4, 
-    backgroundColor: "#dcfce7",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  height: 42,
+  borderRadius: 20,
+  backgroundColor: "#dcfce7",
+  justifyContent: "center",
+  alignItems: "center",
+padding:4,
+  elevation: 3, // Android shadow
 
-  trashIcon: {
-    width: 18,
-    height: 18,
-    
-  },
+  shadowColor: "#000", // iOS/Web shadow
+  shadowOpacity: 0.2,
+  shadowRadius: 3,
+},
+
+audioBtnActive: {
+  backgroundColor: "#f87171",
+},
+
+audioIcon: {
+  fontSize: 12,
+},
+footerText: {
+  textAlign: "center",
+  fontSize: 10,
+  color: "#94a3b8", // slate-400
+  marginTop: 8,
+  fontWeight: "bold",
+  textTransform: "uppercase",
+  letterSpacing: 1,
+  opacity: 0.6,
+},
+
+audioText: {
+ 
+  fontSize: 13,
+  fontWeight: "200",
+},
+trashBtn: {
+  width: 36,
+  height: 36,
+  borderRadius: 4, // 👈 makes it circular
+  backgroundColor: "#dcfce7",
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+trashIcon: {
+  width: 18,
+  height: 18,
+  
+},
+
+
 });
 
 
