@@ -3,10 +3,10 @@ import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 
-// Get Expo host IP automatically
+
 const LOCAL_IP = Constants.expoConfig?.hostUri?.split(":")[0];
 
-// Determine correct backend URL
+
 const BASE_URL =
   Platform.OS === "web"
     ? "http://localhost:8000"
@@ -16,7 +16,7 @@ const BASE_URL =
 
 export const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 30000, // Increased to 30 seconds default
   headers: {
     "Content-Type": "application/json",
   },
