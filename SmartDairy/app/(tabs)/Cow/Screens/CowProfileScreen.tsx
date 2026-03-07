@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
   Info,
 } from "lucide-react-native";
 import { LineChart } from "react-native-chart-kit";
+import { useCowProfileStore } from "@/Store/cowProfileStore";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -22,87 +23,65 @@ interface CowProfileScreenProps {
   onBack: () => void;
 }
 
-const cowData: Record<string, any> = {
-  "1": {
-    name: "Lassie",
-    breed: "Jersey",
-    age: "4 years 3 months",
-    lactationNumber: 3,
-    currentDay: 142,
-    status: "healthy",
-    avgMilk: 18.5,
-  },
-  "2": {
-    name: "Bella",
-    breed: "Holstein Friesian",
-    age: "3 years 1 month",
-    lactationNumber: 2,
-    currentDay: 89,
-    status: "warning",
-    avgMilk: 12.3,
-  },
-  "3": {
-    name: "Daisy",
-    breed: "Jersey Cross",
-    age: "5 years 8 months",
-    lactationNumber: 4,
-    currentDay: 201,
-    status: "healthy",
-    avgMilk: 20.1,
-  },
-};
-
-/* ---------- LACTATION DATA ---------- */
-
-const generateLactationData = (
-  currentDay: number,
-  status: string
-) => {
-  const labels: string[] = [];
-  const expected: number[] = [];
-  const actual: number[] = [];
-
-  for (let day = 0; day <= Math.min(currentDay + 30, 305); day += 10) {
-    const exp = 25 * Math.exp(-0.003 * day);
-    const act =
-      status === "warning" && day > currentDay - 20
-        ? exp * 0.75
-        : exp + (Math.random() - 0.5) * 2;
-
-    labels.push(day.toString());
-    expected.push(Number(exp.toFixed(1)));
-    actual.push(day <= currentDay ? Number(act.toFixed(1)) : 0);
-  }
-
-  return { labels, expected, actual };
-};
-
-/* ---------- SCREEN ---------- */
-
-export function CowProfileScreen({
+export default function CowProfileScreen({
   cowId,
   onBack,
 }: CowProfileScreenProps) {
-  const cow = cowId ? cowData[cowId] : null;
+  const { data, fetchCowProfile, isLoading } =
+    useCowProfileStore();
 
-  if (!cow) {
+  useEffect(() => {
+    if (cowId) fetchCowProfile(cowId);
+  }, [cowId]);
+
+  if (isLoading || !data) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Text className="text-slate-600">Cow not found</Text>
+        <Text className="text-slate-600">
+          Loading cow profile…
+        </Text>
       </View>
     );
   }
 
-  const chart = useMemo(
-    () => generateLactationData(cow.currentDay, cow.status),
-    [cow]
-  );
+  const { cow, lactationCycles } = data;
+  const activeLactation = lactationCycles.at(-1);
+  const milkings = activeLactation?.milkingRecords ?? [];
+
+  /* ---------- GRAPH DATA (REAL) ---------- */
+  const chart = useMemo(() => {
+    const labels: string[] = [];
+    const actual: number[] = [];
+    const expected: number[] = [];
+
+    milkings.forEach((m) => {
+      labels.push(m.milkingDay.toString());
+
+      actual.push(m.dailyMilk);
+
+      // Simple expected lactation curve (Wood-style decay)
+      const exp =
+        25 * Math.exp(-0.003 * m.milkingDay);
+      expected.push(Number(exp.toFixed(1)));
+    });
+
+    return { labels, actual, expected };
+  }, [milkings]);
+
+  const avgMilk =
+    milkings.reduce((s, m) => s + m.dailyMilk, 0) /
+      (milkings.length || 1);
+
+  const status =
+    avgMilk < chart.expected.at(-1)!
+      ? "warning"
+      : "healthy";
 
   const chartConfig = {
     backgroundGradientFrom: "#ffffff",
     backgroundGradientTo: "#ffffff",
     color: (opacity = 1) =>
-      cow.status === "healthy"
+      status === "healthy"
         ? `rgba(16, 185, 129, ${opacity})`
         : `rgba(245, 158, 11, ${opacity})`,
     labelColor: () => "#64748b",
@@ -112,14 +91,16 @@ export function CowProfileScreen({
 
   return (
     <ScrollView className="flex-1 bg-slate-50">
-      {/* Header */}
+      {/* ---------- HEADER ---------- */}
       <View className="bg-green-600 px-6 pt-12 pb-6">
         <Pressable
           onPress={onBack}
           className="flex-row items-center gap-2 mb-4"
         >
           <ArrowLeft size={20} color="#dcfce7" />
-          <Text className="text-green-100">Back to Home</Text>
+          <Text className="text-green-100">
+            Back to Home
+          </Text>
         </Pressable>
 
         <View className="flex-row items-center gap-4">
@@ -137,12 +118,14 @@ export function CowProfileScreen({
         </View>
       </View>
 
-      {/* Status */}
+      {/* ---------- STATUS ---------- */}
       <View className="px-6 mt-4 mb-4">
-        {cow.status === "healthy" ? (
+        {status === "healthy" ? (
           <View className="flex-row items-center gap-2 bg-green-100 px-4 py-2 rounded-full self-start">
             <Activity size={16} color="#16a34a" />
-            <Text className="text-green-700">Healthy</Text>
+            <Text className="text-green-700">
+              Healthy
+            </Text>
           </View>
         ) : (
           <View className="flex-row items-center gap-2 bg-orange-100 px-4 py-2 rounded-full self-start">
@@ -154,7 +137,7 @@ export function CowProfileScreen({
         )}
       </View>
 
-      {/* Info */}
+      {/* ---------- INFO ---------- */}
       <View className="px-6 space-y-4">
         <View className="bg-white rounded-2xl p-5 border border-slate-100">
           <Text className="text-slate-900 mb-4">
@@ -162,23 +145,26 @@ export function CowProfileScreen({
           </Text>
 
           <View className="flex-row flex-wrap gap-y-4">
-            <InfoItem label="Age" value={cow.age} />
+            <InfoItem
+              label="Age"
+              value={`${cow.ageInMonths} months`}
+            />
             <InfoItem
               label="Lactation #"
-              value={`#${cow.lactationNumber}`}
+              value={`#${activeLactation?.lactationRound ?? "-"}`}
             />
             <InfoItem
               label="Current Day"
-              value={`Day ${cow.currentDay}`}
+              value={`Day ${milkings.at(-1)?.milkingDay ?? 0}`}
             />
             <InfoItem
               label="Avg Milk"
-              value={`${cow.avgMilk}L`}
+              value={`${avgMilk.toFixed(1)} L`}
             />
           </View>
         </View>
 
-        {/* Chart */}
+        {/* ---------- GRAPH ---------- */}
         <View className="bg-white rounded-2xl p-5 border border-slate-100">
           <View className="flex-row justify-between mb-4">
             <View>
@@ -204,7 +190,7 @@ export function CowProfileScreen({
                 {
                   data: chart.actual,
                   color: () =>
-                    cow.status === "healthy"
+                    status === "healthy"
                       ? "#10b981"
                       : "#f59e0b",
                   strokeWidth: 3,
@@ -220,12 +206,12 @@ export function CowProfileScreen({
           />
         </View>
 
-        {/* Insights */}
-        {cow.status === "warning" ? (
+        {/* ---------- INSIGHT ---------- */}
+        {status === "warning" ? (
           <Insight
             icon={<TrendingDown size={20} color="#ea580c" />}
             title="Milk Yield Drop Detected"
-            text={`Production dropped below expected for day ${cow.currentDay}.`}
+            text="Production dropped below expected curve."
             bg="bg-orange-50"
             border="border-orange-200"
           />
@@ -233,28 +219,12 @@ export function CowProfileScreen({
           <Insight
             icon={<Activity size={20} color="#16a34a" />}
             title="Performing Well"
-            text={`${cow.name} is above average for this lactation stage.`}
+            text={`${cow.name} is on track for this lactation stage.`}
             bg="bg-green-50"
             border="border-green-200"
           />
         )}
-
-        {/* Actions */}
-        <View className="flex-row gap-3">
-          <Pressable className="flex-1 bg-green-600 py-3 rounded-xl items-center">
-            <Calendar size={20} color="#fff" />
-            <Text className="text-white text-sm mt-1">
-              Schedule
-            </Text>
-          </Pressable>
-
-          <Pressable className="flex-1 bg-white border border-slate-200 py-3 rounded-xl items-center">
-            <Activity size={20} color="#334155" />
-            <Text className="text-slate-700 text-sm mt-1">
-              Health Log
-            </Text>
-          </Pressable>
-        </View>
+       
       </View>
     </ScrollView>
   );

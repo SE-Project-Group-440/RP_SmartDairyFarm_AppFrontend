@@ -6,18 +6,23 @@ import {
 } from "react-native";
 import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import useTranslation from "../../hooks/useTranslation";
+import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 import {AiRecommendationScreen} from "../AIPrediction/AiRecommendationScreen";
 import AiHomeScreen from "../AIPrediction/AIHomeScreen";
 
 
-import { DairyManagementScreen } from "../(tabs)/Cow/Screens/DairyManagementScreen";
-import  ProfileScreen  from "./Cow/Screens/ProfileScreen";
+import  CattleListScreen  from "../(tabs)/cattleHeat/Screens/CattleListScreen";
+import  DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen";
+import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
+import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
+import DiseaseScreenComponent from "../(tabs)/Disease/Screens/DiseaseScreen";
 
 export type MainTab =
-  | "dairy"
-  | "Samudra"
-  | "Anjana"
-  | "Dinidi"
+  | "Dairy"
+  | "Chatbot"
+  | "HeatStress"
+  | "Health"
   | "profile";
 
 export type DairyScreen =
@@ -33,10 +38,13 @@ export type DairyScreen =
   | "history";
 
 export default function LactationCurveHome() {
+  const { t } = useTranslation();
   const [currentTab, setCurrentTab] =
-    useState<MainTab>("dairy");
+    useState<MainTab>("Dairy");
   const [dairyScreen, setDairyScreen] =
     useState<DairyScreen>("dashboard");
+  const [diseaseScreen, setDiseaseScreen] =
+    useState<DiseaseScreen>("home");
   const [selectedCowId, setSelectedCowId] =
     useState<string | null>(null);
 
@@ -47,7 +55,7 @@ export default function LactationCurveHome() {
 
   const renderMainContent = () => {
     switch (currentTab) {
-      case "dairy":
+      case "Dairy":
         return (
           <DairyManagementScreen
             currentScreen={dairyScreen}
@@ -57,37 +65,18 @@ export default function LactationCurveHome() {
           />
         );
 
-      case "Samudra":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <Package size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Samudra
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-        );
+      case "Chatbot":
+        return <ChatScreen />;
 
-      case "Anjana":
-        return <AiHomeScreen />;
-      case "Dinidi":
-        return (
-          <View className="flex-1 items-center justify-center bg-slate-50 px-6">
-            <View className="w-20 h-20 bg-slate-200 rounded-2xl items-center justify-center mb-4">
-              <TrendingUp size={40} color="#94a3b8" />
-            </View>
-            <Text className="text-slate-900 mb-1">
-              Dinidi
-            </Text>
-            <Text className="text-slate-600 text-sm">
-              Coming Soon
-            </Text>
-          </View>
-      );
+      case "HeatStress":
+        return <CattleListScreen />;
+
+      case "Health":
+        return diseaseScreen === "home" ? (
+          <DiseaseHomeScreen onNavigate={setDiseaseScreen} />
+        ) : (
+          <DiseaseScreenComponent />
+        );
 
       case "profile":
         return <ProfileScreen />;
@@ -110,11 +99,11 @@ export default function LactationCurveHome() {
           {/* Dairy */}
           <Pressable
             onPress={() => {
-              setCurrentTab("dairy");
+              setCurrentTab("Dairy");
               setDairyScreen("dashboard");
             }}
             className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "dairy"
+              currentTab === "Dairy"
                 ? "bg-green-50"
                 : ""
             }`}
@@ -122,14 +111,14 @@ export default function LactationCurveHome() {
             <Milk
               size={24}
               color={
-                currentTab === "dairy"
+                currentTab === "Dairy"
                   ? "#15803d"
                   : "#475569"
               }
             />
             <Text
               className={`text-xs ${
-                currentTab === "dairy"
+                currentTab === "Dairy"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
@@ -140,9 +129,9 @@ export default function LactationCurveHome() {
 
           {/* Feature 2 */}
           <Pressable
-            onPress={() => setCurrentTab("Samudra")}
+            onPress={() => setCurrentTab("Chatbot")}
             className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Samudra"
+              currentTab === "Chatbot"
                 ? "bg-green-50"
                 : ""
             }`}
@@ -150,27 +139,29 @@ export default function LactationCurveHome() {
             <Package
               size={24}
               color={
-                currentTab === "Samudra"
+                currentTab === "Chatbot"
                   ? "#15803d"
                   : "#475569"
               }
             />
             <Text
+            numberOfLines={2}
               className={`text-xs ${
-                currentTab === "Samudra"
+                currentTab === "Chatbot"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
             >
-              Samudra
+              
+              උපදේශක
             </Text>
           </Pressable>
 
           {/* Feature 3 */}
           <Pressable
-            onPress={() => setCurrentTab("Anjana")}
+            onPress={() => setCurrentTab("HeatStress")}
             className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Anjana"
+              currentTab === "HeatStress"
                 ? "bg-green-50"
                 : ""
             }`}
@@ -178,27 +169,30 @@ export default function LactationCurveHome() {
             <TrendingUp
               size={24}
               color={
-                currentTab === "Anjana"
+                currentTab === "HeatStress"
                   ? "#15803d"
                   : "#475569"
               }
             />
             <Text
               className={`text-xs ${
-                currentTab === "Anjana"
+                currentTab === "HeatStress"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
             >
-              Anjana
+              HeatStress
             </Text>
           </Pressable>
 
           {/* Feature 4 */}
           <Pressable
-            onPress={() => setCurrentTab("Dinidi")}
+            onPress={() => {
+              setCurrentTab("Health");
+              setDiseaseScreen("home");
+            }}
             className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Dinidi"
+              currentTab === "Health"
                 ? "bg-green-50"
                 : ""
             }`}
@@ -206,19 +200,19 @@ export default function LactationCurveHome() {
             <TrendingUp
               size={24}
               color={
-                currentTab === "Dinidi"
+                currentTab === "Health"
                   ? "#15803d"
                   : "#475569"
               }
             />
             <Text
               className={`text-xs ${
-                currentTab === "Dinidi"
+                currentTab === "Health"
                   ? "text-green-700"
                   : "text-slate-600"
               }`}
             >
-              Dinidi
+              {t("common", "health")}
             </Text>
           </Pressable>
 

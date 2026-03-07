@@ -6,6 +6,7 @@ import "../global.css";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useAuthStore } from "../Store/auth.store";
+import { useLanguageStore } from "../Store/language.store";
 import { useEffect } from "react";
 import AIHomeScreen from "./AIPrediction/AIHomeScreen";
 
@@ -18,9 +19,11 @@ export default function RootLayout() {
   const segments = useSegments();
 
   const { token, isHydrated, hydrate } = useAuthStore();
+  const { hydrate: hydrateLanguage } = useLanguageStore();
 
   useEffect(() => {
     hydrate();
+    hydrateLanguage();
   }, []);
 
   // ⏳ wait until auth is restored

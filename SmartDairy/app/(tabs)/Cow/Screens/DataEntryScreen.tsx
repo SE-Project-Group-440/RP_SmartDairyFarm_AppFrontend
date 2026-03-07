@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -16,25 +16,42 @@ import {
   Wifi,
 } from "lucide-react-native";
 
-const cows = [
-  { id: "1", name: "Lassie" },
-  { id: "2", name: "Bella" },
-  { id: "3", name: "Daisy" },
-];
+import { useCowListStore } from "../../../../Store/cowStore";
+import { api } from "../../../../hooks/api";
 
-export function DataEntryScreen() {
-  const [selectedCow, setSelectedCow] = useState("1");
+export default function DataEntryScreen() {
+  const { cows, fetchCows } = useCowListStore();
+  const [selectedCow, setSelectedCow] = useState<string | null>(null);
   const [session, setSession] = useState<"morning" | "evening">("morning");
   const [milkAmount, setMilkAmount] = useState(15);
   const [isOnline] = useState(true);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = () => {
-    setShowSuccess(true);
-    setTimeout(() => {
-      setShowSuccess(false);
-      setMilkAmount(15);
-    }, 2000);
+  useEffect(() => {
+    fetchCows();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!selectedCow) return;
+
+    try {
+      const payload: any = {
+        cowId: selectedCow,
+      };
+
+      if (session === "morning") payload.morning = Number(milkAmount);
+      else payload.evening = Number(milkAmount);
+
+      await api.post("/milk/milktoml", payload);
+
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowSuccess(false);
+        setMilkAmount(15);
+      }, 2000);
+    } catch (err) {
+      // keep simple error handling for now
+    }
   };
 
   return (
@@ -102,10 +119,10 @@ export function DataEntryScreen() {
           <Text className="text-slate-600 mb-3">Select Cow</Text>
           {cows.map((cow) => (
             <Pressable
-              key={cow.id}
-              onPress={() => setSelectedCow(cow.id)}
+              key={cow._id}
+              onPress={() => setSelectedCow(cow._id)}
               className={`p-4 rounded-xl mb-2 flex-row items-center gap-4 ${
-                selectedCow === cow.id
+                selectedCow === cow._id
                   ? "bg-green-600"
                   : "bg-white border-2 border-slate-200"
               }`}
@@ -113,12 +130,12 @@ export function DataEntryScreen() {
               <Text className="text-2xl">🐄</Text>
               <Text
                 className={`text-lg ${
-                  selectedCow === cow.id ? "text-white" : "text-slate-700"
+                  selectedCow === cow._id ? "text-white" : "text-slate-700"
                 }`}
               >
                 {cow.name}
               </Text>
-              {selectedCow === cow.id && (
+              {selectedCow === cow._id && (
                 <Check size={20} color="white" style={{ marginLeft: "auto" }} />
               )}
             </Pressable>

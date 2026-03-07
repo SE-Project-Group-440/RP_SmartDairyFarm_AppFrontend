@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,135 +8,41 @@ import {
 import {
   ArrowLeft,
   AlertTriangle,
-  Info,
   AlertCircle,
   Eye,
   X,
-  Lightbulb,
-  Check,
-  Clock,
 } from "lucide-react-native";
+
+import { useRecommendationStore } from "../../Store/recommendationStore";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface AlertsRecommendationsScreenProps {
   onCowSelect: (cowId: string) => void;
   onBack: () => void;
 }
 
-interface Alert {
-  id: string;
-  type: "critical" | "warning" | "info";
-  title: string;
-  description: string;
-  cowId: string;
-  cowName: string;
-  timestamp: string;
-}
-
-interface Recommendation {
-  id: string;
-  type: "feed" | "supplement" | "health";
-  title: string;
-  description: string;
-  reason: string;
-  impact: string;
-  urgency: "low" | "medium" | "high";
-  cowName: string;
-}
-
-const mockAlerts: Alert[] = [
-  {
-    id: "1",
-    type: "warning",
-    title: "Sudden Milk Drop Detected",
-    description: "Milk production decreased by 12% over the last 3 days",
-    cowId: "2",
-    cowName: "Bella",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "2",
-    type: "info",
-    title: "Lactation Milestone",
-    description: "Daisy has reached day 200 of lactation",
-    cowId: "3",
-    cowName: "Daisy",
-    timestamp: "5 hours ago",
-  },
-];
-
-const mockRecommendations: Recommendation[] = [
-  {
-    id: "1",
-    type: "feed",
-    title: "Increase concentrated feed by 0.5kg",
-    description: "Add 0.5kg of concentrated feed to evening meal",
-    reason:
-      "Milk yield is trending down for Bella. Increased energy intake may help stabilize production.",
-    impact: "Expected yield increase: +1.5–2L per day within 3–5 days",
-    urgency: "high",
-    cowName: "Bella",
-  },
-  {
-    id: "2",
-    type: "supplement",
-    title: "Add mineral supplement for 3 days",
-    description: "Calcium and phosphorus supplement recommended",
-    reason:
-      "Bella is at lactation day 89, a critical period for mineral balance.",
-    impact:
-      "Helps prevent milk fever and supports consistent production",
-    urgency: "medium",
-    cowName: "Bella",
-  },
-];
-
 export function AlertsRecommendationsScreen({
   onCowSelect,
   onBack,
 }: AlertsRecommendationsScreenProps) {
-  const [view, setView] = useState<"alerts" | "recommendations">("alerts");
-  const [dismissedAlertIds, setDismissedAlertIds] = useState<Set<string>>(
-    new Set()
-  );
-  const [completedRecIds, setCompletedRecIds] = useState<Set<string>>(
+  const { t } = useTranslations();
+  const {
+    recommendations,
+    fetchAll,
+    resolveRecommendation,
+  } = useRecommendationStore();
+
+  const [dismissedIds, setDismissedIds] = useState<Set<string>>(
     new Set()
   );
 
-  const activeAlerts = mockAlerts.filter(
-    (a) => !dismissedAlertIds.has(a.id)
-  );
-  const activeRecommendations = mockRecommendations.filter(
-    (r) => !completedRecIds.has(r.id)
-  );
+  useEffect(() => {
+    fetchAll();
+  }, []);
 
-  const getAlertStyle = (type: Alert["type"]) => {
-    switch (type) {
-      case "critical":
-        return {
-          bg: "bg-red-50",
-          border: "border-red-200",
-          iconBg: "bg-red-100",
-          iconColor: "#dc2626",
-          Icon: AlertCircle,
-        };
-      case "warning":
-        return {
-          bg: "bg-orange-50",
-          border: "border-orange-200",
-          iconBg: "bg-orange-100",
-          iconColor: "#ea580c",
-          Icon: AlertTriangle,
-        };
-      default:
-        return {
-          bg: "bg-blue-50",
-          border: "border-blue-200",
-          iconBg: "bg-blue-100",
-          iconColor: "#2563eb",
-          Icon: Info,
-        };
-    }
-  };
+  const activeAlerts = recommendations.filter(
+    (r) => !dismissedIds.has(r._id)
+  );
 
   return (
     <ScrollView className="flex-1 bg-slate-50">
@@ -147,196 +53,93 @@ export function AlertsRecommendationsScreen({
           className="mb-4 flex-row items-center gap-2"
         >
           <ArrowLeft size={20} color="#ffedd5" />
-          <Text className="text-orange-100">Back to Dashboard</Text>
+          <Text className="text-orange-100">{t('common', 'backToDashboard')}</Text>
         </Pressable>
 
         <Text className="text-2xl text-white mb-1">
-          Alerts & Recommendations
+          {t('alerts', 'alertsRecommendations')}
         </Text>
         <Text className="text-orange-100">
-          Stay informed and take action
+          {activeAlerts.length === 0 ? t('alerts', 'noAlerts') : "Stay informed and take action"}
         </Text>
       </View>
 
       <View className="px-6 py-6 space-y-4">
-        {/* Tabs */}
-        <View className="flex-row gap-3">
-          <Pressable
-            onPress={() => setView("alerts")}
-            className={`flex-1 py-3 rounded-xl flex-row items-center justify-center gap-2 ${
-              view === "alerts"
-                ? "bg-orange-600"
-                : "bg-white border-2 border-slate-200"
-            }`}
-          >
-            <AlertTriangle
-              size={18}
-              color={view === "alerts" ? "white" : "#334155"}
-            />
-            <Text
-              className={
-                view === "alerts" ? "text-white" : "text-slate-700"
-              }
-            >
-              Alerts ({activeAlerts.length})
-            </Text>
-          </Pressable>
-
-          <Pressable
-            onPress={() => setView("recommendations")}
-            className={`flex-1 py-3 rounded-xl flex-row items-center justify-center gap-2 ${
-              view === "recommendations"
-                ? "bg-green-600"
-                : "bg-white border-2 border-slate-200"
-            }`}
-          >
-            <Lightbulb
-              size={18}
-              color={
-                view === "recommendations" ? "white" : "#334155"
-              }
-            />
-            <Text
-              className={
-                view === "recommendations"
-                  ? "text-white"
-                  : "text-slate-700"
-              }
-            >
-              AI Tips ({activeRecommendations.length})
-            </Text>
-          </Pressable>
-        </View>
-
         {/* Alerts */}
-        {view === "alerts" &&
-          activeAlerts.map((alert) => {
-            const style = getAlertStyle(alert.type);
-            const Icon = style.Icon;
-
-            return (
-              <View
-                key={alert.id}
-                className={`${style.bg} ${style.border} border-2 rounded-2xl p-5`}
-              >
-                <Pressable
-                  onPress={() =>
-                    setDismissedAlertIds(
-                      (p) => new Set([...p, alert.id])
-                    )
-                  }
-                  className="absolute top-4 right-4"
-                >
-                  <X size={16} color="#64748b" />
-                </Pressable>
-
-                <View className="flex-row gap-3 mb-4">
-                  <View
-                    className={`w-10 h-10 ${style.iconBg} rounded-xl items-center justify-center`}
-                  >
-                    <Icon size={20} color={style.iconColor} />
-                  </View>
-
-                  <View className="flex-1 pr-6">
-                    <Text className="text-slate-900 mb-1">
-                      {alert.title}
-                    </Text>
-                    <Text className="text-sm text-slate-700 mb-2">
-                      {alert.description}
-                    </Text>
-                    <Text className="text-xs text-slate-600">
-                      🐄 {alert.cowName} • {alert.timestamp}
-                    </Text>
-                  </View>
-                </View>
-
-                <View className="flex-row gap-2">
-                  <Pressable
-                    onPress={() => onCowSelect(alert.cowId)}
-                    className="flex-1 bg-white border border-slate-200 rounded-xl py-2.5 flex-row items-center justify-center gap-2"
-                  >
-                    <Eye size={16} color="#334155" />
-                    <Text className="text-slate-700 text-sm">
-                      View Cow
-                    </Text>
-                  </Pressable>
-
-                  {alert.type === "warning" && (
-                    <Pressable className="px-6 bg-orange-600 rounded-xl py-2.5">
-                      <Text className="text-white text-sm">
-                        Take Action
-                      </Text>
-                    </Pressable>
-                  )}
-                </View>
-              </View>
-            );
-          })}
-
-        {/* Recommendations */}
-        {view === "recommendations" &&
-          activeRecommendations.map((rec) => (
-            <View
-              key={rec.id}
-              className="bg-green-50 border-2 border-green-200 rounded-2xl p-5"
+        {activeAlerts.map((alert) => (
+          <View
+            key={alert._id}
+            className="bg-red-50 border-red-200 border-2 rounded-2xl p-5"
+          >
+            <Pressable
+              onPress={async () => {
+                setDismissedIds(
+                  (p) => new Set([...p, alert._id])
+                );
+                await resolveRecommendation(alert._id);
+              }}
+              className="absolute top-4 right-4"
             >
-              <View className="flex-row gap-3 mb-4">
-                <View className="w-10 h-10 bg-green-100 rounded-xl items-center justify-center">
-                  <Lightbulb size={20} color="#16a34a" />
-                </View>
+              <X size={16} color="#64748b" />
+            </Pressable>
 
-                <View className="flex-1">
-                  <Text className="text-slate-900 mb-1">
-                    {rec.title}
-                  </Text>
-                  <Text className="text-sm text-slate-700 mb-2">
-                    {rec.description}
-                  </Text>
-                  <Text className="text-xs text-slate-600">
-                    🐄 {rec.cowName}
-                  </Text>
-                </View>
+            <View className="flex-row gap-3 mb-4">
+              <View className="w-10 h-10 bg-red-100 rounded-xl items-center justify-center">
+                <AlertCircle size={20} color="#dc2626" />
               </View>
 
-              <View className="bg-white/70 rounded-xl p-3 mb-3">
-                <Text className="text-xs text-slate-500 mb-1">
-                  Why this matters
+              <View className="flex-1 pr-6">
+                <Text className="text-slate-900 mb-1">
+                  {alert.title}
                 </Text>
-                <Text className="text-sm text-slate-700">
-                  {rec.reason}
+                <Text className="text-sm text-slate-700 mb-2">
+                  {alert.message}
                 </Text>
-              </View>
-
-              <View className="bg-white/70 rounded-xl p-3 mb-4">
-                <Text className="text-xs text-slate-500 mb-1">
-                  Expected impact
+                <Text className="text-xs text-slate-600">
+                  🐄 {alert.cowId.name} •{" "}
+                  {new Date(alert.createdAt).toLocaleString()}
                 </Text>
-                <Text className="text-sm text-slate-700">
-                  {rec.impact}
-                </Text>
-              </View>
-
-              <View className="flex-row gap-2">
-                <Pressable
-                  onPress={() =>
-                    setCompletedRecIds(
-                      (p) => new Set([...p, rec.id])
-                    )
-                  }
-                  className="flex-1 bg-green-600 rounded-xl py-3 flex-row items-center justify-center gap-2"
-                >
-                  <Check size={16} color="white" />
-                  <Text className="text-white">
-                    Mark as Done
-                  </Text>
-                </Pressable>
-
-                <Pressable className="px-4 bg-white border border-slate-200 rounded-xl py-3">
-                  <Clock size={16} color="#334155" />
-                </Pressable>
               </View>
             </View>
-          ))}
+
+            <View className="flex-row gap-2">
+              <Pressable
+                onPress={() =>
+                  onCowSelect(alert.cowId._id)
+                }
+                className="flex-1 bg-white border border-slate-200 rounded-xl py-2.5 flex-row items-center justify-center gap-2"
+              >
+                <Eye size={16} color="#334155" />
+                <Text className="text-slate-700 text-sm">
+                  View Cow
+                </Text>
+              </Pressable>
+
+              <Pressable
+                onPress={async () => {
+                  setDismissedIds(
+                    (p) => new Set([...p, alert._id])
+                  );
+                  await resolveRecommendation(alert._id);
+                }}
+                className="px-6 bg-orange-600 rounded-xl py-2.5"
+              >
+                <Text className="text-white text-sm">
+                  Mark Done
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        ))}
+
+        {activeAlerts.length === 0 && (
+          <View className="items-center py-12">
+            <AlertTriangle size={40} color="#94a3b8" />
+            <Text className="text-slate-500 mt-3">
+              No active alerts 🎉
+            </Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
