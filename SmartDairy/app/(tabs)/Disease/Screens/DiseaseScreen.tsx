@@ -50,6 +50,21 @@ interface PredictionResult {
   // Additional backend fields
   image_prediction?: string;
   blood_report?: string;
+  blood_analysis?: {
+    status: string;
+    confidence: number;
+    parameters: {
+      lymphocyte_status?: string;
+      wbc_status?: string;
+    };
+    health_flags: string[];
+    abnormal_indicators: number;
+    total_parameters_found: number;
+    interpretation: {
+      lymphocyte_check?: string;
+      wbc_check?: string;
+    };
+  };
   final_decision?: string;
 }
 
@@ -108,6 +123,12 @@ export default function DiseaseScreen() {
     if (diseaseKey?.includes('healthy') || diseaseKey?.includes('normal')) {
       return t("disease", "healthy");
     }
+    if (diseaseKey?.includes('uncertain')) {
+      return t("disease", "uncertain") || "Uncertain";
+    }
+    if (diseaseKey?.includes('unknown')) {
+      return t("disease", "unknown") || "Unknown";
+    }
     return disease; // Return original if no match
   };
 
@@ -165,12 +186,12 @@ export default function DiseaseScreen() {
     try {
       const token = await AsyncStorage.getItem("token");
       if (!token) {
-        Alert.alert(t("disease", "authenticationError"), t("disease", "tokenNotFound"));
-        return;
+        console.log("No token available for care instructions");
+        return null;
       }
 
       console.log(`Fetching care instructions for: ${diseaseType}`);
-      const res = await api.get(`/cattle/disease/care/${diseaseType}`, {
+      const res = await api.get(`/cattle/disease/care/${encodeURIComponent(diseaseType)}`, {
         timeout: 15000, // 15 seconds for care instructions
       });
 
@@ -188,6 +209,10 @@ export default function DiseaseScreen() {
       // Don't show alert for automatic fetching, just log the error
       if (err.response?.status === 404) {
         console.log('Care instructions not available for:', diseaseType);
+      } else if (err.response?.status === 400) {
+        console.log('Invalid disease type for care instructions:', diseaseType);
+      } else if (err.code === 'ECONNABORTED') {
+        console.log('Care instructions request timed out');
       }
       
       return null;
@@ -273,13 +298,23 @@ export default function DiseaseScreen() {
           // Store additional backend data for display
           image_prediction: backendData.image_prediction,
           blood_report: backendData.blood_report,
+          blood_analysis: backendData.blood_analysis,
           final_decision: backendData.final_decision,
         };
 
         console.log('Mapped result:', mappedResult);
         
-        // Try to fetch care instructions for the predicted disease
-        if (prediction && prediction !== 'Unknown') {
+        // Only try to fetch care instructions for actual disease predictions
+        const validDiseases = ['FMD', 'LSD', 'Foot and Mouth Disease', 'Lumpy Skin Disease'];
+        const shouldFetchCare = prediction && 
+                               prediction !== 'Unknown' && 
+                               prediction !== 'Uncertain' && 
+                               prediction !== 'Healthy' &&
+                               validDiseases.some(disease => 
+                                 prediction.toLowerCase().includes(disease.toLowerCase())
+                               );
+        
+        if (shouldFetchCare) {
           try {
             console.log(`Fetching care instructions for: ${prediction}`);
             const careData = await getCareInstructions(prediction);
@@ -292,6 +327,9 @@ export default function DiseaseScreen() {
             console.log('⚠️ Could not fetch care instructions:', error);
             mappedResult.hasCareInstructions = false;
           }
+        } else {
+          console.log(`ℹ️ Skipping care instructions for prediction: ${prediction}`);
+          mappedResult.hasCareInstructions = false;
         }
         
         setResult(mappedResult);
@@ -497,13 +535,39 @@ export default function DiseaseScreen() {
             </Text>
 
             {/* Main Prediction */}
-            <View className="bg-green-50 border border-green-300 rounded-xl p-4 mb-4">
+            <View className={`rounded-xl p-4 mb-4 ${
+              (result.final_decision || result.prediction)?.toLowerCase().includes('uncertain') ||
+              (result.final_decision || result.prediction)?.toLowerCase().includes('unknown')
+                ? 'bg-yellow-50 border border-yellow-300'
+                : 'bg-green-50 border border-green-300'
+            }`}>
               <Text className="text-xs text-slate-500 mb-1">
                 {t("disease", "finalDecision")}
               </Text>
-              <Text className="text-lg font-bold text-green-700">
+              <Text className={`text-lg font-bold ${
+                (result.final_decision || result.prediction)?.toLowerCase().includes('uncertain') ||
+                (result.final_decision || result.prediction)?.toLowerCase().includes('unknown')
+                  ? 'text-yellow-700'
+                  : 'text-green-700'
+              }`}>
                 {getDiseaseTranslation(result.final_decision || result.prediction || t("disease", "healthy"))}
               </Text>
+              
+              {/* Uncertain prediction guidance */}
+              {((result.final_decision || result.prediction)?.toLowerCase().includes('uncertain') ||
+                (result.final_decision || result.prediction)?.toLowerCase().includes('unknown')) && (
+                <View className="mt-3 pt-3 border-t border-yellow-200">
+                  <Text className="text-yellow-800 text-sm font-medium mb-2">
+                    ℹ️ {t("disease", "uncertainGuidanceHeader")}
+                  </Text>
+                  <Text className="text-yellow-700 text-xs leading-5">
+                    • {t("disease", "uncertainReason1")}{'\n'}
+                    • {t("disease", "uncertainReason2")}{'\n'}
+                    • {t("disease", "uncertainReason3")}{'\n'}
+                    • {t("disease", "uncertainReason4")}
+                  </Text>
+                </View>
+              )}
             </View>
 
             {/* Additional Prediction Info */}
@@ -515,6 +579,56 @@ export default function DiseaseScreen() {
                 <Text className="text-base font-semibold text-blue-700">
                   {getDiseaseTranslation(result.image_prediction)}
                 </Text>
+              </View>
+            )}
+
+            {/* Blood Analysis Prediction */}
+            {result.blood_analysis && (
+              <View className={`rounded-xl p-4 mb-4 ${
+                result.blood_analysis.status?.toLowerCase() === 'unhealthy'
+                  ? 'bg-red-50 border border-red-300'
+                  : 'bg-green-50 border border-green-300'
+              }`}>
+                <Text className="text-xs text-slate-500 mb-1">
+                  📋 {t("disease", "bloodAnalysisPrediction")}
+                </Text>
+                <Text className={`text-base font-semibold mb-2 ${
+                  result.blood_analysis.status?.toLowerCase() === 'unhealthy'
+                    ? 'text-red-700'
+                    : 'text-green-700'
+                }`}>
+                  {result.blood_analysis.status?.toUpperCase()} 
+                  <Text className="text-xs font-normal text-slate-600">
+                    ({Math.round((result.blood_analysis.confidence || 0) * 100)}% {t("disease", "confidence").toLowerCase()})
+                  </Text>
+                </Text>
+                
+                {/* Health Indicators */}
+                {result.blood_analysis.health_flags && result.blood_analysis.health_flags.length > 0 && (
+                  <View className="mt-2">
+                    <Text className="text-xs text-slate-600 mb-1">{t("disease", "healthIndicators")}:</Text>
+                    {result.blood_analysis.health_flags.map((flag, index) => (
+                      <Text key={index} className="text-xs text-red-600 mb-1">
+                        • {flag.replace('_', ' ').toUpperCase()}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+                
+                {/* Parameter Status */}
+                {result.blood_analysis.parameters && (
+                  <View className="mt-2 pt-2 border-t border-gray-200">
+                    <Text className="text-xs text-slate-600 mb-1">{t("disease", "parameterAnalysis")}:</Text>
+                    {Object.entries(result.blood_analysis.parameters).map(([key, value]) => (
+                      <Text key={key} className={`text-xs mb-1 ${
+                        value === 'high' ? 'text-red-600' : 
+                        value === 'low' ? 'text-orange-600' : 'text-green-600'
+                      }`}>
+                        • {key.replace('_', ' ').toUpperCase()}: {value?.toUpperCase()}
+                      </Text>
+                    ))}
+                  </View>
+                )}
               </View>
             )}
 
