@@ -10,7 +10,8 @@
       "error": "Error",
       "success": "Success",
       "loading": "Loading...",
-      "noData": "No data available"
+      "noData": "No data available",
+      "health": "Health"
     },
     "profile": {
       "myProfile": "My Profile",
@@ -147,6 +148,106 @@
       "today": "Today",
       "yesterday": "Yesterday"
     },
+
+    "disease": {
+      "diseaseDetection": "Disease Detection",
+      "uploadImage": "Upload Image",
+      "uploadBloodReport": "Upload Blood Report",
+      "enterSymptoms": "Enter Symptoms",
+      "analyzeNow": "Analyze Now",
+      "analyzing": "Analyzing...",
+      "results": "Results",
+      "predictionHistory": "Prediction History",
+      "clearHistory": "Clear History",
+      "noHistory": "No prediction history yet",
+      
+      "imageUpload": "Image Upload",
+      "takePhoto": "Take Photo",
+      "selectFromGallery": "Select from Gallery",
+      "imageSelected": "Image selected",
+      "noImageSelected": "No image selected",
+      
+      "bloodReportUpload": "Blood Report Upload",
+      "selectBloodReport": "Select Blood Report",
+      "bloodReportSelected": "Blood report selected",
+      "noBloodReportSelected": "No blood report selected",
+      
+      "symptoms": "Symptoms",
+      "enterSymptomsHere": "Enter symptoms here",
+      "symptomsPlaceholder": "Describe any symptoms you've observed in your cattle (e.g., fever, loss of appetite, skin lesions, etc.)",
+      
+      "salivation": "Salivation",
+      "blisters": "Blisters", 
+      "fever": "Fever",
+      "lameness": "Lameness",
+      "nodules": "Nodules",
+      "skinLesions": "Skin Lesions",
+      "swollenLymphNodes": "Swollen Lymph Nodes",
+      "nasalDischarge": "Nasal Discharge",
+      "reducedAppetite": "Reduced Appetite",
+      
+      "finalDecision": "Final Decision",
+      "imageAnalysis": "Image Analysis",
+      "bloodReportAnalysis": "Blood Report Analysis",
+      "bloodAnalysisPrediction": "Blood Analysis Prediction",
+      "healthIndicators": "Health Indicators",
+      "parameterAnalysis": "Parameter Analysis",
+      "confidence": "Confidence",
+      
+      "fmd": "Foot and Mouth Disease (FMD)",
+      "lsd": "Lumpy Skin Disease (LSD)",
+      "healthy": "Healthy",
+      "uncertain": "Uncertain",
+      "unknown": "Unknown",
+      
+      "uncertainGuidanceHeader": "What this means:",
+      "uncertainReason1": "More information is needed for a clear diagnosis",
+      "uncertainReason2": "This could be due to insufficient data or early-stage symptoms",
+      "uncertainReason3": "Consider consulting a veterinarian for professional assessment",
+      "uncertainReason4": "Monitor the animal closely for symptom changes",
+      
+      "careInstructions": "Care Instructions",
+      "prevention": "Prevention",
+      "treatment": "Treatment",
+      "monitoring": "Monitoring",
+      
+      "authenticationError": "Authentication Error",
+      "tokenNotFound": "Token not found",
+      "provideAtLeastOneInput": "Provide at least one input!",
+      "predictionFailed": "Prediction failed. Please try again.",
+      
+      "loadingCareInstructions": "Loading care instructions...",
+      
+      "predictionDate": "Prediction Date",
+      "viewDetails": "View Details",
+      
+      "immediateActions": "Immediate Actions",
+      "careAndTreatment": "Care & Treatment", 
+      "vectorControl": "Vector Control",
+      "monitoring": "Monitoring",
+      "prevention": "Prevention",
+      "diseaseInfo": "Disease Information",
+      "noCareInstructions": "No specific care instructions available for this prediction.",
+      
+      "homeTitle": "Healthy Cows, Better Yield 🐄",
+      "homeSubtitle": "AI-Powered Disease Detection",
+      "cows": "Cows",
+      "lastCheck": "Last Check",
+      "alerts": "Alerts",
+      "healthy": "Healthy",
+      "cowsNeedAttention": "cows need attention",
+      "cowsShowingSymptoms": "showing symptoms",
+      "quickActions": "Quick Actions",
+      "uploadCattleImage": "Upload Cattle Image",
+      "takeOrUploadPhoto": "Take or upload photo",
+      "uploadMedicalReport": "Upload Medical Report",
+      "scanOrUploadReport": "Scan or upload report",
+      "diseasePrediction": "Disease Prediction",
+      "aiPoweredAnalysis": "AI-powered analysis",
+      "healthHistory": "Health History",
+      "viewPastRecords": "View past records",
+      "startDiseasePrediction": "🔍 Start Disease Prediction"
+
       "cattleHeat": {
       "heatStressDetails": "Heat Stress Details",
       "sprinklerAutoMessage": "Sprinkler is automatically controlled by prediction system.",
@@ -177,6 +278,7 @@
       "heatMapView": "Heat Map View",
       "thiLabel": "THI",
       "cattleHeader": "Cattle Heat Stress Prediction"
+
     }
   },
   "sinhala": {
@@ -190,7 +292,8 @@
       "error": "ගැටලුවක්",
       "success": "සාර්ථකයි",
       "loading": "පූරණය වෙමින්...",
-      "noData": "දත්ත නැත"
+      "noData": "දත්ත නැත",
+      "health": "සෞඛ්‍යය"
     },
     "profile": {
       "myProfile": "මගේ පැතිකඩ",
@@ -327,6 +430,105 @@
       "today": "අධ",
       "yesterday": "ඊය්ගිමහින්"
     },
+
+    "disease": {
+      "diseaseDetection": "රෝග හඳුනාගැනීම",
+      "uploadImage": "ප්‍රතිමාව උඩුගත කරන්න",
+      "uploadBloodReport": "රුධිර වාර්තාව උඩුගත කරන්න",
+      "enterSymptoms": "රෝග ලක්ෂණ ඇතුළත් කරන්න",
+      "analyzeNow": "දැන් විශ්ලේෂණය කරන්න",
+      "analyzing": "විශ්ලේෂණය කරමින්...",
+      "results": "ප්‍රතිඵල",
+      "predictionHistory": "පූර්වකථන ඉතිහාසය",
+      "clearHistory": "ඉතිහාසය මකන්න",
+      "noHistory": "තවම පූර්වකථන ඉතිහාසයක් නැත",
+      
+      "imageUpload": "ප්‍රතිමාව උඩුගත කරන්න",
+      "takePhoto": "ඡායාරූපයක් ගන්න",
+      "selectFromGallery": "ගැලරියෙන් තෝරන්න",
+      "imageSelected": "ප්‍රතිමාව තෝරාගත්තා",
+      "noImageSelected": "ප්‍රතිමාවක් තෝරා නැත",
+      
+      "bloodReportUpload": "රුධිර වාර්තාව උඩුගත කරන්න",
+      "selectBloodReport": "රුධිර වාර්තාව තෝරන්න",
+      "bloodReportSelected": "රුධිර වාර්තාව තෝරාගත්තා",
+      "noBloodReportSelected": "රුධිර වාර්තාවක් තෝරා නැත",
+      
+      "symptoms": "රෝග ලක්ෂණ",
+      "enterSymptomsHere": "මෙහි රෝග ලක්ෂණ ඇතුළත් කරන්න",
+      "symptomsPlaceholder": "ඔබේ ගවයන් තුළ දක්නට ලැබෙන ඕනෑම රෝග ලක්ෂණයක් විස්තර කරන්න (උදා: උණ, ආහාර රුචිය නැතිවීම, සම තුවාල, ආදිය)",
+      
+      "salivation": "ලොවට පිටවීම",
+      "blisters": "බිඳී ගිනි", 
+      "fever": "උණ",
+      "lameness": "කර්ගරතාව",
+      "nodules": "ගැටිති",
+      "skinLesions": "සම තුවාල",
+      "swollenLymphNodes": "ඉදිමුණු ලිම්ෆ් ගාන්ධි",
+      "nasalDischarge": "නාසික ස්‍රාවය",
+      "reducedAppetite": "අඩු ආහාර රුචිය",
+      
+      "finalDecision": "අවසාන තීරණය",
+      "imageAnalysis": "ප්‍රතිමා විශ්ලේෂණය",
+      "bloodReportAnalysis": "රුධිර වාර්තා විශ්ලේෂණය",
+      "bloodAnalysisPrediction": "රුධිර විශ්ලේෂණ පූර්වකථනය",
+      "healthIndicators": "සෞඛ්‍ය දර්ශක",
+      "parameterAnalysis": "පරාමිති විශ්ලේෂණය",
+      "confidence": "විශ්වාසය",
+      
+      "fmd": "පාද හා මුඛ රෝගය (FMD)",
+      "lsd": "ගැටිති සම රෝගය (LSD)",
+      "healthy": "සෞඛ්‍ය සම්පන්න",
+      "uncertain": "අවිනිශ්චිත",
+      "unknown": "නොදන්නා",
+      
+      "uncertainGuidanceHeader": "මෙයින් අදහස් කරන්නේ:",
+      "uncertainReason1": "පැහැදිලි රෝග නිර්ණයක් සඳහා වැඩි තොරතුරු අවශ්‍යයි",
+      "uncertainReason2": "මෙය ප්‍රමාණවත් නොවන දත්ත හෝ මුල් අවධි රෝග ලක්ෂණ නිසා විය හැකිය",
+      "uncertainReason3": "වෘත්තීය තක්සේරුවක් සඳහා පශු වෛද්‍යවරයකු සමඟ සම්මන්ත්‍රණය කිරීම සලකා බලන්න",
+      "uncertainReason4": "රෝග ලක්ෂණ වෙනස්කම් සඳහා සතුන් සමීපව අධීක්ෂණය කරන්න",      
+      "careInstructions": "සත්කාර උපදෙස්",
+      "prevention": "වැලැක්වීම",
+      "treatment": "ප්‍රතිකාර",
+      "monitoring": "අධීක්ෂණය",
+      
+      "authenticationError": "සත්‍යාපන දෝෂය",
+      "tokenNotFound": "ටෝකනය හමු නොවිණි",
+      "provideAtLeastOneInput": "අවම වශයෙන් එක් ආදානයක් ලබා දෙන්න!",
+      "predictionFailed": "පූර්වකථනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න.",
+      
+      "loadingCareInstructions": "සත්කාර උපදෙස් පූරණය වෙමින්...",
+      
+      "predictionDate": "පූර්වකථන දිනය",
+      "viewDetails": "විස්තර බලන්න",
+      
+      "immediateActions": "ක්ෂණික ක්‍රියා",
+      "careAndTreatment": "සත්කාර සහ ප්‍රතිකාර",
+      "vectorControl": "වාහක පාලනය", 
+      "monitoring": "අධීක්ෂණය",
+      "prevention": "වැලැක්වීම",
+      "diseaseInfo": "රෝග තොරතුරු",
+      "noCareInstructions": "මෙම පූර්වකථනය සඳහා විශේෂ සත්කාර උපදෙස් නොමැත.",
+      
+      "homeTitle": "සෞඛ්‍ය සම්පන්න ගවයන්, වඩා හොඳ අස්වැන්න 🐄",
+      "homeSubtitle": "AI-ශක්තිමත් රෝග නිර්ණය",
+      "cows": "ගවයන්",
+      "lastCheck": "අවසන් පරීක්ෂණය",
+      "alerts": "අනතුරු ඇඟවීම්",
+      "healthy": "සෞඛ්‍ය සම්පන්න",
+      "cowsNeedAttention": "ගවයන්ට අවධානය අවශ්‍යයි",
+      "cowsShowingSymptoms": "රෝග ලක්ෂණ පෙන්වයි",
+      "quickActions": "ක්ෂණික ක්‍රියා",
+      "uploadCattleImage": "ගව ප්‍රතිමාව උඩුගත කරන්න",
+      "takeOrUploadPhoto": "ඡායාරූපයක් ගන්න හෝ උඩුගත කරන්න",
+      "uploadMedicalReport": "වෛද්‍ය වාර්තාව උඩුගත කරන්න",
+      "scanOrUploadReport": "වාර්තාව ස්කෑන් කරන්න හෝ උඩුගත කරන්න",
+      "diseasePrediction": "රෝග පූර්වකථනය",
+      "aiPoweredAnalysis": "AI-ශක්තිමත් විශ්ලේෂණය",
+      "healthHistory": "සෞඛ්‍ය ඉතිහාසය",
+      "viewPastRecords": "පැරණි වාර්තා බලන්න",
+      "startDiseasePrediction": "🔍 රෝග පූර්වකථනය ආරම්භ කරන්න"
+
          "cattleHeat": {
       "heatStressDetails": "උෂ්ණතා ආතති විස්තර",
       "sprinklerAutoMessage": "ජල විහිදුම් පද්ධතිය ස්වයංක්‍රීයව පාලනය වේ.",
@@ -357,12 +559,13 @@
       "heatMapView": "උෂ්ණතා සිතියම් දර්ශනය",
       "thiLabel": "THI",
       "cattleHeader": "ගව තාප පීඩන පුරෝකථනය"
+
     }
   },
   "tamil": {
     "common": {
       "back": "பின்னோக்கு",
-      "backToDashboard": "டேஷ்போர்டுக்கு பின்னோக்கு",
+      "backToDashboard": "டேஷ்போர்டுக்கு பின்னோक்கு",
       "save": "சேமிக்க",
       "done": "முடிந்தது",
       "dismiss": "நிராகரிக்க",
@@ -370,7 +573,8 @@
       "error": "பிழை",
       "success": "வெற்றி",
       "loading": "ஏற்றுகிறது...",
-      "noData": "தரவு இல்லை"
+      "noData": "தரவு இல்லை",
+      "health": "சுகாதாரம்"
     },
     "profile": {
       "myProfile": "என்னுடைய சுயவிவரம்",
@@ -507,6 +711,106 @@
       "today": "இன்று",
       "yesterday": "நன்னாடக்கன்"
     },
+
+    "disease": {
+      "diseaseDetection": "நோய் கண்டறிதல்",
+      "uploadImage": "படத்தை அப்லோட் செய்க",
+      "uploadBloodReport": "இரத்த அறிக்கையை அப்லோட் செய்க",
+      "enterSymptoms": "அறிகுறிகளை உள்ளிடுக",
+      "analyzeNow": "இப்போது பகுப்பாய்வு செய்க",
+      "analyzing": "பகுப்பாய்வு செய்கிறது...",
+      "results": "முடிவுகள்",
+      "predictionHistory": "முன்கணிப்பு வரலாறு",
+      "clearHistory": "வரலாறு அழிக்க",
+      "noHistory": "இன்னும் முன்கணிப்பு வரலாறு இல்லை",
+      
+      "imageUpload": "படத்தை அப்லோட் செய்க",
+      "takePhoto": "புகைப்படம் எடுக்க",
+      "selectFromGallery": "கேலரியில் இருந்து தேர்ந்தெடுக்க",
+      "imageSelected": "படம் தேர்ந்தெடுக்கப்பட்டது",
+      "noImageSelected": "படம் எதுவும் தேர்ந்தெடுக்கப்படவில்லை",
+      
+      "bloodReportUpload": "இரத்த அறிக்கையை அப்லோட் செய்க",
+      "selectBloodReport": "இரத்த அறிக்கையை தேர்ந்தெடுக்க",
+      "bloodReportSelected": "இரத்த அறிக்கை தேர்ந்தெடுக்கப்பட்டது",
+      "noBloodReportSelected": "இரத்த அறிக்கை எதுவும் தேர்ந்தெடுக்கப்படவில்லை",
+      
+      "symptoms": "அறிகுறிகள்",
+      "enterSymptomsHere": "இங்கே அறிகுறிகளை உள்ளிடுக",
+      "symptomsPlaceholder": "உங்கள் கால்நடைகளில் நீங்கள் கவனித்த ஏதேனும் அறிகுறிகளை விவரிக்கவும் (எ.கா.: காய்ச்சல், பசியின்மை, தோல் புண்கள் போன்றவை)",
+      
+      "salivation": "எச்சில் சுரப்பு",
+      "blisters": "கொப்புளங்கள்", 
+      "fever": "காய்ச்சல்",
+      "lameness": "தகளிப்பு",
+      "nodules": "கணுக்கள்",
+      "skinLesions": "தோல் புண்கள்",
+      "swollenLymphNodes": "வீங்கிய நிணநீர் கணுக்கள்",
+      "nasalDischarge": "நாசி சுரப்பு",
+      "reducedAppetite": "குறைந்த பசி",
+      
+      "finalDecision": "இறுதி முடிவு",
+      "imageAnalysis": "படப் பகுப்பாய்வு",
+      "bloodReportAnalysis": "இரத்த அறிக்கை பகுப்பாய்வு",
+      "bloodAnalysisPrediction": "இரத்த பகுப்பாய்வு முன்கணிப்பு",
+      "healthIndicators": "ஆரோக்கிய குறிகாட்டிகள்",
+      "parameterAnalysis": "அளவுரு பகுப்பாய்வு",
+      "confidence": "நம்பிக்கை",
+      
+      "fmd": "கால் மற்றும் வாய் நோய் (FMD)",
+      "lsd": "குமிழ் தோல் நோய் (LSD)",
+      "healthy": "ஆரோக்கியமான",
+      "uncertain": "நிச்சயமற்ற",
+      "unknown": "தெரியாத",
+      
+      "uncertainGuidanceHeader": "இதன் அர்த்தம்:",
+      "uncertainReason1": "தெளிவான நோயறிக்குறிப்புக்கு மேலும் தகவல் தேவை",
+      "uncertainReason2": "இது போதுமான தரவு இல்லாமை அல்லது ஆரம்ப நிலை அறிகுறிகள் காரணமாக இருக்கலாம்",
+      "uncertainReason3": "தொழிலுர் மதிப்பீட்டிற்கு கால்நடை மருத்துவரை அணுகுங்கள்",
+      "uncertainReason4": "அறிகுறி மாற்றங்களுக்காக விலங்கை நெருக்கமாக கண்காணிக்கவும்",
+      
+      "careInstructions": "கவனிப்பு வழிமுறைகள்",
+      "prevention": "தடுப்பு",
+      "treatment": "சிகிச்சை",
+      "monitoring": "கண்காணிப்பு",
+      
+      "authenticationError": "அங்கீகார பிழை",
+      "tokenNotFound": "டோக்கன் காணப்படவில்லை",
+      "provideAtLeastOneInput": "குறைந்தம் ஒரு உள்ளீட்டை வழங்கவும்!",
+      "predictionFailed": "முன்கணிப்பு தோல்வியுற்றது. மீண்டும் முயற்சி செய்க.",
+      
+      "loadingCareInstructions": "கவனிப்பு வழிமுறைகள் ஏற்றப்படுகின்றன...",
+      
+      "predictionDate": "முன்கணிப்பு தேதி",
+      "viewDetails": "விவரங்களைப் பார்க்க",
+      
+      "immediateActions": "உடனடி நடவடிக்கைகள்",
+      "careAndTreatment": "பராமரிப்பு மற்றும் சிகிச்சை",
+      "vectorControl": "வெக்டர் கட்டுப்பாடு",
+      "monitoring": "கண்காணிப்பு", 
+      "prevention": "தடுப்பு",
+      "diseaseInfo": "நோய் தகவல்",
+      "noCareInstructions": "இந்த முன்கணிப்புக்கு குறிப்பிட்ட பராமரிப்பு வழிமுறைகள் கிடைக்கவில்லை.",
+      
+      "homeTitle": "ஆரோக்கியமான பசுக்கள், சிறந்த மகசூல் 🐄",
+      "homeSubtitle": "AI-சக்தி வாய்ந்த நோய் கண்டறிதல்",
+      "cows": "பசுக்கள்",
+      "lastCheck": "கடைசி சோதனை",
+      "alerts": "எச்சரிக்கைகள்",
+      "healthy": "ஆரோக்கியமான",
+      "cowsNeedAttention": "பசுக்களுக்கு கவனம் தேவை",
+      "cowsShowingSymptoms": "அறிகுறிகளைக் காட்டுகிறது",
+      "quickActions": "விரைவு நடவடிக்கைகள்",
+      "uploadCattleImage": "கால்நடை படத்தை அப்லோட் செய்க",
+      "takeOrUploadPhoto": "புகைப்படம் எடுக்க அல்லது அப்லோड் செய்க",
+      "uploadMedicalReport": "மருத்துவ அறிக்கையை அப்லோட் செய்க",
+      "scanOrUploadReport": "அறிக்கையை ஸ்கேன் செய்க அல்லது அப்லோড் செய்க",
+      "diseasePrediction": "நோய் முன்கணிப்பு",
+      "aiPoweredAnalysis": "AI-சக்தி வாய்ந்த பகுப்பாய்வு",
+      "healthHistory": "சுகாதார வரலாறு",
+      "viewPastRecords": "கடந்தகால பதிவுகளைப் பார்க்க",
+      "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"
+
          "cattleHeat": {
       "heatStressDetails": "வெப்ப அழுத்த விவரங்கள்",
       "sprinklerAutoMessage": "தண்ணீர் தெளிப்பு அமைப்பு முன்னறிவிப்பு முறையால் தானாக கட்டுப்படுத்தப்படுகிறது.",
@@ -537,6 +841,7 @@
       "heatMapView": "வெப்ப வரைபட காட்சி",
       "thiLabel": "THI",
       "cattleHeader": "கால்நடை வெப்ப அழுத்த கணிப்பு"
+
     }
   }
 }

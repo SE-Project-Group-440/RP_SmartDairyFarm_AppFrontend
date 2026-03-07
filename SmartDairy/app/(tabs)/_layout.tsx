@@ -6,6 +6,7 @@ import {
 } from "react-native";
 import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import useTranslation from "../../hooks/useTranslation";
 import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 
 
@@ -13,8 +14,8 @@ import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 import  CattleListScreen  from "../(tabs)/cattleHeat/Screens/CattleListScreen";
 import  DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen";
 import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
-import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Cow/Screens/DiseaseHomeScreen";
-import DiseaseScreenComponent from "../(tabs)/Cow/Screens/DiseaseScreen";
+import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
+import DiseaseScreenComponent from "../(tabs)/Disease/Screens/DiseaseScreen";
 
 export type MainTab =
   | "Dairy"
@@ -36,6 +37,7 @@ export type DairyScreen =
   | "history";
 
 export default function LactationCurveHome() {
+  const { t } = useTranslation();
   const [currentTab, setCurrentTab] =
     useState<MainTab>("Dairy");
   const [dairyScreen, setDairyScreen] =
@@ -209,7 +211,7 @@ export default function LactationCurveHome() {
                   : "text-slate-600"
               }`}
             >
-              Health
+              {t("common", "health")}
             </Text>
           </Pressable>
 
