@@ -1,8 +1,6 @@
 import axios from "axios";
+import { api } from "./../hooks/api";
 
-const API = axios.create({
-  baseURL: "http://192.168.8.176:8080/api/ai",
-});
 export interface InputData {
   "Lactation No": number;
   "Milk_Yield": number;
@@ -39,7 +37,7 @@ export const recommendAI = async (
 ): Promise<Recommendation> => {
   const payload = { cowId, row };
   console.log("Sending payload to backend:", payload);
-  const response = await API.post<Recommendation>("/recommend", payload);
+  const response = await api.post<Recommendation>("/api/ai/recommend", payload);
   return response.data;
 };
 
@@ -47,15 +45,15 @@ export const markAIDone = async (
   recommendationId: string,
   ai_date: string
 ): Promise<Recommendation> => {
-  const response = await API.post<Recommendation>(
-    `/done/${recommendationId}`,
+  const response = await api.post<Recommendation>(
+    `/api/ai/done/${recommendationId}`,
     { ai_date }
   );
   return response.data;
 };
 
 export const fetchPendingCows = async (): Promise<Recommendation[]> => {
-  const response = await API.get<Recommendation[]>("/all");
+  const response = await api.get<Recommendation[]>("/api/ai/all");
   return response.data;
 };
 
@@ -64,8 +62,8 @@ export const confirmPregnancy = async (
   recommendationId: string,
   status: PregnancyStatus
 ): Promise<Recommendation> => {
-  const response = await API.post<Recommendation>(
-    `/confirm-pregnancy/${recommendationId}`,
+  const response = await api.post<Recommendation>(
+    `/api/ai/confirm-pregnancy/${recommendationId}`,
     {
       pregnancy_check_status: status,
     }
