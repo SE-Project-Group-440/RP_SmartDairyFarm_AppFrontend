@@ -8,6 +8,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useAuthStore } from "../Store/auth.store";
 import { useLanguageStore } from "../Store/language.store";
 import { useEffect } from "react";
+import AIHomeScreen from "./AIPrediction/AIHomeScreen";
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -56,6 +57,11 @@ export default function RootLayout() {
         <Stack.Screen
           name="modal"
           options={{ presentation: "modal" }}
+        />
+
+        <Stack.Screen
+          name="AIPrediction/AIHomeScreen"
+          options={{ headerShown: true, title: "" }}
         />
       </Stack>
 

@@ -8,7 +8,8 @@ import { Milk, Package, TrendingUp, User } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useTranslation from "../../hooks/useTranslation";
 import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
-
+import {AiRecommendationScreen} from "../AIPrediction/AiRecommendationScreen";
+import AiHomeScreen from "../AIPrediction/AIHomeScreen";
 
 
 import  CattleListScreen  from "../(tabs)/cattleHeat/Screens/CattleListScreen";
