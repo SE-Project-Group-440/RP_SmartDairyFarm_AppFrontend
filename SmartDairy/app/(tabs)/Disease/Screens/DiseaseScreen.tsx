@@ -144,7 +144,7 @@ export default function DiseaseScreen() {
     if (titleKey?.includes('vector')) {
       return t("disease", "vectorControl");
     }
-    if (titleKey?.includes('monitoring')) {
+    if (titleKey?.includes('monitoring') || titleKey?.includes('monitor')) {
       return t("disease", "monitoring");
     }
     if (titleKey?.includes('prevention')) {
@@ -661,10 +661,10 @@ export default function DiseaseScreen() {
                   <View className="mb-4">
                     <Text className="font-semibold text-base mb-1">
                       {result.careInstructions.diseaseInfo.emoji}{" "}
-                      {result.careInstructions.diseaseInfo.fullName}
+                      {getDiseaseTranslation(result.careInstructions.diseaseInfo.fullName)}
                     </Text>
                     <Text className="text-sm text-slate-600">
-                      {result.careInstructions.diseaseInfo.description}
+                      {translateInstructionArray([result.careInstructions.diseaseInfo.description], language)[0]}
                     </Text>
                   </View>
                 )}
