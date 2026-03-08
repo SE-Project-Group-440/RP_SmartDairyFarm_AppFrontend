@@ -9,20 +9,20 @@ const LOCAL_IP = Constants.expoConfig?.hostUri?.split(":")[0];
 
 const BASE_URL =
   Platform.OS === "web"
-    ? "http://localhost:8000"
+    ? "http://localhost:8080"
     : Platform.OS === "android"
-    ? `http://${LOCAL_IP}:8000`
-    : `http://${LOCAL_IP}:8000`;
+    ? `http://${LOCAL_IP}:8080`
+    : `http://${LOCAL_IP}:8080`;
 
 export const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 30000, // Increased to 30 seconds default
+  timeout: 30000, 
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Attach token automatically
+
 api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
