@@ -298,7 +298,7 @@
       "startDiseasePrediction": "🔍 Start Disease Prediction"
     },
     "addAiCow": {
-      "title": "Resgister a New Cow for AI Observation",
+      "title": "New Cow for AI Observation",
       "cowId": "Cow ID",
       "lactationNo": "Lactation No",
       "breed": "Breed",
@@ -337,7 +337,7 @@
       "notPregnant": "Not Pregnant",
       "enterAiDate": "Enter AI done date (YYYY-MM-DD)",
       "markAIDone": "Mark AI as Done",
-      "addtitle": "Add New Cow For AI Monitoring",
+      "addtitle": "Cow For AI Monitoring",
       "jersey": "Jersey",
       "friesian": "Friesian",
       "crossbreed": "Crossbreed",
