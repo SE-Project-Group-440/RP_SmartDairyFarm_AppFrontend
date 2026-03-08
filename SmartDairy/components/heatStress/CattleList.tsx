@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { Cattle } from '../../app/(tabs)/cattleHeat/Screens/CattleListScreen';
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface CattleListProps {
   cattleData: Cattle[];
@@ -8,10 +9,22 @@ interface CattleListProps {
 }
 
 export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
+
+  // 🔥 THI-based stress resolver
+  const { t } = useTranslations();
+  const getStressLevelFromTHI = (thi: number) => {
+    if (thi >= 88) return 'Critical';
+    if (thi >= 79) return 'High';
+    if (thi >= 72) return 'Moderate';
+    return 'Low';
+  };
+
   const totalCattle = cattleData.length;
-  const highStressCattle = cattleData.filter(c => 
-    c.stressLevel === 'High' || c.stressLevel === 'Critical'
-  ).length;
+
+  const highStressCattle = cattleData.filter(c => {
+    const level = getStressLevelFromTHI(c.thi);
+    return level === 'High' || level === 'Critical';
+  }).length;
 
   const getStressColors = (level: string) => {
     switch (level) {
@@ -35,25 +48,30 @@ export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.greetingRow}>
-              <Text style={styles.greetingText}>Good Evening</Text>
-              <Text style={styles.moonIcon}>🌙</Text>
-              <Text style={styles.greetingText}>Manujaya</Text>
+              <Text style={styles.greetingText}>{t('cattleHeat', 'cattleHeader')}  </Text>
             </View>
-            <Text style={styles.subHeaderText}>Dairy Farm Management</Text>
+            <Text style={styles.subHeaderText}>{t('cattleHeat', 'dairyFarmManagement')}</Text>
           </View>
         </View>
 
         {/* Content */}
         <View style={styles.content}>
-          <Text style={styles.sectionTitle}>Heat Stress Monitoring</Text>
-          
+          <Text style={styles.sectionTitle}>{t('cattleHeat', 'heatStressMonitoring')}</Text>
+
           <View style={styles.grid}>
             {cattleData.map((cattle) => {
-              const colors = getStressColors(cattle.stressLevel);
+              const stressLevel = getStressLevelFromTHI(cattle.thi);
+              const colors = getStressColors(stressLevel);
+
               return (
                 <TouchableOpacity
                   key={cattle.id}
-                  onPress={() => onSelectCattle(cattle)}
+                  onPress={() =>
+                      onSelectCattle({
+                        ...cattle,
+                        stressLevel: getStressLevelFromTHI(cattle.thi),
+                      })
+                    }
                   style={styles.card}
                   activeOpacity={0.7}
                 >
@@ -62,17 +80,14 @@ export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
                     <View style={styles.cattleIcon}>
                       <Text style={styles.cattleIconText}>🐄</Text>
                     </View>
-                    
-                    {/* Cattle Name */}
-                    <Text style={styles.cattleName}>{cattle.name}</Text>
-                    
-                    {/* Temperature */}
-                    <Text style={styles.temperature}>{cattle.bodyTemp}°C</Text>
-                    
+
+                    {/* THI */}
+                    <Text style={styles.temperature}>THI - {cattle.thi}</Text>
+
                     {/* Stress Level Badge */}
                     <View style={[styles.badge, { backgroundColor: colors.bg }]}>
                       <Text style={[styles.badgeText, { color: colors.text }]}>
-                        {cattle.stressLevel}
+                        {stressLevel}
                       </Text>
                     </View>
                   </View>
@@ -107,74 +122,17 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
-  headerContent: {
-    gap: 8,
-  },
+  headerContent: { gap: 8 },
   greetingRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     marginBottom: 4,
   },
-  greetingText: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#ffffff',
-  },
-  moonIcon: {
-    fontSize: 20,
-  },
-  subHeaderText: {
-    fontSize: 14,
-    color: '#bbf7d0',
-  },
-  statsCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: 16,
-    marginTop: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  statItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statItemBorder: {
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#e5e7eb',
-  },
-  statValueGreen: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#16a34a',
-  },
-  statValue: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1f2937',
-  },
-  statValueOrange: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#f97316',
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginTop: 4,
-  },
-  content: {
-    padding: 24,
-  },
+  greetingText: { fontSize: 24, fontWeight: '600', color: '#ffffff' },
+  moonIcon: { fontSize: 20 },
+  subHeaderText: { fontSize: 14, color: '#bbf7d0' },
+  content: { padding: 24 },
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
@@ -199,10 +157,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 12,
   },
-  cardContent: {
-    alignItems: 'center',
-    gap: 12,
-  },
+  cardContent: { alignItems: 'center', gap: 12 },
   cattleIcon: {
     width: 64,
     height: 64,
@@ -211,25 +166,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cattleIconText: {
-    fontSize: 32,
-  },
-  cattleName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1f2937',
-  },
-  temperature: {
-    fontSize: 14,
-    color: '#6b7280',
-  },
-  badge: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  badgeText: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
+  cattleIconText: { fontSize: 32 },
+  cattleName: { fontSize: 16, fontWeight: '600', color: '#1f2937' },
+  temperature: { fontSize: 14, color: '#6b7280' },
+  badge: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: 12 },
+  badgeText: { fontSize: 12, fontWeight: '500' },
 });
