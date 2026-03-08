@@ -336,33 +336,34 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
       {/* Recommendation Modal */}
 <Modal visible={showRecommendation} transparent animationType="fade">
   <View className="flex-1 bg-black/40 justify-center items-center">
-    <View className="bg-white p-6 rounded-3xl w-[90%]">
+    <View className={`bg-white p-6 rounded-3xl w-[90%] ${result?.recommendation?.key === 'below_expected' ? 'border-red-500 border-2' : 'border-green-500 border-2'}`}>
       <Text className="text-xl font-semibold mb-2 text-center">
         {t('milkEntry', 'recommendation')}
       </Text>
 
-      <Text className="text-base font-medium mb-2">
-        {result?.recommendation?.title}
-      </Text>
+{/* translate title and message using the key returned from the backend */}
+        <Text className={`text-base font-medium mb-2 ${result?.recommendation?.key === 'below_expected' ? 'text-red-600' : 'text-green-600'}`}>
+          {t('milkEntry', `recommendation_${result?.recommendation?.key}_title`)}
+        </Text>
 
-      <Text className="text-slate-600 mb-3">
-        {result?.recommendation?.message}
-      </Text>
+        <Text className="text-slate-600 mb-3">
+          {t('milkEntry', `recommendation_${result?.recommendation?.key}_message`)}
+        </Text>
 
-      {result?.recommendation?.actions?.length > 0 && (
-        <View className="mt-2">
-          {result.recommendation.actions.map(
-            (action: string, index: number) => (
-              <Text
-                key={index}
-                className="text-slate-600 mb-1"
-              >
-                • {action}
-              </Text>
-            )
-          )}
-        </View>
-      )}
+        {result?.recommendation?.actions?.length > 0 && (
+          <View className="mt-2">
+            {result.recommendation.actions.map(
+              (actionKey: string, index: number) => (
+                <Text
+                  key={index}
+                  className="text-slate-600 mb-1"
+                >
+                  • {t('milkEntry', actionKey)}
+                </Text>
+              )
+            )}
+          </View>
+        )}
 
       <Pressable
         onPress={() => setShowRecommendation(false)}

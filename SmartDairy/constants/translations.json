@@ -120,7 +120,30 @@
       "milkEntrySaved": "Milk Entry Saved!",
       "milkDataRecorded": "Milk data recorded successfully.",
       "recommendation": "Recommendation",
-      "gotIt": "Got it"
+      "gotIt": "Got it",
+      
+      "recommendation_above_expected_title": "Excellent Performance",
+      "recommendation_above_expected_message": "Milk yield is significantly higher than the predicted value.",
+      "recommendation_above_expected_action_1": "Maintain the current feeding schedule",
+      "recommendation_above_expected_action_2": "Continue regular health monitoring",
+      "recommendation_above_expected_action_3": "This cow is performing better than expected",
+
+      "recommendation_on_track_title": "On Track",
+      "recommendation_on_track_message": "Milk yield is within the expected prediction range.",
+      "recommendation_on_track_action_1": "No immediate action required",
+      "recommendation_on_track_action_2": "Continue the current management routine",
+
+      "recommendation_below_expected_title": "Needs Attention",
+      "recommendation_below_expected_message": "Milk yield is lower than predicted.",
+      "recommendation_below_expected_action_1": "Review feed quality and quantity",
+      "recommendation_below_expected_action_2": "Ensure sufficient clean water intake",
+      "recommendation_below_expected_action_3": "Observe cow behavior for stress or discomfort",
+      "recommendation_below_expected_peak_action_1": "Increase concentrated feed intake gradually during this peak period",
+      "recommendation_below_expected_peak_action_2": "Ensure sufficient clean water intake and monitor appetite",
+      "recommendation_below_expected_peak_action_3": "Recheck milk output for the next 2-3 days and consult a vet if decline continues",
+      "recommendation_below_expected_non_peak_action_1": "Do not increase feed immediately outside peak period",
+      "recommendation_below_expected_non_peak_action_2": "Review feed quality, cow comfort, and possible health stress",
+      "recommendation_below_expected_non_peak_action_3": "Track milk trend for the next 2-3 days before changing ration"
     },
     "analytics": {
       "analytics": "Analytics",
@@ -129,8 +152,33 @@
     },
     "alerts": {
       "alertsRecommendations": "Alerts & Recommendations",
-      "noAlerts": "No active alerts"
+      "noAlerts": "No active alerts",
+
+    
+      "header": "Alerts & Notifications",
+      "subheader": "Stay on top of your farm's needs",
+      "allClear": "All Clear!",
+      "noActiveAlerts": "No active alerts",
+      "critical": "Critical",
+      "warning": "Warning",
+      "info": "Info",
+      "viewCow": "View Cow",
+      "markDone": "Mark Done",
+      "dismiss": "Dismiss",
+      "takeAction": "Take Action",
+      "stayInformed": "Stay informed and take action",
+
+      "alert_sudden_drop_title": "Sudden Milk Drop Detected",
+      "alert_sudden_drop_description": "Milk production decreased by 12% over the last 3 days",
+      "alert_lactation_milestone_title": "Lactation Day Milestone",
+      "alert_lactation_milestone_description": "Daisy has reached day 200 of lactation",
+      "alert_above_average_title": "Above Average Performance",
+      "alert_above_average_description": "Lassie is producing 8% above expected",
+
+      "below_expected_title": "Needs Attention",
+      "below_expected_message": "Milk yield is lower than predicted."
     },
+
     "history": {
       "history": "History",
       "viewHistory": "View History",
@@ -466,7 +514,30 @@
       "milkEntrySaved": "කිරි ඇතුළත් කිරීම සුරැකිණි!",
       "milkDataRecorded": "කිරි දත්ත ඇතුලත් කලා.",
       "recommendation": "නිර්දේශ",
-      "gotIt": "තේරුම් ගත්තා"
+      "gotIt": "තේරුම් ගත්තා",
+      
+      "recommendation_above_expected_title": "අති විශිෂ්ට කාර්ය්‍ය සාධනය",
+      "recommendation_above_expected_message": "ඉදිරිපත් කල ප්‍රවේශයට සාපේක්ෂව කිරි ප්‍රමාණය සුවිශේෂී ලෙස ඉහළයි.",
+      "recommendation_above_expected_action_1": "වත්මන් ආහාර සැලැස්වීම පැවැත්ම",
+      "recommendation_above_expected_action_2": "සම්මත සෞඛ්‍ය පරීක්ෂණය පවත්වාගන්න",
+      "recommendation_above_expected_action_3": "මෙම ගවය ඉතා හොඳින් කාර්යයයන් ඉටු කරමින් ඇත",
+
+      "recommendation_on_track_title": "පියවරේ",
+      "recommendation_on_track_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ පරාසය තුළ පවතී.",
+      "recommendation_on_track_action_1": "ඉක්මන් ක්‍රියාකාරකම් අවශ්‍ය නැත",
+      "recommendation_on_track_action_2": "වත්මන් කළමනාකරණ රීති පවත්වාගන්න",
+
+      "recommendation_below_expected_title": "අවධානය අවශ්‍යයි",
+      "recommendation_below_expected_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ තරමට වඩා පහළ වේ.",
+      "recommendation_below_expected_action_1": "ආහාර ප්‍රමාණය සහ තත්ත්වය සමාලෝචනය කරන්න",
+      "recommendation_below_expected_action_2": "පිරිසිදු ජලය සැපයීම සනාථ කරන්න",
+      "recommendation_below_expected_action_3": "ශාරීරික රෝග ලක්ෂණ හෝ ආතතිය සඳහා ගවය පරීක්ෂා කරන්න",
+      "recommendation_below_expected_peak_action_1": "මෙම peak කාලයේදී කේන්ද්‍රිත ආහාර ප්‍රමාණය ක්‍රමයෙන් වැඩි කරන්න",
+      "recommendation_below_expected_peak_action_2": "පිරිසිදු ජලය ප්‍රමාණවත්ද සහ ආහාර රුචිය පවතිනද සනාථ කරන්න",
+      "recommendation_below_expected_peak_action_3": "ඊළඟ දින 2-3 තුළ කිරි ප්‍රමාණය නැවත පරීක්ෂා කර අඩුවීම දිගු වුවහොත් වෛද්‍ය උපදෙස් ගන්න",
+      "recommendation_below_expected_non_peak_action_1": "peak කාලයට පිටතදී වහාම ආහාර ප්‍රමාණය වැඩි නොකරන්න",
+      "recommendation_below_expected_non_peak_action_2": "ආහාර තත්ත්වය, ගවයගේ සුවපහසුව සහ සෞඛ්‍ය ආතතිය සමාලෝචනය කරන්න",
+      "recommendation_below_expected_non_peak_action_3": "ration වෙනස් කිරීමට පෙර ඊළඟ දින 2-3 තුළ කිරි ප්‍රවණතාව නිරීක්ෂණය කරන්න"
     },
     "analytics": {
       "analytics": "විශ්ලේෂණ",
@@ -475,7 +546,30 @@
     },
     "alerts": {
       "alertsRecommendations": "ඇඟවීම් සහ නිර්දේශ",
-      "noAlerts": "ක්‍රියාකාරී ඇඟවීම් නැත"
+      "noAlerts": "ක්‍රියාකාරී ඇඟවීම් නැත",
+
+      "header": "ඇඟවීම් සහ දැනුම්දීම්",
+      "subheader": "ඔබේ ගොවිපළ අවශ්‍යතා ඉහළින් පවත්වා ගන්න",
+      "allClear": "සියල්ල පැහැදිලියි!",
+      "noActiveAlerts": "ක්‍රියාකාරී ඇඟවීම් නොමැත",
+      "critical": "සංක්‍රමණය",
+      "warning": "අවවාදය",
+      "info": "තොරතුරු",
+      "viewCow": "ගවය බලන්න",
+      "stayInformed": "දැනුවත් වෙමින් ක්‍රියා කරන්න",
+      "markDone": "සම්පූර්ණයි ලෙස ලකුණු කරන්න",
+      "dismiss": "ඉවතලන්න",
+      "takeAction": "ක්‍රියා කරන්න",
+
+      "alert_sudden_drop_title": "අහඹු කිරි අඩු වීම සොයා ගන්නා ලදී",
+      "alert_sudden_drop_description": "අවසාන දින තුන තුළ කිරි නිෂ්පාදනය 12% කින් පහත වැටුණි",
+      "alert_lactation_milestone_title": "කිරිදීම දිනය සීමාව සලකා බැලීම",
+      "alert_lactation_milestone_description": "Daisy යට පසු කිරිදීමේ 200වන දිනට පත් විය",
+      "alert_above_average_title": "සාමාන්‍යයට மேல் செயல்திறன்",
+      "alert_above_average_description": "Lassie எதிர்பார்த்ததைவிட 8% மேல் உற்பத்தி செய்கிறது",
+
+      "below_expected_title": "අවධානය අවශ්‍යයි",
+      "below_expected_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ තරමට වඩා පහළ වේ."
     },
     "history": {
       "history": "ඉතිහාසය",
@@ -491,7 +585,7 @@
       "recordTypeMilk": "කිරි",
       "recordTypeCow": "ගවයෙක්",
       "searchPlaceholder": "ගවගේ නම හෝ අගය අනුව සොයන්න...",
-      "today": "අධ",
+      "today": "අද",
       "yesterday": "ඊය්ගිමහින්"
     },
 
@@ -812,7 +906,30 @@
       "milkEntrySaved": "பால் நுழைப்பு சேமிக்கப்பட்டுள்ளது!",
       "milkDataRecorded": "பால் தரவு வெற்றிகரமாக பதிவு செய்யப்பட்டுள்ளது.",
       "recommendation": "பரிந்துரை",
-      "gotIt": "புரிந்துகொண்டேன்"
+      "gotIt": "புரிந்துகொண்டேன்",
+      
+      "recommendation_above_expected_title": "சிறந்த செயல்திறன்",
+      "recommendation_above_expected_message": "எதிர்பார்த்த மதிப்பை விட பால் உற்பத்தி குறிப்பிடத்தக்க அளவு அதிகமாக உள்ளது.",
+      "recommendation_above_expected_action_1": "தற்போதைய உணவு திட்டத்தை தொடரவும்",
+      "recommendation_above_expected_action_2": "சார்ந்த சுகாதார பின்வழிப்புகளை தொடரவும்",
+      "recommendation_above_expected_action_3": "இந்த மாடு எதிர்பார்த்ததைவிட சிறப்பாக செயல்படுகிறது",
+
+      "recommendation_on_track_title": "வழியில்",
+      "recommendation_on_track_message": "பால் உற்பத்தி எதிர்பார்த்த வரம்பிற்குள் உள்ளதாகும்.",
+      "recommendation_on_track_action_1": "உடனடி நடவடிக்கை தேவையில்லை",
+      "recommendation_on_track_action_2": "தற்போதைய முகாமைத்துவ நடைமுறையை தொடரவும்",
+
+      "recommendation_below_expected_title": "கவனத்தை தேவை",
+      "recommendation_below_expected_message": "பால் உற்பத்தி எதிர்பார்ப்பிற்குக் கீழே உள்ளது.",
+      "recommendation_below_expected_action_1": "உணவு தரம் மற்றும் அளவை பரிசீலிக்கவும்",
+      "recommendation_below_expected_action_2": "பழுப்பு நீர் போதுமானதா என்பதை உறுதிசெய்யவும்",
+      "recommendation_below_expected_action_3": "மாடு இடையறை அல்லது அழுத்தத்தின் அறிகுறிகள் உள்ளதா என்பதைக் கவனிக்கவும்",
+      "recommendation_below_expected_peak_action_1": "இந்த peak காலத்தில் கச்சா தீவன அளவை மெதுவாக அதிகரிக்கவும்",
+      "recommendation_below_expected_peak_action_2": "போதுமான சுத்தமான நீரும் உணவு விருப்பமும் இருப்பதை உறுதிசெய்யவும்",
+      "recommendation_below_expected_peak_action_3": "அடுத்த 2-3 நாட்கள் பால் வெளியீட்டை மீண்டும் பார்த்து குறைவு தொடர்ந்தால் வைத்தியரை அணுகவும்",
+      "recommendation_below_expected_non_peak_action_1": "peak காலத்திற்கு வெளியே உடனே தீவனத்தை அதிகரிக்க வேண்டாம்",
+      "recommendation_below_expected_non_peak_action_2": "தீவன தரம், மாட்டின் வசதி, உடல்நிலை அழுத்தம் ஆகியவற்றை பரிசீலிக்கவும்",
+      "recommendation_below_expected_non_peak_action_3": "ration மாற்றத்திற்கு முன் அடுத்த 2-3 நாட்கள் பால் போக்கை கண்காணிக்கவும்"
     },
     "analytics": {
       "analytics": "பகுப்பாய்வு",
@@ -821,7 +938,30 @@
     },
     "alerts": {
       "alertsRecommendations": "எச்சரிக்கைகள் மற்றும் பரிந்துரைகள்",
-      "noAlerts": "செயல்பட்ட எச்சரிக்கைகள் இல்லை"
+      "noAlerts": "செயல்பட்ட எச்சரிக்கைகள் இல்லை",
+
+      "header": "எச்சரிக்கைகள் & அறிவிப்புகள்",
+      "subheader": "உங்கள் பண்ணையின் தேவைகளை முன்னிலையில் வைத்திருங்கள்",
+      "allClear": "அனைத்தும் மறு!",
+      "noActiveAlerts": "செயல்பட்ட எச்சரிக்கைகள் இல்லை",
+      "critical": "முக்கிய",
+      "warning": "எச்சரிக்கை",
+      "info": "தகவல்",
+      "viewCow": "மாடு பார்க்கவும்",
+      "stayInformed": "தகவல் பெற்று செயல்படு",
+      "markDone": "முடித்ததாக குறியீடு செய்",
+      "dismiss": "நிராகரிக்கவும்",
+      "takeAction": "செயலாற்றவும்",
+
+      "alert_sudden_drop_title": "அவசரமாக கதி குறைவு கண்டறிதல்",
+      "alert_sudden_drop_description": "கடந்த 3 நாட்களில் கதிர் உற்பத்தி 12% குறைந்தது",
+      "alert_lactation_milestone_title": "பால் நாள் மைல்கல்",
+      "alert_lactation_milestone_description": "Daisy பால் தாழ்வு 200 ஆம் நாளை அடைந்தது",
+      "alert_above_average_title": "சராசரியை மீறிய செயல்திறன்",
+      "alert_above_average_description": "Lassie எதிர்பார்த்ததைவிட 8% மேலாக உற்பத்தி செய்கிறது",
+
+      "below_expected_title": "கவனத்தை தேவை",
+      "below_expected_message": "பால் உற்பத்தி எதிர்பார்ப்பிற்குக் கீழே உள்ளது."
     },
     "history": {
       "history": "வரலாறு",

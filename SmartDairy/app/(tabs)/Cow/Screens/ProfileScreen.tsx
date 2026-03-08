@@ -27,6 +27,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function ProfileScreen() {
   const [darkMode, setDarkMode] = useState(false);
   const logout = useAuthStore((s) => s.logout);
+  const user = useAuthStore((s) => s.user);
   const currentLanguage = useLanguageStore((s) => s.language);
   const setLanguage = useLanguageStore((s) => s.setLanguage);
   const { t } = useTranslations();
@@ -46,29 +47,12 @@ export default function ProfileScreen() {
 
           <View>
             <Text className="text-2xl text-white mb-1">
-              Manujaya Perera
+              {user?.name || user?.email || "Farmer"}
             </Text>
             <Text className="text-slate-300">
-              {t('profile', 'farmer')} • {t('profile', 'since')} 2020
+              {t('profile', 'farmer')}
             </Text>
           </View>
-        </View>
-
-        <View className="flex-row bg-white/10 rounded-xl p-4">
-          {[
-            { label: t('profile', 'cows'), value: "3" },
-            { label: t('profile', 'records'), value: "1,245" },
-            { label: t('profile', 'daysActive'), value: "156" },
-          ].map((item, i) => (
-            <View key={i} className="flex-1 items-center">
-              <Text className="text-xl text-white mb-1">
-                {item.value}
-              </Text>
-              <Text className="text-xs text-slate-300">
-                {item.label}
-              </Text>
-            </View>
-          ))}
         </View>
       </View>
 

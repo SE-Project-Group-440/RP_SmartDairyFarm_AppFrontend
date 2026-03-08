@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -60,7 +60,7 @@ export function AlertsRecommendationsScreen({
           {t('alerts', 'alertsRecommendations')}
         </Text>
         <Text className="text-orange-100">
-          {activeAlerts.length === 0 ? t('alerts', 'noAlerts') : "Stay informed and take action"}
+          {activeAlerts.length === 0 ? t('alerts', 'noAlerts') : t('alerts', 'stayInformed')}
         </Text>
       </View>
 
@@ -73,10 +73,12 @@ export function AlertsRecommendationsScreen({
           >
             <Pressable
               onPress={async () => {
-                setDismissedIds(
-                  (p) => new Set([...p, alert._id])
-                );
                 await resolveRecommendation(alert._id);
+                setDismissedIds((p) => {
+                  const updated = new Set(p);
+                  updated.add(alert._id);
+                  return updated;
+                });
               }}
               className="absolute top-4 right-4"
             >
@@ -90,14 +92,26 @@ export function AlertsRecommendationsScreen({
 
               <View className="flex-1 pr-6">
                 <Text className="text-slate-900 mb-1">
-                  {alert.title}
+                  {t('alerts', alert.title.startsWith('recommendation_') ? alert.title.replace('recommendation_','') : alert.title)}
                 </Text>
                 <Text className="text-sm text-slate-700 mb-2">
-                  {alert.message}
+                  {t('alerts', alert.message.startsWith('recommendation_') ? alert.message.replace('recommendation_','') : alert.message)}
                 </Text>
+                {Array.isArray(alert.actions) &&
+                  alert.actions.length > 0 && (
+                    <View className="mb-2">
+                      {alert.actions.map((actionKey, index) => (
+                        <Text
+                          key={`${alert._id}-action-${index}`}
+                          className="text-xs text-slate-700 mb-1"
+                        >
+                          - {t("milkEntry", actionKey)}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
                 <Text className="text-xs text-slate-600">
-                  🐄 {alert.cowId.name} •{" "}
-                  {new Date(alert.createdAt).toLocaleString()}
+                  {alert.cowId.name} - {new Date(alert.createdAt).toLocaleString()}
                 </Text>
               </View>
             </View>
@@ -111,21 +125,23 @@ export function AlertsRecommendationsScreen({
               >
                 <Eye size={16} color="#334155" />
                 <Text className="text-slate-700 text-sm">
-                  View Cow
+                  {t('alerts','viewCow')}
                 </Text>
               </Pressable>
 
               <Pressable
                 onPress={async () => {
-                  setDismissedIds(
-                    (p) => new Set([...p, alert._id])
-                  );
                   await resolveRecommendation(alert._id);
+                  setDismissedIds((p) => {
+                    const updated = new Set(p);
+                    updated.add(alert._id);
+                    return updated;
+                  });
                 }}
                 className="px-6 bg-orange-600 rounded-xl py-2.5"
               >
                 <Text className="text-white text-sm">
-                  Mark Done
+                  {t('alerts','markDone')}
                 </Text>
               </Pressable>
             </View>
@@ -136,7 +152,7 @@ export function AlertsRecommendationsScreen({
           <View className="items-center py-12">
             <AlertTriangle size={40} color="#94a3b8" />
             <Text className="text-slate-500 mt-3">
-              No active alerts 🎉
+              No active alerts
             </Text>
           </View>
         )}

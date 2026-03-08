@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,113 +12,62 @@ import {
   Eye,
   X,
 } from "lucide-react-native";
-
-interface Alert {
-  id: string;
-  type: "critical" | "warning" | "info";
-  title: string;
-  description: string;
-  cowId: string;
-  cowName: string;
-  timestamp: string;
-}
+import { useTranslations } from "@/hooks/useTranslations";
+import { useRecommendationStore } from "@/Store/recommendationStore";
 
 interface AlertsScreenProps {
   onCowSelect: (cowId: string) => void;
 }
 
-const mockAlerts: Alert[] = [
-  {
-    id: "1",
-    type: "warning",
-    title: "Sudden Milk Drop Detected",
-    description: "Milk production decreased by 12% over the last 3 days",
-    cowId: "2",
-    cowName: "Bella",
-    timestamp: "2 hours ago",
-  },
-  {
-    id: "2",
-    type: "info",
-    title: "Lactation Day Milestone",
-    description: "Daisy has reached day 200 of lactation",
-    cowId: "3",
-    cowName: "Daisy",
-    timestamp: "5 hours ago",
-  },
-  {
-    id: "3",
-    type: "info",
-    title: "Above Average Performance",
-    description: "Lassie is producing 8% above expected",
-    cowId: "1",
-    cowName: "Lassie",
-    timestamp: "1 day ago",
-  },
-];
-
 export default function AlertsScreen({ onCowSelect }: AlertsScreenProps) {
+  const { t } = useTranslations();
+  const {
+    recommendations,
+    fetchAll,
+    resolveRecommendation,
+  } = useRecommendationStore();
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
 
-  const activeAlerts = mockAlerts.filter(
-    (alert) => !dismissedIds.has(alert.id)
+  useEffect(() => {
+    fetchAll();
+  }, []);
+
+  const activeAlerts = recommendations.filter(
+    (alert) => !dismissedIds.has(alert._id)
   );
 
-  const handleDismiss = (id: string) => {
-    setDismissedIds((prev) => new Set([...prev, id]));
+  const getAlertStyle = () => {
+    return {
+      bg: "bg-red-50",
+      border: "border-red-200",
+      iconBg: "bg-red-100",
+      iconColor: "#dc2626",
+      Icon: AlertCircle,
+    };
   };
 
-  const getAlertStyle = (type: Alert["type"]) => {
-    switch (type) {
-      case "critical":
-        return {
-          bg: "bg-red-50",
-          border: "border-red-200",
-          iconBg: "bg-red-100",
-          iconColor: "#dc2626",
-          Icon: AlertCircle,
-        };
-      case "warning":
-        return {
-          bg: "bg-orange-50",
-          border: "border-orange-200",
-          iconBg: "bg-orange-100",
-          iconColor: "#ea580c",
-          Icon: AlertTriangle,
-        };
-      default:
-        return {
-          bg: "bg-blue-50",
-          border: "border-blue-200",
-          iconBg: "bg-blue-100",
-          iconColor: "#2563eb",
-          Icon: Info,
-        };
-    }
-  };
-
-  const criticalCount = activeAlerts.filter(a => a.type === "critical").length;
-  const warningCount = activeAlerts.filter(a => a.type === "warning").length;
-  const infoCount = activeAlerts.filter(a => a.type === "info").length;
+  const criticalCount = activeAlerts.length;
+  const warningCount = 0;
+  const infoCount = 0;
 
   return (
     <ScrollView className="flex-1 bg-slate-50">
       {/* Header */}
       <View className="bg-orange-500 px-6 pt-12 pb-6">
         <Text className="text-2xl text-white mb-1">
-          Alerts & Notifications
+          {t('alerts', 'header')}
         </Text>
         <Text className="text-orange-100">
-          Stay on top of your farm's needs
+          {t('alerts', 'subheader')}
         </Text>
       </View>
 
       <View className="px-6 py-6 space-y-4">
         {/* Summary */}
         <View className="flex-row justify-between">
-          <SummaryCard label="Critical" value={criticalCount} color="text-red-600" />
-          <SummaryCard label="Warning" value={warningCount} color="text-orange-600" />
-          <SummaryCard label="Info" value={infoCount} color="text-blue-600" />
+          <SummaryCard label={t('alerts','critical')} value={criticalCount} color="text-red-600" />
+          <SummaryCard label={t('alerts','warning')} value={warningCount} color="text-orange-600" />
+          <SummaryCard label={t('alerts','info')} value={infoCount} color="text-blue-600" />
         </View>
 
         {/* Alerts */}
@@ -132,16 +81,23 @@ export default function AlertsScreen({ onCowSelect }: AlertsScreenProps) {
           </View>
         ) : (
           activeAlerts.map((alert) => {
-            const style = getAlertStyle(alert.type);
+            const style = getAlertStyle();
             const Icon = style.Icon;
 
             return (
               <View
-                key={alert.id}
+                key={alert._id}
                 className={`${style.bg} ${style.border} border-2 rounded-2xl p-5`}
               >
                 <Pressable
-                  onPress={() => handleDismiss(alert.id)}
+                  onPress={async () => {
+                    await resolveRecommendation(alert._id);
+                    setDismissedIds((prev) => {
+                      const updated = new Set(prev);
+                      updated.add(alert._id);
+                      return updated;
+                    });
+                  }}
                   className="absolute top-4 right-4"
                 >
                   <X size={18} color="#64748b" />
@@ -154,32 +110,39 @@ export default function AlertsScreen({ onCowSelect }: AlertsScreenProps) {
 
                   <View className="flex-1">
                     <Text className="text-slate-900 mb-1">
-                      {alert.title}
+                      {t('alerts', alert.title.startsWith('recommendation_') ? alert.title.replace('recommendation_','') : alert.title)}
                     </Text>
                     <Text className="text-sm text-slate-700 mb-2">
-                      {alert.description}
+                      {t('alerts', alert.message.startsWith('recommendation_') ? alert.message.replace('recommendation_','') : alert.message)}
                     </Text>
                     <Text className="text-xs text-slate-600">
-                      🐄 {alert.cowName} • {alert.timestamp}
+                      🐄 {alert.cowId.name} • Cow ID: {alert.cowId._id}
                     </Text>
                   </View>
                 </View>
 
                 <View className="flex-row gap-2">
                   <Pressable
-                    onPress={() => onCowSelect(alert.cowId)}
+                    onPress={() => onCowSelect(alert.cowId._id)}
                     className="flex-1 bg-white border border-slate-200 rounded-xl py-2.5 flex-row items-center justify-center gap-2"
                   >
                     <Eye size={16} color="#334155" />
-                    <Text className="text-sm">View Cow</Text>
+                    <Text className="text-sm">{t('alerts','viewCow')}</Text>
                   </Pressable>
 
                   <Pressable
-                    onPress={() => handleDismiss(alert.id)}
+                    onPress={async () => {
+                      await resolveRecommendation(alert._id);
+                      setDismissedIds((prev) => {
+                        const updated = new Set(prev);
+                        updated.add(alert._id);
+                        return updated;
+                      });
+                    }}
                     className="px-5 bg-green-600 rounded-xl justify-center"
                   >
                     <Text className="text-white text-sm">
-                      {alert.type === "info" ? "Dismiss" : "Take Action"}
+                      {t('alerts','takeAction')}
                     </Text>
                   </Pressable>
                 </View>
@@ -192,7 +155,7 @@ export default function AlertsScreen({ onCowSelect }: AlertsScreenProps) {
   );
 }
 
-/* Helper */
+
 function SummaryCard({
   label,
   value,
