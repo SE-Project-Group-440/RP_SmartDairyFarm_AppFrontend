@@ -281,7 +281,11 @@
       "uploadEnterInfo": "Upload or enter information",
       "getResultsCare": "Get results with care instructions",
       "note": "Note",
-      "consultVeterinarian": "Always consult with a veterinarian for final diagnosis and treatment."
+      "consultVeterinarian": "Always consult with a veterinarian for final diagnosis and treatment.",
+      
+      "all": "All",
+      "sick": "Sick",
+      "recovering": "Recovering"
     }
   },
   "sinhala": {
@@ -563,7 +567,11 @@
       "uploadEnterInfo": "තොරතුරු උඩුගත කරන්න හෝ ඇතුළත් කරන්න",
       "getResultsCare": "රැකවරණ උපදෙස් සමඟ ප්‍රතිඵල ලබා ගන්න",
       "note": "සටහන",
-      "consultVeterinarian": "අවසාන රෝග විනිශ්චය සහ ප්‍රතිකාර සඳහා සෑම විටම පශු වෛද්‍යවරයකු සමඟ සාකච්ඡා කරන්න."
+      "consultVeterinarian": "අවසාන රෝග විනිශ්චය සහ ප්‍රතිකාර සඳහා සෑම විටම පශු වෛද්‍යවරයකු සමග සාකච්ඡා කරන්න.",
+      
+      "all": "සියල්ල",
+      "sick": "රෝගී", 
+      "recovering": "සුවය ලබමින්"
     }
   },
   "tamil": {
@@ -848,7 +856,11 @@
       "uploadEnterInfo": "தகவலை பதிவேற்றவும் அல்லது உள்ளிடவும்",
       "getResultsCare": "பராமரிப்பு வழிமுறைகளுடன் முடிவுகளை பெறுங்கள்",
       "note": "குறிப்பு",
-      "consultVeterinarian": "இறுதி நோய் கண்டறிதல் மற்றும் சிகிச்சைக்காக எப்போதும் கால்நடை மருத்துவரை அணுகவும்."
+      "consultVeterinarian": "இறுதி நோய் கண்டறிதல் மற்றும் சிகிச்சைக்காக எப்போதும் கால்நடை மருத்துவரை அணுகவும்.",
+      
+      "all": "அனைத்தும்",
+      "sick": "நோயுற்ற",
+      "recovering": "மீண்டு வரும்"
     }
   }
 }

@@ -8,7 +8,7 @@ const LOCAL_IP = "192.168.1.15";
 
 const BASE_URL =
   Platform.OS === "web"
-    ? "http://localhost:8000"
+    ? `http://${LOCAL_IP}:8000`  
     : `http://${LOCAL_IP}:8000`;
 
 export const api = axios.create({
