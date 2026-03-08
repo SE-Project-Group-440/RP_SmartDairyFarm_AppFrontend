@@ -17,6 +17,10 @@ import  DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen
 import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
 import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
 import DiseaseScreenComponent from "../(tabs)/Disease/Screens/DiseaseScreen";
+import UploadImageScreen from "../(tabs)/Disease/Screens/UploadImageScreen";
+import UploadReportScreen from "../(tabs)/Disease/Screens/UploadReportScreen";
+import HealthHistoryScreen from "../(tabs)/Disease/Screens/HealthHistoryScreen";
+import DiseasePredictionInfoScreen from "../(tabs)/Disease/Screens/DiseasePredictionInfoScreen";
 
 export type MainTab =
   | "Dairy"
@@ -72,11 +76,22 @@ export default function LactationCurveHome() {
         return <CattleListScreen />;
 
       case "Health":
-        return diseaseScreen === "home" ? (
-          <DiseaseHomeScreen onNavigate={setDiseaseScreen} />
-        ) : (
-          <DiseaseScreenComponent />
-        );
+        switch (diseaseScreen) {
+          case "home":
+            return <DiseaseHomeScreen onNavigate={setDiseaseScreen} />;
+          case "prediction":
+            return <DiseaseScreenComponent />;
+          case "uploadImage":
+            return <UploadImageScreen onBack={() => setDiseaseScreen("home")} />;
+          case "uploadReport":
+            return <UploadReportScreen onBack={() => setDiseaseScreen("home")} />;
+          case "healthHistory":
+            return <HealthHistoryScreen onBack={() => setDiseaseScreen("home")} />;
+          case "diseasePredictionInfo":
+            return <DiseasePredictionInfoScreen onBack={() => setDiseaseScreen("home")} />;
+          default:
+            return <DiseaseHomeScreen onNavigate={setDiseaseScreen} />;
+        }
 
       case "profile":
         return <ProfileScreen />;
