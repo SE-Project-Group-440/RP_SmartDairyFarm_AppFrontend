@@ -1,33 +1,85 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Alert } from 'react-native';
 import type { Cattle } from '../../app/(tabs)/cattleHeat/Screens/CattleListScreen';
 import { CattleBody3D } from './CattleBody3D';
+import {
+  getSprinklerStatus,
+  setAutoMode,
+  setManualMode
+} from "../../services/cattleHeatApi";
+import { useTranslations } from "@/hooks/useTranslations";
 
 interface CattleDetailProps {
   cattle: Cattle;
   onBack: () => void;
-  onStatusChange: (id: number, status: 'active' | 'inactive') => void;
+  onStatusChange: (id: string, status: 'active' | 'inactive') => void;
 }
 
-export function CattleDetail({ cattle, onBack, onStatusChange }: CattleDetailProps) {
-  const [collarStatus, setCollarStatus] = useState<'active' | 'inactive'>(cattle.collarStatus);
+
+export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
+
+  const [mode, setMode] = useState<'AUTO' | 'MANUAL'>('AUTO');
   const [sprinklerOn, setSprinklerOn] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { t } = useTranslations();  
+
+  // ✅ Fetch sprinkler status from backend
+  useEffect(() => {
+    fetchStatus();
+  }, [cattle.id]);
 
   useEffect(() => {
-    // Auto start sprinkler when stress is High or Critical
-    if (cattle.stressLevel === 'High' || cattle.stressLevel === 'Critical') {
-      setSprinklerOn(true);
-      setCollarStatus('inactive'); // button becomes STOP mode
-    } else {
-      setSprinklerOn(false);
-    }
-  }, [cattle.stressLevel]);
+  if (cattle.bodyTemp > 39) {
+    Alert.alert(
+      "⚠️ High Body Temperature",
+      `Cattle ${cattle.id} body temperature is ${cattle.bodyTemp}°C.\nImmediate consideration recommended.`,
+      [{ text: "OK" }]
+    );
+  }
+}, [cattle.bodyTemp]);
 
-  const handleToggle = () => {
-    const newStatus = collarStatus === 'active' ? 'inactive' : 'active';
-    setCollarStatus(newStatus);
-    setSprinklerOn(newStatus === 'inactive'); // turn on if STOP is shown
-    onStatusChange(cattle.id, newStatus);
+  const fetchStatus = async () => {
+  try {
+    setLoading(true);
+    const data = await getSprinklerStatus(cattle.id);
+
+    setMode(data.mode);
+    setSprinklerOn(data.state);
+
+  } catch (err) {
+    console.log("Failed to fetch sprinkler status");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const handleAutoMode = async () => {
+    try {
+      await setAutoMode(cattle.id);
+      setMode("AUTO");
+    } catch (err) {
+      console.log("Failed AUTO mode");
+    }
+  };
+
+  const handleManualMode = async () => {
+    try {
+      await setManualMode(cattle.id, sprinklerOn);
+      setMode("MANUAL");
+    } catch (err) {
+      console.log("Failed MANUAL mode");
+    }
+  };
+
+  const handleToggleWater = async () => {
+    const newState = !sprinklerOn;
+
+    try {
+      const data = await setManualMode(cattle.id, newState);
+      setSprinklerOn(data.state);
+    } catch (err) {
+      console.log("Toggle failed");
+    }
   };
 
   const getStressColor = (level: string) => {
@@ -60,9 +112,18 @@ export function CattleDetail({ cattle, onBack, onStatusChange }: CattleDetailPro
     }
   };
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#22c55e" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
+
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -71,21 +132,26 @@ export function CattleDetail({ cattle, onBack, onStatusChange }: CattleDetailPro
                 <Text style={styles.backIcon}>←</Text>
               </TouchableOpacity>
               <View style={styles.headerTextContainer}>
-                <Text style={styles.headerTitle}>{cattle.name}</Text>
-                <Text style={styles.headerSubtitle}>Heat Stress Details</Text>
+                <Text style={styles.headerTitle}>{cattle.id}</Text>
+                <Text style={styles.headerSubtitle}>
+                  {t('cattleHeat', 'heatStressDetails')}
+                </Text>
               </View>
             </View>
 
-            {/* Sprinkler Auto Alert */}
-            {sprinklerOn && (
+            {/* AUTO Message */}
+            {mode === "AUTO" && (
               <View style={styles.autoAlertBox}>
-                <Text style={styles.autoAlertText}>Sprinkler Activated Automatically due to High Stress!</Text>
+                <Text style={styles.autoAlertText}>
+                  {t('cattleHeat', 'sprinklerAutoMessage')}
+                </Text>
               </View>
             )}
 
-            {/* Status Badge */}
             <View style={styles.statusContainer}>
-              <Text style={styles.statusLabel}>Sprinkler System</Text>
+              <Text style={styles.statusLabel}>
+                {t('cattleHeat', 'sprinklerSystem')}
+              </Text>
               <View style={[
                 styles.statusBadge,
                 { backgroundColor: sprinklerOn ? '#86efac' : '#d1d5db' }
@@ -94,7 +160,9 @@ export function CattleDetail({ cattle, onBack, onStatusChange }: CattleDetailPro
                   styles.statusBadgeText,
                   { color: sprinklerOn ? '#166534' : '#374151' }
                 ]}>
-                  {sprinklerOn ? 'Running' : 'Stopped'}
+                  {sprinklerOn
+                      ? t('cattleHeat', 'running')
+                      : t('cattleHeat', 'stopped')}
                 </Text>
               </View>
             </View>
@@ -103,46 +171,17 @@ export function CattleDetail({ cattle, onBack, onStatusChange }: CattleDetailPro
 
         {/* Content */}
         <View style={styles.content}>
-          {/* 3D Cattle Body Map */}
+
+          {/* Heat Section */}
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Body Temperature Map</Text>
-            <CattleBody3D temperature={cattle.bodyTemp} stressLevel={cattle.stressLevel} />
+            <Text style={styles.cardTitle}>
+              {t('cattleHeat', 'cattleHeatStress')}
+            </Text>
+            <CattleBody3D thiIndex={cattle.thi} stressLevel={cattle.stressLevel} />
             <View style={styles.tempDisplay}>
-              <Text style={styles.tempValue}>{cattle.bodyTemp}°C</Text>
-              <Text style={styles.tempLabel}>Current Body Temperature</Text>
-            </View>
-          </View>
-
-          {/* Environmental Conditions */}
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Environmental Conditions</Text>
-            <View style={[styles.envCard, { backgroundColor: '#fed7aa' }]}>
-              <View style={styles.envCardContent}>
-                <View style={[styles.envIconContainer, { backgroundColor: '#f97316' }]}>
-                  <Text style={styles.envIcon}>🌡️</Text>
-                </View>
-                <View>
-                  <Text style={styles.envLabel}>Temperature</Text>
-                  <Text style={styles.envValue}>{cattle.envTemp}°C</Text>
-                </View>
-              </View>
-              <Text style={[styles.envStatus, { color: '#c2410c' }]}>
-                {cattle.envTemp > 35 ? 'Very High' : cattle.envTemp > 30 ? 'High' : 'Normal'}
-              </Text>
-            </View>
-
-            <View style={[styles.envCard, { backgroundColor: '#dbeafe' }]}>
-              <View style={styles.envCardContent}>
-                <View style={[styles.envIconContainer, { backgroundColor: '#3b82f6' }]}>
-                  <Text style={styles.envIcon}>💧</Text>
-                </View>
-                <View>
-                  <Text style={styles.envLabel}>Humidity</Text>
-                  <Text style={styles.envValue}>{cattle.humidity}%</Text>
-                </View>
-              </View>
-              <Text style={[styles.envStatus, { color: '#2563eb' }]}>
-                {cattle.humidity > 80 ? 'Very High' : cattle.humidity > 70 ? 'High' : 'Normal'}
+              <Text style={styles.tempValue}>{cattle.envTemp}°C</Text>
+             <Text style={styles.cardTitle}>
+                {t('cattleHeat', 'currentBodyTemperature')}
               </Text>
             </View>
           </View>
@@ -151,7 +190,9 @@ export function CattleDetail({ cattle, onBack, onStatusChange }: CattleDetailPro
           <View style={styles.card}>
             <View style={styles.stressHeader}>
               <Text style={styles.alertIcon}>⚠️</Text>
-              <Text style={styles.cardTitle}>Stress Level</Text>
+              <Text style={styles.cardTitle}>
+                {t('cattleHeat', 'stressLevel')}
+              </Text>
             </View>
 
             <View style={styles.stressRow}>
@@ -182,25 +223,63 @@ export function CattleDetail({ cattle, onBack, onStatusChange }: CattleDetailPro
             </View>
           </View>
 
-          {/* Water Flow Control */}
+          {/* 🔥 AUTO / MANUAL CONTROL */}
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Water Flow Control</Text>
-            <TouchableOpacity
-              onPress={handleToggle}
-              style={[
-                styles.toggleButton,
-                { backgroundColor: sprinklerOn ? '#ef4444' : '#22c55e' }
-              ]}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.toggleText}>
-                {sprinklerOn ? 'Stop Water Flow' : 'Start Water Flow'}
-              </Text>
-            </TouchableOpacity>
-            <Text style={styles.toggleHint}>
-              {sprinklerOn ? 'Click to stop sprinkler system' : 'Click to activate sprinkler system'}
+            <Text style={styles.cardTitle}>
+              {t('cattleHeat', 'sprinklerControl')}
             </Text>
+
+            <View style={{ flexDirection: 'row', gap: 10, marginBottom: 15 }}>
+              <TouchableOpacity
+                style={[
+                  styles.toggleButton,
+                  { backgroundColor: mode === "AUTO" ? '#22c55e' : '#d1d5db', flex: 1 }
+                ]}
+                onPress={handleAutoMode}
+              >
+                <Text style={styles.toggleText}>
+                  {t('cattleHeat', 'auto')}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.toggleButton,
+                  { backgroundColor: mode === "MANUAL" ? '#22c55e' : '#d1d5db', flex: 1 }
+                ]}
+                onPress={handleManualMode}
+              >
+                <Text style={styles.toggleText}>
+                  {t('cattleHeat', 'manual')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {mode === "MANUAL" && (
+              <>
+                <TouchableOpacity
+                  onPress={handleToggleWater}
+                  style={[
+                    styles.toggleButton,
+                    { backgroundColor: sprinklerOn ? '#ef4444' : '#22c55e' }
+                  ]}
+                >
+                  <Text style={styles.toggleText}>
+                    {sprinklerOn
+                      ? t('cattleHeat', 'stopWater')
+                      : t('cattleHeat', 'startWater')}
+                  </Text>
+                </TouchableOpacity>
+
+                <Text style={styles.toggleHint}>
+                  {sprinklerOn
+                    ? t('cattleHeat', 'clickToStop')
+                    : t('cattleHeat', 'clickToStart')}
+                </Text>
+              </>
+            )}
           </View>
+
         </View>
       </ScrollView>
     </View>

@@ -148,6 +148,7 @@
       "today": "Today",
       "yesterday": "Yesterday"
     },
+
     "disease": {
       "diseaseDetection": "Disease Detection",
       "uploadImage": "Upload Image",
@@ -286,6 +287,39 @@
       "all": "All",
       "sick": "Sick",
       "recovering": "Recovering"
+      "startDiseasePrediction": "🔍 Start Disease Prediction"
+
+      "cattleHeat": {
+      "heatStressDetails": "Heat Stress Details",
+      "sprinklerAutoMessage": "Sprinkler is automatically controlled by prediction system.",
+      "sprinklerSystem": "Sprinkler System",
+      "running": "Running",
+      "stopped": "Stopped",
+      "cattleHeatStress": "Cattle Heat Stress",
+      "currentBodyTemperature": "Current Body Temperature",
+      "stressLevel": "Stress Level",
+      "noAction": "No action needed",
+      "monitorClosely": "Monitor closely",
+      "interventionRecommended": "Intervention recommended",
+      "immediateAction": "Immediate action required",
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "critical": "Critical",
+      "sprinklerControl": "Sprinkler Control",
+      "auto": "AUTO",
+      "manual": "MANUAL",
+      "stopWater": "Stop Water Flow",
+      "startWater": "Start Water Flow",
+      "clickToStop": "Click to stop sprinkler system",
+      "clickToStart": "Click to activate sprinkler system",
+      "heatStressMonitoring": "Heat Stress Monitoring",
+      "goodEvening": "Good Evening",
+      "dairyFarmManagement": "Dairy Farm Management",
+      "heatMapView": "Heat Map View",
+      "thiLabel": "THI",
+      "cattleHeader": "Cattle Heat Stress Prediction"
+
     }
   },
   "sinhala": {
@@ -437,6 +471,7 @@
       "today": "අධ",
       "yesterday": "ඊය්ගිමහින්"
     },
+
     "disease": {
       "diseaseDetection": "රෝග හඳුනාගැනීම",
       "uploadImage": "ප්‍රතිමාව උඩුගත කරන්න",
@@ -533,6 +568,39 @@
       "aiPoweredAnalysis": "AI-ශක්තිමත් විශ්ලේෂණය",
       "healthHistory": "සෞඛ්‍ය ඉතිහාසය",
       "viewPastRecords": "පැරණි වාර්තා බලන්න",
+      "startDiseasePrediction": "🔍 රෝග පූර්වකථනය ආරම්භ කරන්න"
+
+         "cattleHeat": {
+      "heatStressDetails": "උෂ්ණතා ආතති විස්තර",
+      "sprinklerAutoMessage": "ජල විහිදුම් පද්ධතිය ස්වයංක්‍රීයව පාලනය වේ.",
+      "sprinklerSystem": "ජල විහිදුම් පද්ධතිය",
+      "running": "ක්‍රියාත්මකයි",
+      "stopped": "නවතා ඇත",
+      "cattleHeatStress": "ගව උෂ්ණතා ආතතිය",
+      "currentBodyTemperature": "වර්තමාන ශරීර උෂ්ණත්වය",
+      "stressLevel": "ආතති මට්ටම",
+      "noAction": "ක්‍රියාමාර්ග අවශ්‍ය නොවේ",
+      "monitorClosely": "සමීපව නිරීක්ෂණය කරන්න",
+      "interventionRecommended": "මැදිහත්වීම නිර්දේශ කරයි",
+      "immediateAction": "ක්ෂණික ක්‍රියාමාර්ග අවශ්‍යයි",
+      "low": "අඩු",
+      "moderate": "මධ්‍යම",
+      "high": "ඉහළ",
+      "critical": "අතිශයින් ඉහළ",
+      "sprinklerControl": "ජල විහිදුම් පාලනය",
+      "auto": "ස්වයංක්‍රීය",
+      "manual": "අතින් පාලනය",
+      "stopWater": "ජල ප්‍රවාහය නවත්වන්න",
+      "startWater": "ජල ප්‍රවාහය ආරම්භ කරන්න",
+      "clickToStop": "ජල විහිදුම් පද්ධතිය නවත්වීමට ඔබන්න",
+      "clickToStart": "ජල විහිදුම් පද්ධතිය ආරම්භ කිරීමට ඔබන්න",
+      "heatStressMonitoring": "උෂ්ණතා ආතති නිරීක්ෂණය",
+      "goodEvening": "සුභ සන්ධ්‍යාවක්",
+      "dairyFarmManagement": "කිරි ගොවිපල කළමනාකරණය",
+      "heatMapView": "උෂ්ණතා සිතියම් දර්ශනය",
+      "thiLabel": "THI",
+      "cattleHeader": "ගව තාප පීඩන පුරෝකථනය"
+
       "startDiseasePrediction": "🔍 රෝග පූර්වකථනය ආරම්භ කරන්න",
       
       "predictionResult": "පූර්වකථන ප්‍රතිඵලය",
@@ -723,6 +791,7 @@
       "today": "இன்று",
       "yesterday": "நன்னாடக்கன்"
     },
+
     "disease": {
       "diseaseDetection": "நோய் கண்டறிதல்",
       "uploadImage": "படத்தை அப்லோட் செய்க",
@@ -820,6 +889,39 @@
       "aiPoweredAnalysis": "AI-சக்தி வாய்ந்த பகுப்பாய்வு",
       "healthHistory": "சுகாதார வரலாறு",
       "viewPastRecords": "கடந்தகால பதிவுகளைப் பார்க்க",
+      "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"
+
+         "cattleHeat": {
+      "heatStressDetails": "வெப்ப அழுத்த விவரங்கள்",
+      "sprinklerAutoMessage": "தண்ணீர் தெளிப்பு அமைப்பு முன்னறிவிப்பு முறையால் தானாக கட்டுப்படுத்தப்படுகிறது.",
+      "sprinklerSystem": "தண்ணீர் தெளிப்பு அமைப்பு",
+      "running": "செயல்பாட்டில் உள்ளது",
+      "stopped": "நிறுத்தப்பட்டுள்ளது",
+      "cattleHeatStress": "மாடு வெப்ப அழுத்தம்",
+      "currentBodyTemperature": "தற்போதைய உடல் வெப்பநிலை",
+      "stressLevel": "அழுத்த நிலை",
+      "noAction": "எந்த நடவடிக்கையும் தேவையில்லை",
+      "monitorClosely": "அருகில் கவனிக்கவும்",
+      "interventionRecommended": "இடைச்செருகல் பரிந்துரைக்கப்படுகிறது",
+      "immediateAction": "உடனடி நடவடிக்கை அவசியம்",
+      "low": "குறைவு",
+      "moderate": "மிதமான",
+      "high": "அதிகம்",
+      "critical": "மிகவும் ஆபத்தானது",
+      "sprinklerControl": "தண்ணீர் தெளிப்பு கட்டுப்பாடு",
+      "auto": "தானியங்கி",
+      "manual": "கையேடு",
+      "stopWater": "தண்ணீர் ஓட்டத்தை நிறுத்தவும்",
+      "startWater": "தண்ணீர் ஓட்டத்தை தொடங்கவும்",
+      "clickToStop": "தண்ணீர் தெளிப்பு அமைப்பை நிறுத்த கிளிக் செய்யவும்",
+      "clickToStart": "தண்ணீர் தெளிப்பு அமைப்பை தொடங்க கிளிக் செய்யவும்",
+      "heatStressMonitoring": "வெப்ப அழுத்த கண்காணிப்பு",
+      "goodEvening": "மாலை வணக்கம்",
+      "dairyFarmManagement": "பால் பண்ணை மேலாண்மை",
+      "heatMapView": "வெப்ப வரைபட காட்சி",
+      "thiLabel": "THI",
+      "cattleHeader": "கால்நடை வெப்ப அழுத்த கணிப்பு"
+
       "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்",
       
       "predictionResult": "முன்கணிப்பு முடிவு",
