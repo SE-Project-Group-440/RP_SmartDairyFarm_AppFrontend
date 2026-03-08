@@ -5,7 +5,7 @@ import useTranslation from "../../../../hooks/useTranslation";
 type IconName = keyof typeof Ionicons.glyphMap;
 
 
-export type DiseaseScreen = "home" | "prediction";
+export type DiseaseScreen = "home" | "prediction" | "uploadImage" | "uploadReport" | "healthHistory" | "diseasePredictionInfo";
 
 interface DiseaseHomeScreenProps {
   onNavigate: (screen: DiseaseScreen) => void;
@@ -18,6 +18,30 @@ export default function DiseaseHomeScreen({ onNavigate }: DiseaseHomeScreenProps
     Keyboard.dismiss(); 
     onNavigate("prediction");
     console.log("Navigating to DiseaseScreen");
+  };
+
+  const goToUploadImage = () => {
+    Keyboard.dismiss();
+    onNavigate("uploadImage");
+    console.log("Navigating to Upload Image Screen");
+  };
+
+  const goToUploadReport = () => {
+    Keyboard.dismiss();
+    onNavigate("uploadReport");
+    console.log("Navigating to Upload Report Screen");
+  };
+
+  const goToHealthHistory = () => {
+    Keyboard.dismiss();
+    onNavigate("healthHistory");
+    console.log("Navigating to Health History Screen");
+  };
+
+  const goToDiseasePredictionInfo = () => {
+    Keyboard.dismiss();
+    onNavigate("diseasePredictionInfo");
+    console.log("Navigating to Disease Prediction Info Screen");
   };
 
   const uploadOptions = [
@@ -111,7 +135,7 @@ return (
 
       <View className="flex-row justify-between mb-6">
         <Pressable
-          onPress={goToPrediction}
+          onPress={goToUploadImage}
           className="bg-white w-[48%] rounded-2xl p-4 border border-slate-200 shadow-sm"
         >
           <Ionicons name="camera" size={26} color="#16a34a" />
@@ -124,7 +148,7 @@ return (
         </Pressable>
 
         <Pressable
-          onPress={goToPrediction}
+          onPress={goToUploadReport}
           className="bg-white w-[48%] rounded-2xl p-4 border border-slate-200 shadow-sm"
         >
           <Ionicons name="document-text" size={26} color="#7c3aed" />
@@ -139,7 +163,10 @@ return (
 
       {/* FEATURES — SAME SIZE AS QUICK ACTIONS */}
       <View className="flex-row justify-between mb-8">
-        <View className="bg-white w-[48%] rounded-2xl p-4 border border-slate-200 shadow-sm items-center">
+        <Pressable
+          onPress={goToDiseasePredictionInfo}
+          className="bg-white w-[48%] rounded-2xl p-4 border border-slate-200 shadow-sm items-center"
+        >
           <Ionicons name="analytics" size={26} color="#16a34a" />
           <Text className="font-semibold mt-2">
             {t("disease", "diseasePrediction")}
@@ -147,9 +174,12 @@ return (
           <Text className="text-xs text-slate-500 mt-1 text-center">
             {t("disease", "aiPoweredAnalysis")}
           </Text>
-        </View>
+        </Pressable>
 
-        <View className="bg-white w-[48%] rounded-2xl p-4 border border-slate-200 shadow-sm items-center">
+        <Pressable
+          onPress={goToHealthHistory}
+          className="bg-white w-[48%] rounded-2xl p-4 border border-slate-200 shadow-sm items-center"
+        >
           <Ionicons name="time-outline" size={26} color="#2563eb" />
           <Text className="font-semibold mt-2">
             {t("disease", "healthHistory")}
@@ -157,7 +187,7 @@ return (
           <Text className="text-xs text-slate-500 mt-1 text-center">
             {t("disease", "viewPastRecords")}
           </Text>
-        </View>
+        </Pressable>
       </View>
 
       {/* CTA */}
