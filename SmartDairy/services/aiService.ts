@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://10.98.42.24:8000/api/ai",
+  baseURL: "http://192.168.8.176:8080/api/ai",
 });
 export interface InputData {
   "Lactation No": number;

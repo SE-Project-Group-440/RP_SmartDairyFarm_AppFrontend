@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 
-export const API_URL = "http://127.0.0.1:8000/chat"; 
+export const API_URL = "http://192.168.8.176:8080/chat"; 
 export interface ChatResponse {
   answer: string;
   audioUri?: string; 
@@ -36,7 +36,7 @@ export async function speechToText(fileUri: string): Promise<string> {
   } as any);
   }
 
-  const res = await fetch("http://127.0.0.1:8000/stt", {
+  const res = await fetch("http://192.168.8.176:8080/stt", {
     method: "POST",
     body: formData,
   });

@@ -358,7 +358,7 @@
       "submit": "Submit",
       "delete": "Delete",
       "edit": "Edit",
-      "add": "Add"
+      "add": "Add"},
 
       "cattleHeat": {
       "heatStressDetails": "Heat Stress Details",
@@ -750,7 +750,7 @@
       "submit": "යොමු කරන්න",
       "delete": "මකා දමන්න",
       "edit": "සංස්කරණය කරන්න",
-      "add": "එක් කරන්න"
+      "add": "එක් කරන්න"},
 
          "cattleHeat": {
       "heatStressDetails": "උෂ්ණතා ආතති විස්තර",
@@ -1077,7 +1077,7 @@
       "aiPoweredAnalysis": "AI-சக்தி வாய்ந்த பகுப்பாய்வு",
       "healthHistory": "சுகாதார வரலாறு",
       "viewPastRecords": "கடந்தகால பதிவுகளைப் பார்க்க",
-      "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"
+      "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"},
 
          "cattleHeat": {
       "heatStressDetails": "வெப்ப அழுத்த விவரங்கள்",
