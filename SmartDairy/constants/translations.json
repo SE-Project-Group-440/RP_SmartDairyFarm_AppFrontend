@@ -37,7 +37,9 @@
       "appInfo": "Smart Farm App",
       "version": "Version",
       "builtWith": "Built with ❤️ for farmers",
-      "logout": "Log Out"
+      "logout": "Log Out",
+      "ai":"AI Monitoring",
+      "aiSub":"Monitor Cow Reproduction"
     },
     "dashboard": {
       "goodMorning": "Good Morning",
@@ -431,7 +433,9 @@
       "appInfo": "යෙදුමේ තොරතුරු",
       "version": "සංස්කරණය",
       "builtWith": "ගොවීන් සඳහා ඉදි කර ඇත",
-      "logout": "ඉවත් වන්න"
+      "logout": "ඉවත් වන්න",
+      "ai":"AI නිරීක්ෂණ",
+      "aiSub":"කෘත්‍රිම සංසේචන තොරතුරැ"
     },
     "dashboard": {
       "goodMorning": "සුභ උදෑසනක්",
