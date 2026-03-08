@@ -224,8 +224,6 @@
       "immediateActions": "Immediate Actions",
       "careAndTreatment": "Care & Treatment", 
       "vectorControl": "Vector Control",
-      "monitoring": "Monitoring",
-      "prevention": "Prevention",
       "diseaseInfo": "Disease Information",
       "noCareInstructions": "No specific care instructions available for this prediction.",
       
@@ -234,7 +232,6 @@
       "cows": "Cows",
       "lastCheck": "Last Check",
       "alerts": "Alerts",
-      "healthy": "Healthy",
       "cowsNeedAttention": "cows need attention",
       "cowsShowingSymptoms": "showing symptoms",
       "quickActions": "Quick Actions",
@@ -246,7 +243,6 @@
       "aiPoweredAnalysis": "AI-powered analysis",
       "healthHistory": "Health History",
       "viewPastRecords": "View past records",
-      "startDiseasePrediction": "🔍 Start Disease Prediction",
       
       "predictionResult": "Prediction Result",
       "bloodAnalysisResults": "Blood Analysis Results",
@@ -286,10 +282,11 @@
       
       "all": "All",
       "sick": "Sick",
-      "recovering": "Recovering"
+      "recovering": "Recovering",
       "startDiseasePrediction": "🔍 Start Disease Prediction"
+    },
 
-      "cattleHeat": {
+    "cattleHeat": {
       "heatStressDetails": "Heat Stress Details",
       "sprinklerAutoMessage": "Sprinkler is automatically controlled by prediction system.",
       "sprinklerSystem": "Sprinkler System",
@@ -546,8 +543,6 @@
       "immediateActions": "ක්ෂණික ක්‍රියා",
       "careAndTreatment": "සත්කාර සහ ප්‍රතිකාර",
       "vectorControl": "වාහක පාලනය", 
-      "monitoring": "අධීක්ෂණය",
-      "prevention": "වැලැක්වීම",
       "diseaseInfo": "රෝග තොරතුරු",
       "noCareInstructions": "මෙම පූර්වකථනය සඳහා විශේෂ සත්කාර උපදෙස් නොමැත.",
       
@@ -556,7 +551,6 @@
       "cows": "ගවයන්",
       "lastCheck": "අවසන් පරීක්ෂණය",
       "alerts": "අනතුරු ඇඟවීම්",
-      "healthy": "සෞඛ්‍ය සම්පන්න",
       "cowsNeedAttention": "ගවයන්ට අවධානය අවශ්‍යයි",
       "cowsShowingSymptoms": "රෝග ලක්ෂණ පෙන්වයි",
       "quickActions": "ක්ෂණික ක්‍රියා",
@@ -569,8 +563,9 @@
       "healthHistory": "සෞඛ්‍ය ඉතිහාසය",
       "viewPastRecords": "පැරණි වාර්තා බලන්න",
       "startDiseasePrediction": "🔍 රෝග පූර්වකථනය ආරම්භ කරන්න"
+    },
 
-         "cattleHeat": {
+    "cattleHeat": {
       "heatStressDetails": "උෂ්ණතා ආතති විස්තර",
       "sprinklerAutoMessage": "ජල විහිදුම් පද්ධතිය ස්වයංක්‍රීයව පාලනය වේ.",
       "sprinklerSystem": "ජල විහිදුම් පද්ධතිය",
@@ -599,7 +594,7 @@
       "dairyFarmManagement": "කිරි ගොවිපල කළමනාකරණය",
       "heatMapView": "උෂ්ණතා සිතියම් දර්ශනය",
       "thiLabel": "THI",
-      "cattleHeader": "ගව තාප පීඩන පුරෝකථනය"
+      "cattleHeader": "ගව තාප පීඩන පුරෝකථනය",
 
       "startDiseasePrediction": "🔍 රෝග පූර්වකථනය ආරම්භ කරන්න",
       
@@ -867,8 +862,6 @@
       "immediateActions": "உடனடி நடவடிக்கைகள்",
       "careAndTreatment": "பராமரிப்பு மற்றும் சிகிச்சை",
       "vectorControl": "வெக்டர் கட்டுப்பாடு",
-      "monitoring": "கண்காணிப்பு", 
-      "prevention": "தடுப்பு",
       "diseaseInfo": "நோய் தகவல்",
       "noCareInstructions": "இந்த முன்கணிப்புக்கு குறிப்பிட்ட பராமரிப்பு வழிமுறைகள் கிடைக்கவில்லை.",
       
@@ -877,7 +870,6 @@
       "cows": "பசுக்கள்",
       "lastCheck": "கடைசி சோதனை",
       "alerts": "எச்சரிக்கைகள்",
-      "healthy": "ஆரோக்கியமான",
       "cowsNeedAttention": "பசுக்களுக்கு கவனம் தேவை",
       "cowsShowingSymptoms": "அறிகுறிகளைக் காட்டுகிறது",
       "quickActions": "விரைவு நடவடிக்கைகள்",
@@ -890,8 +882,9 @@
       "healthHistory": "சுகாதார வரலாறு",
       "viewPastRecords": "கடந்தகால பதிவுகளைப் பார்க்க",
       "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"
+    },
 
-         "cattleHeat": {
+    "cattleHeat": {
       "heatStressDetails": "வெப்ப அழுத்த விவரங்கள்",
       "sprinklerAutoMessage": "தண்ணீர் தெளிப்பு அமைப்பு முன்னறிவிப்பு முறையால் தானாக கட்டுப்படுத்தப்படுகிறது.",
       "sprinklerSystem": "தண்ணீர் தெளிப்பு அமைப்பு",
@@ -920,7 +913,7 @@
       "dairyFarmManagement": "பால் பண்ணை மேலாண்மை",
       "heatMapView": "வெப்ப வரைபட காட்சி",
       "thiLabel": "THI",
-      "cattleHeader": "கால்நடை வெப்ப அழுத்த கணிப்பு"
+      "cattleHeader": "கால்நடை வெப்ப அழுத்த கணிப்பு",
 
       "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்",
       

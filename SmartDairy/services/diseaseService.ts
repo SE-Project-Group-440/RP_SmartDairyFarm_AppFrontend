@@ -89,7 +89,7 @@ const mapDatabaseRecordToUI = (dbRecord: DatabasePredictionRecord): PredictionRe
     // For uncertain predictions, use confidence to decide
     if (predictionLower === 'uncertain') {
       const confidence = dbRecord.confidence || dbRecord.aiResponse?.overall_confidence || 0;
-      return confidence > 0.  ? 'sick' : 'healthy';
+      return confidence > 0.5 ? 'sick' : 'healthy';
     }
     
     // Use severity assessment if available - handle both string and object formats
@@ -98,8 +98,11 @@ const mapDatabaseRecordToUI = (dbRecord: DatabasePredictionRecord): PredictionRe
     
     if (typeof severityAssessment === 'string') {
       severity = severityAssessment.toLowerCase();
-    } else if (severityAssessment && typeof severityAssessment === 'object' && 'level' in severityAssessment) {
-      severity = severityAssessment.level?.toLowerCase();
+    } else if (severityAssessment && typeof severityAssessment === 'object' && severityAssessment !== null) {
+      const obj = severityAssessment as Record<string, any>;
+      if ('level' in obj) {
+        severity = obj.level?.toString()?.toLowerCase();
+      }
     }
     
     if (severity === 'high' || severity === 'critical' || severity === 'severe') return 'critical';
@@ -128,8 +131,11 @@ const mapDatabaseRecordToUI = (dbRecord: DatabasePredictionRecord): PredictionRe
     
     if (typeof severityAssessment === 'string') {
       severity = severityAssessment.toLowerCase();
-    } else if (severityAssessment && typeof severityAssessment === 'object' && 'level' in severityAssessment) {
-      severity = severityAssessment.level?.toLowerCase();
+    } else if (severityAssessment && typeof severityAssessment === 'object' && severityAssessment !== null) {
+      const obj = severityAssessment as Record<string, any>;
+      if ('level' in obj) {
+        severity = obj.level?.toString()?.toLowerCase();
+      }
     }
     
     // Map severity values to expected format
