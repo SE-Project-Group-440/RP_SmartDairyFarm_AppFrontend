@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "smartdairy",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -26,7 +26,8 @@
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.RECORD_AUDIO"
-      ]
+      ],
+      "package": "com.dinidisg.smartdairy"
     },
     "web": {
       "output": "static",
@@ -58,8 +59,9 @@
     },
     "extra": {
       "router": {},
+      "backendUrl": "http://192.168.11.238:8082",
       "eas": {
-        "projectId": "beab1082-c0fa-45fa-a156-203e9b5e9141"
+        "projectId": "29d1d47c-057a-41fa-ba1f-a067d44cb34d"
       }
     }
   }
