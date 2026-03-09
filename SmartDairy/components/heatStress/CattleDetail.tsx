@@ -179,7 +179,7 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
             </Text>
             <CattleBody3D thiIndex={cattle.thi} stressLevel={cattle.stressLevel} />
             <View style={styles.tempDisplay}>
-              <Text style={styles.tempValue}>{cattle.envTemp}°C</Text>
+              <Text style={styles.tempValue}>{cattle.bodyTemp}°C</Text>
              <Text style={styles.cardTitle}>
                 {t('cattleHeat', 'currentBodyTemperature')}
               </Text>
