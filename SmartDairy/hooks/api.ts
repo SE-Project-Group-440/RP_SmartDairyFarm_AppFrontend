@@ -9,10 +9,10 @@ const LOCAL_IP = Constants.expoConfig?.hostUri?.split(":")[0];
 
 const BASE_URL =
   Platform.OS === "web"
-    ? "http://localhost:8080"
+    ? "http://localhost:8082"
     : Platform.OS === "android"
-    ? `http://${LOCAL_IP}:8080`
-    : `http://${LOCAL_IP}:8080`;
+    ? `http://${LOCAL_IP}:8082`
+    : `http://${LOCAL_IP}:8082`;
 
 export const api = axios.create({
   baseURL: BASE_URL,
