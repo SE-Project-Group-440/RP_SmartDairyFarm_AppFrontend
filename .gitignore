@@ -72,4 +72,4 @@ tmp/
 
 # --- EAS (Expo) ---
 .easl
-eas.json
+# eas.json

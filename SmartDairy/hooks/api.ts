@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 
 
-const LOCAL_IP = Constants.expoConfig?.hostUri?.split(":")[0];
+const LOCAL_IP = "10.98.42.24"; // Replace with your machine's local IP address
 
 
 const BASE_URL =
