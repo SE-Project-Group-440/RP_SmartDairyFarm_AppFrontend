@@ -11,7 +11,11 @@
       "success": "Success",
       "loading": "Loading...",
       "noData": "No data available",
-      "health": "Health"
+      "health": "Health",
+      "dairy": "Dairy",
+      "heatstress": "Heat Stress",
+      "chatbot": "Advisor",
+      "profile": "Profile"
     },
     "profile": {
       "myProfile": "My Profile",
@@ -407,7 +411,11 @@
       "success": "සාර්ථකයි",
       "loading": "පූරණය වෙමින්...",
       "noData": "දත්ත නැත",
-      "health": "සෞඛ්‍යය"
+      "health": "සෞඛ්‍යය",
+       "dairy": "කිරි",
+      "heatstress": "උෂ්ණතා ආතතිය",
+      "chatbot": "උපදේශක",
+      "profile": "පැතිකඩ"
     },
     "profile": {
       "myProfile": "මගේ පැතිකඩ",
@@ -801,7 +809,11 @@
       "success": "வெற்றி",
       "loading": "ஏற்றுகிறது...",
       "noData": "தரவு இல்லை",
-      "health": "சுகாதாரம்"
+      "health": "சுகாதாரம்",
+        "dairy": "பால்",
+      "heatstress": "வெப்ப அழுத்தம்",
+      "chatbot": "ஆலோசகர்",
+      "profile": "சுயவிவரம்"
     },
     "profile": {
       "myProfile": "என்னுடைய சுயவிவரம்",
