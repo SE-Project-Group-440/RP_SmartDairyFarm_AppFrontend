@@ -132,15 +132,13 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         setMilkSlot("evening");
         setMilkValue("");
       } else {
-        
+        // Evening entry - show recommendation or success
         if (res.data?.recommendation) {
           setShowRecommendation(true);
         } else {
           setSuccess(true);
+          resetForm();
         }
-
-
-        resetForm();
       }
     } catch (err: any) {
       const errorMsg =  err?.response?.data?.error || err?.response?.data?.message || err?.message || "Failed to save milk entry";
@@ -366,7 +364,10 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         )}
 
       <Pressable
-        onPress={() => setShowRecommendation(false)}
+        onPress={() => {
+          setShowRecommendation(false);
+          resetForm();
+        }}
         className="bg-green-600 py-3 rounded-xl items-center mt-4"
       >
         <Text className="text-white font-semibold">{t('milkEntry', 'gotIt')}</Text>

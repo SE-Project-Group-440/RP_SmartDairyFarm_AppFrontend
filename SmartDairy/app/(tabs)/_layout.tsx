@@ -138,7 +138,7 @@ export default function LactationCurveHome() {
                   : "text-slate-600"
               }`}
             >
-              Dairy
+              {t("common", "dairy")}
             </Text>
           </Pressable>
 
@@ -196,7 +196,7 @@ export default function LactationCurveHome() {
                   : "text-slate-600"
               }`}
             >
-              HeatStress
+               {t("common", "heatstress")}
             </Text>
           </Pressable>
 
@@ -256,7 +256,7 @@ export default function LactationCurveHome() {
                   : "text-slate-600"
               }`}
             >
-              Profile
+              {t("common", "profile")}
             </Text>
           </Pressable>
         </View>
