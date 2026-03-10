@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import {
   View,
@@ -5,21 +6,11 @@ import {
   Pressable,
   ScrollView,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import useTranslation from "../../../../hooks/useTranslation";
-
-interface HealthRecord {
-  id: string;
-  cowId: string;
-  cowName: string;
-  date: string;
-  diagnosis: string;
-  status: 'healthy' | 'sick' | 'recovering' | 'critical';
-  symptoms: string[];
-  treatment?: string;
-  veterinarian?: string;
-}
+import { getPredictionHistory, PredictionRecord } from "../../../../services/diseaseService";
 
 interface HealthHistoryScreenProps {
   onBack: () => void;
@@ -27,71 +18,41 @@ interface HealthHistoryScreenProps {
 
 export default function HealthHistoryScreen({ onBack }: HealthHistoryScreenProps) {
   const { t } = useTranslation();
-  const [healthRecords, setHealthRecords] = useState<HealthRecord[]>([]);
+  const [healthRecords, setHealthRecords] = useState<PredictionRecord[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
 
-  // Mock data - replace with actual API call
   useEffect(() => {
     loadHealthRecords();
   }, []);
 
-  const loadHealthRecords = () => {
-    // TODO: Replace with actual API call
-    const mockRecords: HealthRecord[] = [
-      {
-        id: "1",
-        cowId: "12",
-        cowName: "Bella",
-        date: "2024-03-05",
-        diagnosis: "Foot and Mouth Disease",
-        status: "recovering",
-        symptoms: ["Blisters", "Salivation", "Fever"],
-        treatment: "Antiviral medication, Isolation",
-        veterinarian: "Dr. Smith"
-      },
-      {
-        id: "2",
-        cowId: "18",
-        cowName: "Daisy",
-        date: "2024-03-03",
-        diagnosis: "Lumpy Skin Disease",
-        status: "sick",
-        symptoms: ["Nodules", "Skin lesions", "Reduced appetite"],
-        treatment: "Supportive care, Monitoring",
-        veterinarian: "Dr. Johnson"
-      },
-      {
-        id: "3",
-        cowId: "7",
-        cowName: "Luna",
-        date: "2024-02-28",
-        diagnosis: "Healthy",
-        status: "healthy",
-        symptoms: [],
-        veterinarian: "Dr. Smith"
-      },
-      {
-        id: "4",
-        cowId: "15",
-        cowName: "Rose",
-        date: "2024-02-25",
-        diagnosis: "Respiratory infection",
-        status: "healthy",
-        symptoms: ["Nasal discharge", "Cough"],
-        treatment: "Antibiotics - Completed",
-        veterinarian: "Dr. Johnson"
-      }
-    ];
-
-    setHealthRecords(mockRecords);
+  const loadHealthRecords = async () => {
+    try {
+      setError(null);
+      const records = await getPredictionHistory();
+      setHealthRecords(records);
+    } catch (error) {
+      console.error("Error loading health records:", error);
+      setError("Failed to load health records. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-    loadHealthRecords();
-    setRefreshing(false);
+    try {
+      setError(null);
+      const records = await getPredictionHistory();
+      setHealthRecords(records);
+    } catch (error) {
+      console.error("Error refreshing health records:", error);
+      setError("Failed to refresh health records. Please try again.");
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -114,7 +75,7 @@ export default function HealthHistoryScreen({ onBack }: HealthHistoryScreenProps
     }
   };
 
-  const filterRecords = (records: HealthRecord[]) => {
+  const filterRecords = (records: PredictionRecord[]) => {
     if (selectedFilter === "all") return records;
     return records.filter(record => record.status === selectedFilter);
   };
@@ -122,11 +83,47 @@ export default function HealthHistoryScreen({ onBack }: HealthHistoryScreenProps
   const filters = [
     { key: "all", label: t("disease", "all") || "All", count: healthRecords.length },
     { key: "healthy", label: t("disease", "healthy") || "Healthy", count: healthRecords.filter(r => r.status === "healthy").length },
-    { key: "sick", label: t("disease", "sick") || "Sick", count: healthRecords.filter(r => r.status === "sick").length },
-    { key: "recovering", label: t("disease", "recovering") || "Recovering", count: healthRecords.filter(r => r.status === "recovering").length }
+    { key: "sick", label: "Needs Attention", count: healthRecords.filter(r => r.status === "sick").length },
+    { key: "recovering", label: t("disease", "recovering") || "Recovering", count: healthRecords.filter(r => r.status === "recovering").length },
+    { key: "critical", label: "Critical", count: healthRecords.filter(r => r.status === "critical").length }
   ];
 
   const filteredRecords = filterRecords(healthRecords);
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString();
+    } catch {
+      return dateString;
+    }
+  };
+
+  if (loading) {
+    return (
+      <View className="flex-1 bg-slate-100">
+        {/* HEADER */}
+        <View className="bg-green-600 px-6 pt-12 pb-10 rounded-b-3xl">
+          <View className="flex-row items-center mb-4">
+            <Pressable onPress={onBack} className="mr-3">
+              <Ionicons name="arrow-back" size={24} color="white" />
+            </Pressable>
+            <Text className="text-white text-2xl font-bold">
+              {t("disease", "healthHistory")}
+            </Text>
+          </View>
+          <Text className="text-green-100 text-sm">
+            View past health records
+          </Text>
+        </View>
+        
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#16a34a" />
+          <Text className="text-slate-500 mt-4">Loading health records...</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <ScrollView 
@@ -185,7 +182,23 @@ export default function HealthHistoryScreen({ onBack }: HealthHistoryScreenProps
           Records ({filteredRecords.length})
         </Text>
 
-        {filteredRecords.length === 0 ? (
+        {error ? (
+          <View className="bg-white rounded-2xl p-8 border border-red-200 shadow-sm items-center">
+            <Ionicons name="alert-circle-outline" size={48} color="#dc2626" />
+            <Text className="text-red-600 text-lg font-medium mt-3">
+              Error Loading Records
+            </Text>
+            <Text className="text-red-500 text-sm mt-1 text-center">
+              {error}
+            </Text>
+            <Pressable 
+              onPress={loadHealthRecords}
+              className="bg-red-600 rounded-full px-6 py-2 mt-4"
+            >
+              <Text className="text-white font-medium">Retry</Text>
+            </Pressable>
+          </View>
+        ) : filteredRecords.length === 0 ? (
           <View className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm items-center">
             <Ionicons name="document-text-outline" size={48} color="#64748b" />
             <Text className="text-slate-500 text-lg font-medium mt-3">
@@ -202,30 +215,66 @@ export default function HealthHistoryScreen({ onBack }: HealthHistoryScreenProps
                 <View className="flex-row justify-between items-start mb-3">
                   <View className="flex-1">
                     <Text className="text-lg font-semibold text-slate-800">
-                      Cow #{record.cowId} - {record.cowName}
+                      {record.cowName && 
+                       record.cowName !== 'Unknown Cow' && 
+                       record.cowName !== 'undefined' && 
+                       !record.cowName.toLowerCase().includes('unknown') &&
+                       record.cowId && 
+                       record.cowId !== 'null' && 
+                       record.cowId !== 'undefined' ? 
+                        `${record.cowName} (ID: ${record.cowId})` : 
+                        record.cowId && 
+                        record.cowId !== 'null' && 
+                        record.cowId !== 'undefined' ? 
+                        `Dairy Animal ID: ${record.cowId}` : 
+                        record.cowName && 
+                        record.cowName !== 'Unknown Cow' && 
+                        record.cowName !== 'undefined' &&
+                        !record.cowName.toLowerCase().includes('unknown') ? 
+                        record.cowName : 
+                        "Dairy Animal"}
                     </Text>
-                    <Text className="text-slate-500 text-sm">{record.date}</Text>
+                    <Text className="text-slate-500 text-sm">{formatDate(record.date)}</Text>
+                    {record.predictionType && (
+                      <Text className="text-blue-600 text-xs mt-1">
+                        Method: {record.predictionType === 'image' ? 'Image Analysis' : 
+                                record.predictionType === 'report' ? 'Medical Report' : 
+                                record.predictionType === 'symptoms' ? 'Symptom Analysis' : 
+                                'Health Check'}
+                      </Text>
+                    )}
                   </View>
-                  <View className="flex-row items-center">
-                    <Ionicons 
-                      name={getStatusIcon(record.status)} 
-                      size={20} 
-                      color={getStatusColor(record.status)} 
-                    />
-                    <Text 
-                      className="text-sm font-medium ml-1"
-                      style={{ color: getStatusColor(record.status) }}
-                    >
-                      {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
-                    </Text>
+                  <View className="items-end">
+                    <View className="flex-row items-center">
+                      <Ionicons 
+                        name={getStatusIcon(record.status)} 
+                        size={20} 
+                        color={getStatusColor(record.status)} 
+                      />
+                      <Text 
+                        className="text-sm font-medium ml-1"
+                        style={{ color: getStatusColor(record.status) }}
+                      >
+                        {record.status === 'healthy' ? 'Healthy' : 
+                         record.status === 'sick' ? 'Needs Attention' :
+                         record.status === 'recovering' ? 'Recovering' :
+                         record.status === 'critical' ? 'Critical' : 
+                         record.status.charAt(0).toUpperCase() + record.status.slice(1)}
+                      </Text>
+                    </View>
+                    {record.confidence && (
+                      <Text className="text-xs text-slate-500 mt-1">
+                        Confidence: {Math.round(record.confidence)}%
+                      </Text>
+                    )}
                   </View>
                 </View>
 
                 <View className="border-t border-slate-200 pt-3">
-                  <Text className="font-medium text-slate-800 mb-1">Diagnosis:</Text>
-                  <Text className="text-slate-600 mb-3">{record.diagnosis}</Text>
+                  <Text className="font-medium text-slate-800 mb-1">Prediction:</Text>
+                  <Text className="text-slate-600 mb-3">{record.diagnosis || "Health Assessment Completed"}</Text>
 
-                  {record.symptoms.length > 0 && (
+                  {record.symptoms && record.symptoms.length > 0 && (
                     <>
                       <Text className="font-medium text-slate-800 mb-1">Symptoms:</Text>
                       <View className="flex-row flex-wrap mb-3">
@@ -238,18 +287,40 @@ export default function HealthHistoryScreen({ onBack }: HealthHistoryScreenProps
                     </>
                   )}
 
-                  {record.treatment && (
+                  {record.careInstructions && (
                     <>
-                      <Text className="font-medium text-slate-800 mb-1">Treatment:</Text>
-                      <Text className="text-slate-600 mb-3">{record.treatment}</Text>
+                      <Text className="font-medium text-slate-800 mb-1">Care Instructions:</Text>
+                      <Text className="text-slate-600 mb-3">{record.careInstructions}</Text>
                     </>
                   )}
 
-                  {record.veterinarian && (
+                  {record.severity && (
+                    <View className="flex-row items-center mb-2">
+                      <Ionicons 
+                        name="warning" 
+                        size={16} 
+                        color={record.severity === 'high' ? '#dc2626' : record.severity === 'medium' ? '#d97706' : '#059669'} 
+                      />
+                      <Text 
+                        className="text-sm ml-1 font-medium"
+                        style={{ 
+                          color: record.severity === 'high' ? '#dc2626' : record.severity === 'medium' ? '#d97706' : '#059669'
+                        }}
+                      >
+                        Severity: {record.severity.charAt(0).toUpperCase() + record.severity.slice(1)}
+                      </Text>
+                    </View>
+                  )}
+
+                  {record.veterinarianConsulted !== undefined && (
                     <View className="flex-row items-center">
-                      <Ionicons name="person" size={16} color="#64748b" />
+                      <Ionicons 
+                        name={record.veterinarianConsulted ? "checkmark-circle" : "time"} 
+                        size={16} 
+                        color={record.veterinarianConsulted ? "#059669" : "#d97706"} 
+                      />
                       <Text className="text-slate-500 text-sm ml-1">
-                        Examined by: {record.veterinarian}
+                        {record.veterinarianConsulted ? "Veterinarian consulted" : "Veterinarian consultation recommended"}
                       </Text>
                     </View>
                   )}

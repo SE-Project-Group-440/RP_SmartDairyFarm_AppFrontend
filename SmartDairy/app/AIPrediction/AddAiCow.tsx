@@ -5,18 +5,21 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Pressable
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Plus } from "lucide-react-native";
 import { useTranslations } from '@/hooks/useTranslations';
+import { ArrowLeft, Camera } from "lucide-react-native";
 
 interface Props {
   addCow: (data: any) => Promise<void>;
   onCancel: () => void;
+  onBack: () => void;
 }
 
-export default function AddAiCow({ addCow, onCancel }: Props) {
+export default function AddAiCow({ addCow, onCancel,onBack }: Props) {
   const [formData, setFormData] = useState<any>({
     cowId: "",
     "Lactation No": "",
@@ -48,7 +51,16 @@ export default function AddAiCow({ addCow, onCancel }: Props) {
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{t('addAiCow', 'addtitle')}</Text>
+      
+     <Pressable
+                  onPress={onBack}
+                  className="mb-4 flex-row items-center gap-2"
+                >
+                  <ArrowLeft size={20}  />
+                  <Text >
+                    {t('addAiCow', 'addtitle')}
+                  </Text>
+                </Pressable>
 
       <Text style={styles.label}>{t('addAiCow', 'cowId')}</Text>
       <TextInput

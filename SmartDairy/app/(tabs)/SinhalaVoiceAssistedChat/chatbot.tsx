@@ -9,6 +9,7 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  Platform,
 } from "react-native";
 import { Audio, AVPlaybackStatus} from "expo-av";
 import { askChat, ChatResponse,speechToText } from "../../../services/chatService";
@@ -65,11 +66,14 @@ export default function ChatScreen() {
 
 
   const quickQuestions = [
-    "ගවුන්ට ආහාර ලබා දෙන්නේ කෙසේද?",
     "කිරි නිෂ්පාදනය වැඩි කරන්නේ කෙසේද?",
+    "ගවයන්ට සාමාන්‍ය රෝග මොනවාද?",
+    "ගවයෙකුට දිනකට කොපමණ ආහාර අවශ්‍යද?",
+    "ගවුන්ට ආහාර ලබා දෙන්නේ කෙසේද?",
     "ගවුන්ගේ රෝග ලක්ෂණ මොනවාද?",
     "ගවුන්ට සනීපාරක්ෂාව කෙසේද?",
     "නව ගවයන් තෝරාගන්නේ කෙසේද?",
+    "ගවයෙකුගේ ගැබ් කාලය කොපමණද?"
   ];
 
   /** ---------------- Audio Playback ---------------- */
@@ -259,6 +263,44 @@ const stopRecording = async () => {
     ]);
   };
 
+  const startRecordingWeb = async () => {
+  if (!navigator.mediaDevices || !window.MediaRecorder) {
+    alert("Recording not supported in this browser");
+    return;
+  }
+
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  const mediaRecorder = new MediaRecorder(stream);
+  const audioChunks: BlobPart[] = [];
+
+  mediaRecorder.ondataavailable = (e) => {
+    audioChunks.push(e.data);
+  };
+
+  mediaRecorder.onstop = async () => {
+    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+    const url = URL.createObjectURL(audioBlob);
+    try {
+      const text = await speechToText(url);
+      setInputText(text);
+    } catch (err) {
+      console.error("STT failed:", err);
+    }
+  };
+
+  mediaRecorder.start();
+  setRecording(mediaRecorder as any); // cast to match Audio.Recording type
+  setIsRecording(true);
+};
+
+const stopRecordingWeb = async () => {
+  if (!recording) return;
+
+  (recording as any).stop(); // stop MediaRecorder
+  setIsRecording(false);
+  setRecording(null);
+};
+
   /** ---------------- UI ---------------- */
   return (
     <SafeAreaView style={styles.container}>
@@ -388,7 +430,7 @@ const stopRecording = async () => {
   </TouchableOpacity>
 
   <TouchableOpacity
-  onPress={isRecording ? stopRecording : startRecording}
+  onPress={Platform.OS === "web" ? (isRecording ? stopRecordingWeb : startRecordingWeb) : (isRecording ? stopRecording : startRecording)}
   style={[
     styles.micBtn,
     {

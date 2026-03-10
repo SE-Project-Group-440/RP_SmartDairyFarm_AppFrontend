@@ -28,6 +28,23 @@ const careInstructionTranslations: Record<Language, Record<string, string>> = {
     "limit visitor access": "Limit visitor access",
     "use footbaths at entry points": "Use footbaths at entry points",
     
+    // Common monitoring phrases
+    "monitor daily": "Monitor daily",
+    "check daily": "Check daily", 
+    "observe daily": "Observe daily",
+    "watch for": "Watch for",
+    "look for signs of": "Look for signs of",
+    "daily monitoring": "Daily monitoring",
+    "regular monitoring": "Regular monitoring",
+    "continuous monitoring": "Continuous monitoring",
+    
+    // Disease descriptions
+    "fmd is viral - there is no direct cure, but supportive care reduces severity.": "FMD is viral - there is no direct cure, but supportive care reduces severity.",
+    "fmd is viral - there is no direct cure, but\nsupportive care reduces severity.": "FMD is viral - there is no direct cure, but supportive care reduces severity.",
+    "lsd is viral disease transmitted by insects. early treatment improves outcomes.": "LSD is viral disease transmitted by insects. Early treatment improves outcomes.",
+    "foot and mouth disease": "Foot and Mouth Disease",
+    "lumpy skin disease": "Lumpy Skin Disease",
+    
     // LSD Immediate Actions
     "isolate infected cattle immediately": "Isolate infected cattle immediately",
     "control mosquitoes and biting insects": "Control mosquitoes and biting insects",
@@ -79,6 +96,23 @@ const careInstructionTranslations: Record<Language, Record<string, string>> = {
     "disinfect equipment daily": "දෙනෙක උපකරණ විෂබීජනාශක කරන්න",
     "limit visitor access": "නරීක්ෂක ප්‍රවේශය සීමා කරන්න",
     "use footbaths at entry points": "ප්‍රවේශ ස්ථානවල පාද ස්නානාගාර භාවිතා කරන්න",
+    
+    // Common monitoring phrases
+    "monitor daily": "දිනපතා නිරීක්ෂණය කරන්න",
+    "check daily": "දිනපතා පරීක්ෂා කරන්න", 
+    "observe daily": "දිනපතා නිරීක්ෂණය කරන්න",
+    "watch for": "සොයා බලන්න",
+    "look for signs of": "සලකුණු සොයන්න",
+    "daily monitoring": "දිනපතා නිරීක්ෂණය",
+    "regular monitoring": "නිරන්තර නිරීක්ෂණය",
+    "continuous monitoring": "අඛණ්ඩ නිරීක්ෂණය",
+    
+    // Disease descriptions
+    "fmd is viral - there is no direct cure, but supportive care reduces severity.": "FMD වෛරස් රෝගයකි - සෘජු ප්‍රතිකාරයක් නැත, නමුත් සහයෝගී සත්කාරය තීව්‍රතාවය අඩු කරයි.",
+    "fmd is viral - there is no direct cure, but\nsupportive care reduces severity.": "FMD වෛරස් රෝගයකි - සෘජු ප්‍රතිකාරයක් නැත, නමුත් සහයෝගී සත්කාරය තීව්‍රතාවය අඩු කරයි.",
+    "lsd is viral disease transmitted by insects. early treatment improves outcomes.": "LSD කෘමීන් විසින් සම්ප්‍රේෂණය කරනු ලබන වෛරස් රෝගයකි. ඉක්මන් ප්‍රතිකාරය ප්‍රතිඵල වැඩි දියුණු කරයි.",
+    "foot and mouth disease": "පාද සහ මුඛ රෝගය",
+    "lumpy skin disease": "ගැටිති සම් රෝගය",
     
     // LSD Immediate Actions
     "isolate infected cattle immediately": "සතුන්ගේ වහාම වෙන්කර තබන්න",
@@ -132,6 +166,23 @@ const careInstructionTranslations: Record<Language, Record<string, string>> = {
     "limit visitor access": "பார்வையாளர் அணுகலை கட்டுப்படுத்தவும்",
     "use footbaths at entry points": "நுழைவு புள்ளிகளில் கால் குளியல் பயன்படுத்தவும்",
     
+    // Common monitoring phrases
+    "monitor daily": "தினமும் கண்காணிக்கவும்",
+    "check daily": "தினமும் சரிபார்க்கவும்", 
+    "observe daily": "தினமும் கவனிக்கவும்",
+    "watch for": "கவனிக்க வேண்டியவை",
+    "look for signs of": "அறிகுறிகளைத் தேடுங்கள்",
+    "daily monitoring": "தினசரி கண்காணிப்பு",
+    "regular monitoring": "வழக்கமான கண்காணிப்பு",
+    "continuous monitoring": "தொடர்ச்சியான கண்காணிப்பு",
+    
+    // Disease descriptions
+    "fmd is viral - there is no direct cure, but supportive care reduces severity.": "FMD ஒரு வைரஸ் நோய் - நேரடி சிகிச்சை இல்லை, ஆனால் ஆதரவு சிகிச்சை தீவிரத்தை குறைக்கிறது.",
+    "fmd is viral - there is no direct cure, but\nsupportive care reduces severity.": "FMD ஒரு வைரஸ் நோய் - நேரடி சிகிச்சை இல்லை, ஆனால் ஆதரவு சிகிச்சை தீவிரத்தை குறைக்கிறது.",
+    "lsd is viral disease transmitted by insects. early treatment improves outcomes.": "LSD பூச்சிகளால் பரவும் வைரஸ் நோய். ஆரம்ப சிகிச்சை முடிவுகளை மேம்படுத்துகிறது.",
+    "foot and mouth disease": "கால் மற்றும் வாய் நோய்",
+    "lumpy skin disease": "கட்டி தோல் நோய்",
+    
     // LSD Immediate Actions
     "isolate infected cattle immediately": "நோயுற்ற கால்நடைகளை உடனடியாக தனிமைப்படுத்தவும்",
     "control mosquitoes and biting insects": "கொசுக்கள் மற்றும் கடிக்கும் பூச்சிகளை கட்டுப்படுத்தவும்",
@@ -171,12 +222,28 @@ export const translateCareInstruction = (text: string, language: Language): stri
   const translations = careInstructionTranslations[language];
   if (!translations) return text;
   
-  // Clean the input text
-  const lowerText = text.toLowerCase().trim();
+  // Clean the input text - normalize whitespace and line breaks
+  const lowerText = text.toLowerCase().trim().replace(/\s+/g, ' ');
   
-  // Try exact match first
+  // Try exact match first (with original text)
+  if (translations[text.toLowerCase().trim()]) {
+    return translations[text.toLowerCase().trim()];
+  }
+  
+  // Try normalized version
   if (translations[lowerText]) {
     return translations[lowerText];
+  }
+  
+  // Handle common monitoring patterns
+  if (lowerText.includes('monitor') && lowerText.includes('daily')) {
+    return translations["monitor daily"] || text;
+  }
+  if (lowerText.includes('check') && lowerText.includes('daily')) {
+    return translations["check daily"] || text;
+  }
+  if (lowerText.includes('observe') && lowerText.includes('daily')) {
+    return translations["observe daily"] || text;
   }
   
   // Try partial matching for common phrases

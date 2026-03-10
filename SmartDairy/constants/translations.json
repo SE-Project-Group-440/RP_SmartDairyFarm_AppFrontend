@@ -37,7 +37,9 @@
       "appInfo": "Smart Farm App",
       "version": "Version",
       "builtWith": "Built with ❤️ for farmers",
-      "logout": "Log Out"
+      "logout": "Log Out",
+      "ai":"AI Monitoring",
+      "aiSub":"Monitor Cow Reproduction"
     },
     "dashboard": {
       "goodMorning": "Good Morning",
@@ -296,7 +298,7 @@
       "startDiseasePrediction": "🔍 Start Disease Prediction"
     },
     "addAiCow": {
-      "title": "Resgister a New Cow for AI Observation",
+      "title": "New Cow for AI Observation",
       "cowId": "Cow ID",
       "lactationNo": "Lactation No",
       "breed": "Breed",
@@ -335,7 +337,7 @@
       "notPregnant": "Not Pregnant",
       "enterAiDate": "Enter AI done date (YYYY-MM-DD)",
       "markAIDone": "Mark AI as Done",
-      "addtitle": "Add New Cow For AI Monitoring",
+      "addtitle": "Cow For AI Monitoring",
       "jersey": "Jersey",
       "friesian": "Friesian",
       "crossbreed": "Crossbreed",
@@ -431,7 +433,9 @@
       "appInfo": "යෙදුමේ තොරතුරු",
       "version": "සංස්කරණය",
       "builtWith": "ගොවීන් සඳහා ඉදි කර ඇත",
-      "logout": "ඉවත් වන්න"
+      "logout": "ඉවත් වන්න",
+      "ai":"AI නිරීක්ෂණ",
+      "aiSub":"කෘත්‍රිම සංසේචන තොරතුරැ"
     },
     "dashboard": {
       "goodMorning": "සුභ උදෑසනක්",

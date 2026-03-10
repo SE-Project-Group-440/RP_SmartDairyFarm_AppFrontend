@@ -31,6 +31,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import ViewAiCow from "./ViewAiCow";
 import AddAiCow from "./AddAiCow";
 import { useTranslations } from '@/hooks/useTranslations';
+import { useAuthStore } from "@/Store/auth.store";
 
 
 export default function AIHomeScreen() {
@@ -131,34 +132,18 @@ export default function AIHomeScreen() {
     </Text>
   </View>
 );
-  
+  const user = useAuthStore((s) => s.user);
 
   return (
     <View style={styles.container}>
       {/* HEADER */}
-      <View style={styles.header}>
-        {view !== "list" ? (
-          <TouchableOpacity onPress={handleBack} style={styles.backBtn}>
-            <ArrowLeft size={20} />
-            <Text style={styles.backText}>{view === "add" ? "Cancel" : "Back"}</Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.headerTitleContainer}>
-            <View style={styles.logoCircle}>
-              <Text style={styles.logoText}>D</Text>
-            </View>
-            <View>
-              <Text style={styles.appTitle}>DairySmart</Text>
-              <Text style={styles.appSubTitle}>Sri Lanka</Text>
-            </View>
-          </View>
-        )}
-        <View style={styles.headerIcons}>
-          <Bell size={20} />
-          <View style={styles.userCircle}>
-            <User size={16} />
-          </View>
-        </View>
+      <View className="bg-green-600 px-6 pt-12 pb-8 rounded-b-3xl">
+        <Text className="text-2xl text-white mb-1">
+          {user?.name || user?.email || "Farmer"}
+        </Text>
+        <Text className="text-green-100">
+          {t('dashboard', 'dairyFarmManagement')}
+        </Text>
       </View>
 
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
@@ -253,6 +238,7 @@ export default function AIHomeScreen() {
           <AddAiCow
             addCow={addCow}
             onCancel={() => setView("list")}
+            onBack={handleBack}
           />
         )}
 

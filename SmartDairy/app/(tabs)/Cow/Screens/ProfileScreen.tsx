@@ -231,23 +231,13 @@ export default function ProfileScreen() {
             ))}
           </View>
         </View>
-
-        {/* App Info */}
-        <View className="bg-slate-100 rounded-2xl p-4 items-center">
-          <Text className="text-sm text-slate-600">
-            {t('profile', 'appInfo')}
-          </Text>
-          <Text className="text-xs text-slate-500">
-            {t('profile', 'version')} 1.0.2 • {t('profile', 'builtWith')}
-          </Text>
-        </View>
-        {/* AI Monitoring */}
+        
 {/* AI Monitoring */}
 <View>
   <View className="flex-row items-center gap-2 mb-3">
     <Layout size={20} color="#0f172a" />
     <Text className="text-slate-900 text-base">
-      AI Monitoring
+      {t('profile', 'ai')}
     </Text>
   </View>
 
@@ -260,13 +250,24 @@ export default function ProfileScreen() {
         <Brain size={20} color="#16A34A" />
       </View>
       <Text className="text-slate-900 font-medium">
-        Monitor Cow Reproduction
+        {t('profile', 'aiSub')}
       </Text>
     </View>
 
     <ChevronRight size={20} color="#94a3b8" />
   </Pressable>
 </View>
+
+        {/* App Info */}
+        <View className="bg-slate-100 rounded-2xl p-4 items-center">
+          <Text className="text-sm text-slate-600">
+            {t('profile', 'appInfo')}
+          </Text>
+          <Text className="text-xs text-slate-500">
+            {t('profile', 'version')} 1.0.2 • {t('profile', 'builtWith')}
+          </Text>
+        </View>
+       
 
         {/* Logout */}
         <Pressable
