@@ -278,15 +278,18 @@ const stopRecording = async () => {
   };
 
   mediaRecorder.onstop = async () => {
-    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-    const url = URL.createObjectURL(audioBlob);
-    try {
-      const text = await speechToText(url);
-      setInputText(text);
-    } catch (err) {
-      console.error("STT failed:", err);
-    }
-  };
+  const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+  // ✅ Convert blob to File
+  const audioFile = new File([audioBlob], "voice.wav", { type: "audio/wav" });
+
+  try {
+    const text = await speechToText(audioFile); // send File instead of blob URL
+    setInputText(text);
+  } catch (err) {
+    console.error("STT failed:", err);
+  }
+};
 
   mediaRecorder.start();
   setRecording(mediaRecorder as any); // cast to match Audio.Recording type

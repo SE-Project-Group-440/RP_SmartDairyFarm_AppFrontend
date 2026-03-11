@@ -10,30 +10,24 @@ export async function askChat(query: string): Promise<ChatResponse> {
   return response.data;
 }
 
-export async function speechToText(fileUri: string): Promise<string> {
+export async function speechToText(file: string | File): Promise<string> {
   const formData = new FormData();
 
-  if (Platform.OS === "web") {
-    const response = await fetch(fileUri);
-    const blob = await response.blob();
-
-    formData.append("audio", blob, "voice.webm");
+  if (file instanceof File) {
+    formData.append("audio", file);
   } else {
-  formData.append("audio", {
-    uri: fileUri,
-    name: "voice.wav",
-    type: "audio/wav",
-  } as any);
+    formData.append("audio", {
+      uri: file,
+      name: "voice.m4a",
+      type: "audio/m4a",
+    } as any);
   }
 
   const res = await api.post("/stt", formData, {
-  headers: {
-    "Content-Type": "multipart/form-data",
-  },
-});
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
-  
-  return res.data.text; 
+  return res.data.text ?? res.data ?? "";
 }
 
 
