@@ -32,6 +32,7 @@ interface CowProfileState {
 
   fetchCowProfile: (cowId: string) => Promise<void>;
   clearProfile: () => void;
+  deleteCow: (cowId: string) => Promise<void>;
 }
 
 export const useCowProfileStore = create<CowProfileState>((set) => ({
@@ -52,6 +53,25 @@ export const useCowProfileStore = create<CowProfileState>((set) => ({
           err?.response?.data?.message ??
           "Failed to load cow profile",
       });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  deleteCow: async (cowId) => {
+    try {
+      set({ isLoading: true, error: null });
+      // soft delete (cull / died)
+      await api.put(`/cows/${cowId}`, {
+        status: "Inactive"
+      });
+    } catch (err: any) {
+      set({
+        error:
+          err?.response?.data?.message ??
+          "Failed to remove cow",
+      });
+      throw err;
     } finally {
       set({ isLoading: false });
     }

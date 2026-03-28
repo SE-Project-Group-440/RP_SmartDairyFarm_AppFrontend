@@ -113,6 +113,19 @@ export function AlertsRecommendationsScreen({
                 <Text className="text-xs text-slate-600">
                   {alert.cowId.name} - {new Date(alert.createdAt).toLocaleString()}
                 </Text>
+
+                {(alert.actualMilk !== undefined && alert.expectedMilk !== undefined) && (
+                  <View className="flex-row gap-4 mt-3 bg-red-100/50 p-2 rounded-lg">
+                    <View>
+                      <Text className="text-xs text-slate-500 font-medium">{t('milkEntry', 'expectedMilk') || 'Expected'}</Text>
+                      <Text className="text-sm text-slate-800 font-bold">{alert.expectedMilk.toFixed(1)} L</Text>
+                    </View>
+                    <View>
+                      <Text className="text-xs text-slate-500 font-medium">{t('history', 'today') || 'Actual'}</Text>
+                      <Text className="text-sm text-red-700 font-bold">{alert.actualMilk.toFixed(1)} L</Text>
+                    </View>
+                  </View>
+                )}
               </View>
             </View>
 

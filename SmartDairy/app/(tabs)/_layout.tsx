@@ -4,18 +4,24 @@ import {
   Text,
   Pressable,
 } from "react-native";
-import { Milk, Package, TrendingUp, User } from "lucide-react-native";
+import {
+  Milk,
+  Bot,
+  Thermometer,
+  HeartPulse,
+  User,
+} from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useTranslation from "../../hooks/useTranslation";
+
 import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
-import {AiRecommendationScreen} from "../AIPrediction/AiRecommendationScreen";
-import AiHomeScreen from "../AIPrediction/AIHomeScreen";
+import CattleListScreen from "../(tabs)/cattleHeat/Screens/CattleListScreen";
+import DairyManagementScreen from "../(tabs)/Cow/Screens/DairyManagementScreen";
+import ProfileScreen from "../(tabs)/Cow/Screens/ProfileScreen";
 
-
-import  CattleListScreen  from "../(tabs)/cattleHeat/Screens/CattleListScreen";
-import  DairyManagementScreen  from "../(tabs)/Cow/Screens/DairyManagementScreen";
-import  ProfileScreen  from "../(tabs)/Cow/Screens/ProfileScreen";
-import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
+import DiseaseHomeScreen, {
+  DiseaseScreen,
+} from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
 import DiseaseScreenComponent from "../(tabs)/Disease/Screens/DiseaseScreen";
 import UploadImageScreen from "../(tabs)/Disease/Screens/UploadImageScreen";
 import UploadReportScreen from "../(tabs)/Disease/Screens/UploadReportScreen";
@@ -43,12 +49,16 @@ export type DairyScreen =
 
 export default function LactationCurveHome() {
   const { t } = useTranslation();
+
   const [currentTab, setCurrentTab] =
     useState<MainTab>("Dairy");
+
   const [dairyScreen, setDairyScreen] =
     useState<DairyScreen>("dashboard");
+
   const [diseaseScreen, setDiseaseScreen] =
     useState<DiseaseScreen>("home");
+
   const [selectedCowId, setSelectedCowId] =
     useState<string | null>(null);
 
@@ -109,156 +119,80 @@ export default function LactationCurveHome() {
       </View>
 
       {/* Bottom Tab Bar */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 py-2">
-        <View className="flex-row items-center justify-around">
-          {/* Dairy */}
+      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 py-2">
+        <View className="flex-row items-center justify-between">
+
+          {/* 🐄 Dairy */}
           <Pressable
             onPress={() => {
               setCurrentTab("Dairy");
               setDairyScreen("dashboard");
             }}
-            className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Dairy"
-                ? "bg-green-50"
-                : ""
+            className={`flex-1 items-center py-2 rounded-xl ${
+              currentTab === "Dairy" ? "bg-green-50" : ""
             }`}
           >
-            <Milk
-              size={24}
-              color={
-                currentTab === "Dairy"
-                  ? "#15803d"
-                  : "#475569"
-              }
-            />
-            <Text
-              className={`text-xs ${
-                currentTab === "Dairy"
-                  ? "text-green-700"
-                  : "text-slate-600"
-              }`}
-            >
-              {t("common", "dairy")}
+            <Milk size={22} color={currentTab === "Dairy" ? "#15803d" : "#475569"} />
+            <Text numberOfLines={1} className={`text-xs ${currentTab === "Dairy" ? "text-green-700" : "text-slate-600"}`}>
+              🐄 Dairy
             </Text>
           </Pressable>
 
-          {/* Feature 2 */}
+          {/* 🤖 Chatbot */}
           <Pressable
             onPress={() => setCurrentTab("Chatbot")}
-            className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Chatbot"
-                ? "bg-green-50"
-                : ""
+            className={`flex-1 items-center py-2 rounded-xl ${
+              currentTab === "Chatbot" ? "bg-green-50" : ""
             }`}
           >
-            <Package
-              size={24}
-              color={
-                currentTab === "Chatbot"
-                  ? "#15803d"
-                  : "#475569"
-              }
-            />
-            <Text
-            numberOfLines={2}
-              className={`text-xs ${
-                currentTab === "Chatbot"
-                  ? "text-green-700"
-                  : "text-slate-600"
-              }`}
-            >
-              
-              උපදේශක
+            <Bot size={22} color={currentTab === "Chatbot" ? "#15803d" : "#475569"} />
+            <Text numberOfLines={1} className={`text-xs ${currentTab === "Chatbot" ? "text-green-700" : "text-slate-600"}`}>
+              🤖 AI
             </Text>
           </Pressable>
 
-          {/* Feature 3 */}
+          {/* 🌡️ Heat */}
           <Pressable
             onPress={() => setCurrentTab("HeatStress")}
-            className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "HeatStress"
-                ? "bg-green-50"
-                : ""
+            className={`flex-1 items-center py-2 rounded-xl ${
+              currentTab === "HeatStress" ? "bg-green-50" : ""
             }`}
           >
-            <TrendingUp
-              size={24}
-              color={
-                currentTab === "HeatStress"
-                  ? "#15803d"
-                  : "#475569"
-              }
-            />
-            <Text
-              className={`text-xs ${
-                currentTab === "HeatStress"
-                  ? "text-green-700"
-                  : "text-slate-600"
-              }`}
-            >
-               {t("common", "heatstress")}
+            <Thermometer size={22} color={currentTab === "HeatStress" ? "#15803d" : "#475569"} />
+            <Text numberOfLines={1} className={`text-xs ${currentTab === "HeatStress" ? "text-green-700" : "text-slate-600"}`}>
+              🌡️ Heat
             </Text>
           </Pressable>
 
-          {/* Feature 4 */}
+          {/* ❤️ Health */}
           <Pressable
             onPress={() => {
               setCurrentTab("Health");
               setDiseaseScreen("home");
             }}
-            className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "Health"
-                ? "bg-green-50"
-                : ""
+            className={`flex-1 items-center py-2 rounded-xl ${
+              currentTab === "Health" ? "bg-green-50" : ""
             }`}
           >
-            <TrendingUp
-              size={24}
-              color={
-                currentTab === "Health"
-                  ? "#15803d"
-                  : "#475569"
-              }
-            />
-            <Text
-              className={`text-xs ${
-                currentTab === "Health"
-                  ? "text-green-700"
-                  : "text-slate-600"
-              }`}
-            >
-              {t("common", "health")}
+            <HeartPulse size={22} color={currentTab === "Health" ? "#15803d" : "#475569"} />
+            <Text numberOfLines={1} className={`text-xs ${currentTab === "Health" ? "text-green-700" : "text-slate-600"}`}>
+              ❤️ Health
             </Text>
           </Pressable>
 
-
-          {/* Profile */}
+          {/* 👤 Profile */}
           <Pressable
             onPress={() => setCurrentTab("profile")}
-            className={`items-center px-4 py-2 rounded-xl ${
-              currentTab === "profile"
-                ? "bg-green-50"
-                : ""
+            className={`flex-1 items-center py-2 rounded-xl ${
+              currentTab === "profile" ? "bg-green-50" : ""
             }`}
           >
-            <User
-              size={24}
-              color={
-                currentTab === "profile"
-                  ? "#15803d"
-                  : "#475569"
-              }
-            />
-            <Text
-              className={`text-xs ${
-                currentTab === "profile"
-                  ? "text-green-700"
-                  : "text-slate-600"
-              }`}
-            >
-              {t("common", "profile")}
+            <User size={22} color={currentTab === "profile" ? "#15803d" : "#475569"} />
+            <Text numberOfLines={1} className={`text-xs ${currentTab === "profile" ? "text-green-700" : "text-slate-600"}`}>
+              👤 Profile
             </Text>
           </Pressable>
+
         </View>
       </View>
     </SafeAreaView>
