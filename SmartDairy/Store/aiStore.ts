@@ -15,6 +15,8 @@ export interface InputData {
   "Previous AI Dates": string;
   "Last Caving Date": string;
   "E. Age (Month)": number;
+  "Estrus Signs"?: number;
+  "Days_Since_Last_Estrus"?: number;
 }
 
 export interface Recommendation {
@@ -43,6 +45,8 @@ export interface Cow {
   "Previous AI Dates": string;
   "Last Caving Date": string;
   "E. Age (Month)": number;
+  "Estrus Signs"?: number;
+  "Days_Since_Last_Estrus"?: number;
 }
 
 interface AIStore {
@@ -55,6 +59,8 @@ interface AIStore {
     recommendationId: string,
     status: "PREGNANT" | "NOT_PREGNANT"
   ) => Promise<void>;
+  updateCow: (recommendationId: string, cowData: any) => Promise<void>;
+  deleteCow: (recommendationId: string) => Promise<void>;
 }
 
 //store
@@ -91,6 +97,8 @@ export const useAIStore = create<AIStore>((set) => ({
         "Breed": cow["Breed"],
         "Estrus Cycle Length": Number(cow["Estrus Cycle Length"]),
         "E. Age (Month)": Number(cow["E. Age (Month)"]),
+        "Estrus Signs": Number(cow["Estrus Signs"]),
+        "Days_Since_Last_Estrus": Number(cow["Days_Since_Last_Estrus"]),
       };
 
       const savedRecommendation: Recommendation = await recommendAI(
@@ -152,6 +160,54 @@ export const useAIStore = create<AIStore>((set) => ({
       }));
 
       set({ cows: flattened, loading: false });
+    } catch (err) {
+      console.log(err);
+      set({ loading: false });
+    }
+  },
+
+  updateCow: async (recommendationId, cowData) => {
+    set({ loading: true });
+    try {
+      const { updateAI } = await import("../services/aiService");
+      const processedRow: InputData = {
+        ...cowData,
+        "Lactation No": Number(cowData["Lactation No"]),
+        "Milk_Yield": Number(cowData["Milk_Yield"]),
+        "Breed": cowData["Breed"],
+        "Estrus Cycle Length": Number(cowData["Estrus Cycle Length"]),
+        "E. Age (Month)": Number(cowData["E. Age (Month)"]),
+        "Estrus Signs": Number(cowData["Estrus Signs"]),
+        "Days_Since_Last_Estrus": Number(cowData["Days_Since_Last_Estrus"]),
+      };
+
+      await updateAI(recommendationId, processedRow);
+      
+      const updated: Recommendation[] = await fetchPendingCows();
+      const flattened: Cow[] = updated.map((rec) => ({
+        _id: rec._id,
+        cowId: rec.cowId,
+        ...rec.input_data,
+        recommendation: rec,
+      }));
+
+      set({ cows: flattened, loading: false });
+    } catch (err) {
+      console.log(err);
+      set({ loading: false });
+    }
+  },
+
+  deleteCow: async (recommendationId) => {
+    set({ loading: true });
+    try {
+      const { deleteAI } = await import("../services/aiService");
+      await deleteAI(recommendationId);
+      
+      set((state) => ({
+        cows: state.cows.filter(c => c.recommendation._id !== recommendationId),
+        loading: false,
+      }));
     } catch (err) {
       console.log(err);
       set({ loading: false });

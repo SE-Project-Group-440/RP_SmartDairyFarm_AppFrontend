@@ -11,6 +11,8 @@ export interface InputData {
   "Previous AI Dates": string;
   "Last Caving Date": string;
   "E. Age (Month)": number;
+  "Estrus Signs"?: number;
+  "Days_Since_Last_Estrus"?: number;
 }
 
 export type RecommendationStatus = "PENDING" | "COMPLETED";
@@ -69,4 +71,21 @@ export const confirmPregnancy = async (
     }
   );
   return response.data;
+};
+
+export const updateAI = async (
+  recommendationId: string,
+  row: InputData
+): Promise<Recommendation> => {
+  const response = await api.put<{ message: string; recommendation: Recommendation }>(
+    `/api/ai/update/${recommendationId}`,
+    { row }
+  );
+  return response.data.recommendation;
+};
+
+export const deleteAI = async (
+  recommendationId: string
+): Promise<void> => {
+  await api.delete(`/api/ai/delete/${recommendationId}`);
 };

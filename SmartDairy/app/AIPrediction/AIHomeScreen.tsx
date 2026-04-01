@@ -8,7 +8,9 @@ import {
   StyleSheet,
   ActivityIndicator,
   Animated,
-  Image
+  Image,
+  Alert,
+  Platform
 } from "react-native";
 import {
   Calendar,
@@ -24,6 +26,8 @@ import {
   MoreHorizontal,
   Search,
   CheckCircle2,
+  Pencil,
+  Trash2,
 } from "lucide-react-native";
 import { useAIStore } from "../../Store/aiStore"; // your Zustand store
 import { Picker } from "@react-native-picker/picker";
@@ -42,12 +46,15 @@ export default function AIHomeScreen() {
     confirmPregnancyStatus,
     fetchPending,
     loading,
+    updateCow,
+    deleteCow,
   } = useAIStore();
   const { t } = useTranslations();
 
   const [view, setView] = useState<"list" | "detail" | "add">("list");
   const [selectedCow, setSelectedCow] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState<"ALL" | "PREGNANT" | "PENDING">("ALL");
   const [formData, setFormData] = useState<any>({
     cowId: "",
     "Lactation No": "",
@@ -61,6 +68,7 @@ export default function AIHomeScreen() {
     "E. Age (Month)": "",
   });
   const [aiDates, setAiDates] = useState<Record<string, string>>({});
+  const [editId, setEditId] = useState<string | null>(null);
   useEffect(() => {
     fetchPending();
   }, []);
@@ -85,6 +93,7 @@ export default function AIHomeScreen() {
 
   const handleBack = () => {
     setSelectedCow(null);
+    setEditId(null);
     setView("list");
   };
 
@@ -101,13 +110,18 @@ export default function AIHomeScreen() {
       "Last Caving Date": "",
       "E. Age (Month)": "",
     });
+    setEditId(null);
     setView("add");
   };
 
 
-  const filteredCows = cows.filter((cow) =>
-    cow.cowId?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredCows = cows.filter((cow) => {
+    const matchesSearch = cow.cowId?.toLowerCase().includes(searchQuery.toLowerCase());
+    if (filterType === "ALL") return matchesSearch;
+    if (filterType === "PREGNANT") return matchesSearch && cow.recommendation.pregnancy_check_status === "PREGNANT";
+    if (filterType === "PENDING") return matchesSearch && cow.recommendation.status === "PENDING";
+    return matchesSearch;
+  });
 
   const StatusBadge = ({ statusKey }: { statusKey: string }) => (
   <View
@@ -134,6 +148,37 @@ export default function AIHomeScreen() {
 );
   const user = useAuthStore((s) => s.user);
 
+  const handleEdit = (cow: any) => {
+    setFormData({
+      cowId: cow.cowId,
+      ...cow.recommendation.input_data
+    });
+    setEditId(cow.recommendation._id);
+    setView("add");
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteCow(id);
+    handleBack();
+  };
+
+  const confirmDelete = (id: string) => {
+    if (Platform.OS === "web") {
+      if (window.confirm(t('addAiCow', 'confirmDelete') || "Are you sure you want to delete this record?")) {
+        handleDelete(id);
+      }
+    } else {
+      Alert.alert(
+        t('addAiCow', 'deleteTitle') || "Delete Record",
+        t('addAiCow', 'deleteMessage') || "Are you sure you want to delete this cow record?",
+        [
+          { text: t('addAiCow', 'cancel') || "Cancel", style: "cancel" },
+          { text: t('addAiCow', 'delete') || "Delete", style: "destructive", onPress: () => handleDelete(id) }
+        ]
+      );
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* HEADER */}
@@ -152,37 +197,62 @@ export default function AIHomeScreen() {
         {/* LIST VIEW */}
         {view === "list" && (
           <>
-            <TouchableOpacity
-              onPress={handleAddClick}
-              activeOpacity={0.9}
-              style={styles.button}
-            >
-              <View style={styles.content}>
-                <View style={styles.iconWrapper}>
-                  <Plus size={20} color="#fff" />
+            {/* SUMMARY CARDS */}
+            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
+              <TouchableOpacity 
+                style={[styles.summaryCard, { backgroundColor: '#E8F5E9', opacity: filterType === "ALL" ? 1 : 0.5 }]}
+                onPress={() => setFilterType("ALL")}
+              >
+                <View style={[styles.iconBox, { backgroundColor: '#C8E6C9' }]}>
+                  <ClipboardList size={20} color="#2E7D32" />
                 </View>
+                <Text style={[styles.summaryNumber, { color: '#2E7D32' }]}>{cows.length}</Text>
+                <Text style={[styles.summaryLabel, { color: '#388E3C' }]}>{t('addAiCow', 'totalCows')}</Text>
+              </TouchableOpacity>
 
-                <Text style={styles.text}>{t('addAiCow', 'title')}</Text>
-              </View>
-            </TouchableOpacity>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 16 }}>
-              <View style={styles.summaryCard}>
-                <Text style={styles.summaryNumber}>{cows.length}</Text>
-                <Text style={styles.summaryLabel}>{t('addAiCow', 'totalCows')}</Text>
-              </View>
-              <View style={styles.summaryCard}>
-                <Text style={styles.summaryNumber}>
+              <TouchableOpacity 
+                style={[styles.summaryCard, { backgroundColor: '#E3F2FD', opacity: filterType === "PREGNANT" ? 1 : 0.5 }]}
+                onPress={() => setFilterType("PREGNANT")}
+              >
+                <View style={[styles.iconBox, { backgroundColor: '#BBDEFB' }]}>
+                  <CheckCircle2 size={20} color="#1565C0" />
+                </View>
+                <Text style={[styles.summaryNumber, { color: '#1565C0' }]}>
                   {cows.filter(c => c.recommendation.pregnancy_check_status === "PREGNANT").length}
                 </Text>
-                <Text style={styles.summaryLabel}>{t('addAiCow', 'pregnant')}</Text>
-              </View>
-              <View style={styles.summaryCard}>
-                <Text style={styles.summaryNumber}>
+                <Text style={[styles.summaryLabel, { color: '#1976D2' }]}>{t('addAiCow', 'pregnant')}</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={[styles.summaryCard, { backgroundColor: '#FFF3E0', opacity: filterType === "PENDING" ? 1 : 0.5 }]}
+                onPress={() => setFilterType("PENDING")}
+              >
+                <View style={[styles.iconBox, { backgroundColor: '#FFE0B2' }]}>
+                  <Bell size={20} color="#E65100" />
+                </View>
+                <Text style={[styles.summaryNumber, { color: '#E65100' }]}>
                   {cows.filter(c => c.recommendation.status === "PENDING").length}
                 </Text>
-              <Text style={styles.summaryLabel}>{t('addAiCow', 'aiDue')}</Text>
-              </View>
+                <Text style={[styles.summaryLabel, { color: '#F57C00' }]}>{t('addAiCow', 'aiDue')}</Text>
+              </TouchableOpacity>
             </View>
+
+            {/* ADD BTN */}
+            <TouchableOpacity
+              onPress={handleAddClick}
+              activeOpacity={0.8}
+              style={styles.addButton}
+            >
+              <View style={styles.addContent}>
+                <View style={styles.addIconBg}>
+                  <Plus size={24} color="#16A34A" />
+                </View>
+                <View style={{ flex: 1, marginLeft: 16 }}>
+                  <Text style={styles.addTitle}>{t('addAiCow', 'title')}</Text>
+                  <Text style={styles.addSubtitle}>Click here to add a new observation</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
 
             {/* SEARCH BAR */}
             <View style={styles.searchContainer}>
@@ -237,7 +307,13 @@ export default function AIHomeScreen() {
         {view === "add" && (
           <AddAiCow
             addCow={addCow}
-            onCancel={() => setView("list")}
+            updateCow={updateCow}
+            editId={editId}
+            initialData={formData}
+            onCancel={() => {
+              setView("list");
+              setEditId(null);
+            }}
             onBack={handleBack}
           />
         )}
@@ -250,6 +326,9 @@ export default function AIHomeScreen() {
             setAiDates={setAiDates}
             markDone={markDone}
             confirmPregnancyStatus={confirmPregnancyStatus}
+            onBack={handleBack}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         )}
       </ScrollView>
@@ -307,42 +386,59 @@ searchInput: {
 },
 summaryCard: {
   flex: 1,
+  padding: 16,
+  borderRadius: 20,
+  marginHorizontal: 5,
+  alignItems: "flex-start",
+  elevation: 2,
+  shadowColor: "#000",
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
+},
+iconBox: {
+  width: 40,
+  height: 40,
+  borderRadius: 14,
+  justifyContent: "center",
+  alignItems: "center",
+  marginBottom: 14,
+},
+summaryNumber: { fontSize: 24, fontWeight: "800", marginBottom: 4 },
+summaryLabel: { fontSize: 10, fontWeight: "700", textTransform: 'uppercase', letterSpacing: 0.5 },
+addButton: {
   backgroundColor: "#16A34A",
-  padding: 12,
-  borderRadius: 16,
-  marginHorizontal: 4,
+  borderRadius: 24,
+  padding: 18,
+  marginBottom: 20,
+  elevation: 5,
+  shadowColor: "#16A34A",
+  shadowOffset: { width: 0, height: 4 },
+  shadowOpacity: 0.4,
+  shadowRadius: 8,
+},
+addContent: {
+  flexDirection: "row",
   alignItems: "center",
 },
-summaryNumber: { color: "white", fontSize: 18, fontWeight: "bold" },
-summaryLabel: { color: "white", fontSize: 12 },
-button: {
-    width: "100%",
-    backgroundColor: "#16A34A", 
-    paddingVertical: 16,
-    borderRadius: 24, 
-    shadowColor: "#a7f3d0", 
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.6,
-    shadowRadius: 10,
-    elevation: 6, 
-    marginBottom: 16,
-  },
-  content: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  iconWrapper: {
-    backgroundColor: "",
-    padding: 6,
-    borderRadius: 8,
-    marginRight: 12,
-  },
-  text: {
-    color: "#ffffff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
+addIconBg: {
+  width: 52,
+  height: 52,
+  backgroundColor: "white",
+  borderRadius: 18,
+  justifyContent: "center",
+  alignItems: "center",
+},
+addTitle: {
+  color: "white",
+  fontSize: 18,
+  fontWeight: "bold",
+  marginBottom: 4,
+},
+addSubtitle: {
+  color: "#DCFCE7",
+  fontSize: 13,
+},
   cowImage: {
   width: 24,
   height: 24,

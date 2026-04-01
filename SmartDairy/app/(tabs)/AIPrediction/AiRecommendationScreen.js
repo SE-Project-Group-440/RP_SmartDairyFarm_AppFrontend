@@ -3,19 +3,19 @@ import { View, Text, TextInput, Button, ActivityIndicator, ScrollView } from "re
 import { useAIStore } from "../../../Store/aiStore";
 
 export const AiRecommendationScreen = () => {
-  const { cows, addCow, markDone, loading,fetchPending } = useAIStore();
+  const { cows, addCow, markDone, loading, fetchPending } = useAIStore();
   const fieldsOrder = [
-  "cowId",
-  "Lactation No",
-  "Milk_Yield",
-  "Breed",
-  "Milking/Dry",
-  "Hormonal Treatment",
-  "Estrus Cycle Length",
-  "Previous AI Dates",
-  "Last Caving Date",
-  "E. Age (Month)",
-];
+    "cowId",
+    "Lactation No",
+    "Milk_Yield",
+    "Breed",
+    "Milking/Dry",
+    "Hormonal Treatment",
+    "Estrus Cycle Length",
+    "Previous AI Dates",
+    "Last Caving Date",
+    "E. Age (Month)",
+  ];
 
   const [form, setForm] = useState({
     cowId: "",
@@ -36,38 +36,38 @@ export const AiRecommendationScreen = () => {
   }, []);
 
   const handleAddCow = () => {
-  if (!form.cowId) {
-    alert("Please enter Cow ID");
-    return;
-  }
-  addCow(form);
-  setForm({
-    cowId: "",
-    "Lactation No": "",
-    "Milk_Yield": "",
-    "Breed": "",
-    "Milking/Dry": "",
-    "Hormonal Treatment": "",
-    "Estrus Cycle Length": "",
-    "Previous AI Dates": "",
-    "Last Caving Date": "",
-    "E. Age (Month)": "",
-  });
-};
+    if (!form.cowId) {
+      alert("Please enter Cow ID");
+      return;
+    }
+    addCow(form);
+    setForm({
+      cowId: "",
+      "Lactation No": "",
+      "Milk_Yield": "",
+      "Breed": "",
+      "Milking/Dry": "",
+      "Hormonal Treatment": "",
+      "Estrus Cycle Length": "",
+      "Previous AI Dates": "",
+      "Last Caving Date": "",
+      "E. Age (Month)": "",
+    });
+  };
 
   return (
     <ScrollView style={{ padding: 20 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>Add New Cow</Text>
 
       {fieldsOrder.map((key) => (
-  <TextInput
-    key={key}
-    placeholder={key}
-    value={form[key]}
-    onChangeText={(text) => setForm({ ...form, [key]: text })}
-    style={{ borderWidth: 1, padding: 5, marginVertical: 5 }}
-  />
-))}
+        <TextInput
+          key={key}
+          placeholder={key}
+          value={form[key]}
+          onChangeText={(text) => setForm({ ...form, [key]: text })}
+          style={{ borderWidth: 1, padding: 5, marginVertical: 5 }}
+        />
+      ))}
 
       <Button title="Add Cow" onPress={handleAddCow} />
 
@@ -77,7 +77,7 @@ export const AiRecommendationScreen = () => {
 
       {cows.map((cow) => (
         <View key={cow._id} style={{ borderWidth: 1, padding: 10, marginVertical: 5 }}>
-          <Text>Lactation No: {cow["Lactation No"]}</Text>
+          <Text>No of times Lactated: {cow["Lactation No"]}</Text>
           <Text>Milk Yield: {cow["Milk_Yield"]}</Text>
           <Text>Breed: {cow["Breed"]}</Text>
           <Text>Milking/Dry: {cow["Milking/Dry"]}</Text>

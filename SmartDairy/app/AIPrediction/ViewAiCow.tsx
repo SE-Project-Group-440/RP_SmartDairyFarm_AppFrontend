@@ -6,9 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
   Animated,
-  Image
+  Image,
+  Platform
 } from "react-native";
-import { Calendar, MoreHorizontal, CheckCircle2, XCircle } from "lucide-react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { ArrowLeft, Calendar, MoreHorizontal, CheckCircle2, XCircle, Pencil, Trash2 } from "lucide-react-native";
+import { Alert } from "react-native";
 import { useTranslations } from "@/hooks/useTranslations";
 
 interface Props {
@@ -20,6 +23,9 @@ interface Props {
   id: string,
   status: "PREGNANT" | "NOT_PREGNANT"
 ) => Promise<void>;
+  onBack: () => void;
+  onEdit?: (cow: any) => void;
+  onDelete?: (id: string) => void;
 }
 
 export default function ViewAiCow({
@@ -28,9 +34,14 @@ export default function ViewAiCow({
   setAiDates,
   markDone,
   confirmPregnancyStatus,
+  onBack,
+  onEdit,
+  onDelete,
 }: Props) {
     
   const progressAnim = useRef(new Animated.Value(0)).current;
+  const [showPicker, setShowPicker] = useState(false);
+
   const FinalStatusHighlight = ({ cow }: { cow: any }) => {
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const opacityAnim = useRef(new Animated.Value(0)).current;
@@ -131,23 +142,48 @@ export default function ViewAiCow({
     </View>
   );
 
+  const handleDelete = () => {
+    if (Platform.OS === "web") {
+      if (window.confirm(t('addAiCow', 'confirmDelete') || "Are you sure you want to delete this record?")) {
+        onDelete && onDelete(cow.recommendation._id);
+      }
+    } else {
+      Alert.alert(
+        t('addAiCow', 'deleteTitle') || "Delete Record",
+        t('addAiCow', 'deleteMessage') || "Are you sure you want to delete this cow record?",
+        [
+          { text: t('addAiCow', 'cancel') || "Cancel", style: "cancel" },
+          { text: t('addAiCow', 'delete') || "Delete", style: "destructive", onPress: () => onDelete && onDelete(cow.recommendation._id) }
+        ]
+      );
+    }
+  };
+
   if (!cow) return null;
 
   return (
     <View style={styles.card}>
       {/* HEADER */}
-      <View style={styles.detailHeader}>
-        <View style={styles.cowIcon}>
+      <View style={[styles.detailHeader, { alignItems: 'center', justifyContent: 'flex-start' }]}>
+        <TouchableOpacity onPress={onBack} style={{ marginRight: 16 }}>
+          <ArrowLeft size={24} color="#333" />
+        </TouchableOpacity>
+        <View style={[styles.cowIcon, { marginRight: 12 }]}>
             <Image
               source={require("../../assets/images/cow.png")}
               style={styles.cowImage}
               resizeMode="contain"
             />
         </View>
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.cowId}>Cow - {cow.cowId}</Text>
         </View>
-        <MoreHorizontal size={20} />
+        <TouchableOpacity onPress={() => onEdit && onEdit(cow)} style={{ marginRight: 16 }}>
+          <Pencil size={20} color="#333" />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={handleDelete}>
+          <Trash2 size={20} color="#E53935" />
+        </TouchableOpacity>
       </View>
 
       <Text style={styles.sectionTitle}>{t('addAiCow', 'viewtitle')}</Text>
@@ -269,19 +305,57 @@ export default function ViewAiCow({
       )}
       {cow.recommendation.status === "PENDING" && (
         <View style={{ marginTop: 16 }}>
-          <TextInput
-            placeholder={t('addAiCow', 'enterAiDate')}
-            value={aiDates[cow._id] || ""}
-            onChangeText={(text) =>
-              setAiDates((prev) => ({ ...prev, [cow._id]: text }))
-            }
-            style={styles.input}
-          />
+          {Platform.OS === 'web' ? (
+              React.createElement('input', {
+                type: 'date',
+                value: aiDates[cow._id] || "",
+                onChange: (e: any) => {
+                  const val = e.target.value;
+                  if (val) {
+                    setAiDates((prev) => ({ ...prev, [cow._id]: val }));
+                  }
+                },
+                style: {
+                  padding: '14px',
+                  borderRadius: '12px',
+                  border: '1px solid #E5E7EB',
+                  backgroundColor: '#F9FAFB',
+                  fontSize: '15px',
+                  color: '#1F2937',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                  width: '100%',
+                  marginBottom: '12px'
+                }
+              })
+            ) : (
+              <>
+                <TouchableOpacity style={styles.input} onPress={() => setShowPicker(true)}>
+                  <Text style={{ color: aiDates[cow._id] ? "#1F2937" : "#9CA3AF" }}>
+                    {aiDates[cow._id] || t('addAiCow', 'enterAiDate')}
+                  </Text>
+                </TouchableOpacity>
+                {showPicker && (
+                  <DateTimePicker
+                    value={aiDates[cow._id] ? new Date(aiDates[cow._id]) : new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(event, selectedDate: Date | undefined) => {
+                      setShowPicker(Platform.OS === "ios");
+                      if (event.type === 'set' && selectedDate) {
+                        setAiDates((prev) => ({ ...prev, [cow._id]: selectedDate.toISOString().split("T")[0] }));
+                      }
+                    }}
+                  />
+                )}
+              </>
+            )}
           <TouchableOpacity
             style={styles.saveBtn}
-            onPress={() =>
-              markDone(cow, aiDates[cow._id])
-            }
+            onPress={async () => {
+              await markDone(cow, aiDates[cow._id]);
+              onBack();
+            }}
           >
            <Text style={styles.saveBtnText}>{t('addAiCow', 'markAIDone')}</Text>
           </TouchableOpacity>
