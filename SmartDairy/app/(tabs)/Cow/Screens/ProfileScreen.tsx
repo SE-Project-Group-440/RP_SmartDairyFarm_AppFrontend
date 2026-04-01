@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import {
   Globe,
@@ -14,19 +15,25 @@ import {
   ChevronRight,
   LogOut,
   Settings,
+  Layout,
 } from "lucide-react-native";
 import { useAuthStore } from '@/Store/auth.store';
 import { useLanguageStore, type Language } from '@/Store/language.store';
 import { useTranslations } from '@/hooks/useTranslations';
+import { router} from "expo-router";
+import { Brain } from "lucide-react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProfileScreen() {
   const [darkMode, setDarkMode] = useState(false);
   const logout = useAuthStore((s) => s.logout);
+  const user = useAuthStore((s) => s.user);
   const currentLanguage = useLanguageStore((s) => s.language);
   const setLanguage = useLanguageStore((s) => s.setLanguage);
   const { t } = useTranslations();
   const [syncStatus, setSyncStatus] =
     useState<"synced" | "syncing" | "offline">("synced");
+    const navigation = useNavigation();
   
 
   return (
@@ -40,29 +47,12 @@ export default function ProfileScreen() {
 
           <View>
             <Text className="text-2xl text-white mb-1">
-              Manujaya Perera
+              {user?.name || user?.email || "Farmer"}
             </Text>
             <Text className="text-slate-300">
-              {t('profile', 'farmer')} • {t('profile', 'since')} 2020
+              {t('profile', 'farmer')}
             </Text>
           </View>
-        </View>
-
-        <View className="flex-row bg-white/10 rounded-xl p-4">
-          {[
-            { label: t('profile', 'cows'), value: "3" },
-            { label: t('profile', 'records'), value: "1,245" },
-            { label: t('profile', 'daysActive'), value: "156" },
-          ].map((item, i) => (
-            <View key={i} className="flex-1 items-center">
-              <Text className="text-xl text-white mb-1">
-                {item.value}
-              </Text>
-              <Text className="text-xs text-slate-300">
-                {item.label}
-              </Text>
-            </View>
-          ))}
         </View>
       </View>
 
@@ -241,6 +231,32 @@ export default function ProfileScreen() {
             ))}
           </View>
         </View>
+        
+{/* AI Monitoring */}
+<View>
+  <View className="flex-row items-center gap-2 mb-3">
+    <Layout size={20} color="#0f172a" />
+    <Text className="text-slate-900 text-base">
+      {t('profile', 'ai')}
+    </Text>
+  </View>
+
+  <Pressable
+    onPress={() => navigation.navigate("AIPrediction/AIHomeScreen" as never)}
+    className="bg-white rounded-2xl border border-slate-100 p-4 flex-row justify-between items-center"
+  >
+    <View className="flex-row items-center gap-3">
+      <View className="w-10 h-10 bg-green-100 rounded-xl items-center justify-center">
+        <Brain size={20} color="#16A34A" />
+      </View>
+      <Text className="text-slate-900 font-medium">
+        {t('profile', 'aiSub')}
+      </Text>
+    </View>
+
+    <ChevronRight size={20} color="#94a3b8" />
+  </Pressable>
+</View>
 
         {/* App Info */}
         <View className="bg-slate-100 rounded-2xl p-4 items-center">
@@ -251,6 +267,7 @@ export default function ProfileScreen() {
             {t('profile', 'version')} 1.0.2 • {t('profile', 'builtWith')}
           </Text>
         </View>
+       
 
         {/* Logout */}
         <Pressable

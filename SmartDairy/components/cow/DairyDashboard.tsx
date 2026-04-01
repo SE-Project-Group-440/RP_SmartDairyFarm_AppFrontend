@@ -214,27 +214,32 @@ export function DairyDashboard({
         </View>
 
         {/* Analytics */}
-        <View>
-          <Text className="text-slate-900 mb-3">
-            {t('dashboard', 'analyticsInsights')}
-          </Text>
+        {/* Analytics */}
+<View>
+  <Text className="text-slate-900 mb-3">
+    {t('dashboard', 'analyticsInsights')}
+  </Text>
 
-          <View className="flex-row gap-3">
-            <Pressable
-              onPress={() => onNavigate("analytics")}
-              className="flex-1 bg-white border-2 border-slate-200 rounded-2xl p-4"
-            >
-              <View className="w-10 h-10 bg-purple-50 rounded-xl items-center justify-center mb-3">
-                <TrendingUp size={20} color="#7c3aed" />
-              </View>
-              <Text className="text-slate-900 mb-1">
-                {t('dashboard', 'analytics')}
-              </Text>
-            </Pressable>
+  <Pressable
+    onPress={() => onNavigate("analytics")}
+    className="bg-white border-2 border-slate-200 rounded-2xl p-5 flex-row items-center gap-4"
+  >
+    <View className="w-12 h-12 bg-purple-50 rounded-xl items-center justify-center">
+      <TrendingUp size={24} color="#7c3aed" />
+    </View>
 
-          </View>
-        </View>
+    <View className="flex-1">
+      <Text className="text-slate-900 mb-1">
+        {t('dashboard', 'analytics')}
+      </Text>
+      <Text className="text-sm text-slate-600">
+        {t('analytics', 'analyticsDetail')}
+      </Text>
+    </View>
 
+    <ChevronRight size={20} color="#94a3b8" />
+  </Pressable>
+</View>
         {/* Smart Features */}
         <View>
           <Text className="text-slate-900 mb-3">

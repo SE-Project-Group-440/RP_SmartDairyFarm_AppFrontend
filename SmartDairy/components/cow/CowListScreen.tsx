@@ -114,18 +114,7 @@ export function CowListScreen({
             {filteredCows.length === 1 ? t('cowList', 'cow') : t('cowList', 'cows')} {t('cowList', 'found')}
           </Text>
 
-          <View className="flex-row gap-2">
-            <View className="px-3 py-1 bg-green-100 rounded-full">
-              <Text className="text-xs text-green-700">
-                {healthyCount} {t('cowList', 'healthy')}
-              </Text>
-            </View>
-            <View className="px-3 py-1 bg-orange-100 rounded-full">
-              <Text className="text-xs text-orange-700">
-                {warningCount} {t('cowList', 'monitor')}
-              </Text>
-            </View>
-          </View>
+      
         </View>
 
         {/* Cow Cards */}
@@ -151,25 +140,7 @@ export function CowListScreen({
                       </Text>
                     </View>
 
-                    <View
-                      className={`px-3 py-1 rounded-full ${
-                        cow.status === "Active"
-                          ? "bg-green-100"
-                          : "bg-orange-100"
-                      }`}
-                    >
-                      <Text
-                        className={`text-xs ${
-                          cow.status === "Active"
-                            ? "text-green-700"
-                            : "text-orange-700"
-                        }`}
-                      >
-                        {cow.status === "Active"
-                          ? `✓ ${t('cowList', 'healthy')}`
-                          : `⚠ ${t('cowList', 'monitor')}`}
-                      </Text>
-                    </View>
+                    
                   </View>
 
                   <View className="flex-row flex-wrap gap-y-2">
@@ -219,13 +190,7 @@ export function CowListScreen({
                   </Text>
                 </Pressable>
 
-                <Pressable className="px-4 bg-slate-100 rounded-xl py-2.5">
-                  <Edit size={16} color="#334155" />
-                </Pressable>
-
-                <Pressable className="px-4 bg-red-50 rounded-xl py-2.5">
-                  <Trash2 size={16} color="#dc2626" />
-                </Pressable>
+              
               </View>
             </View>
           ))}

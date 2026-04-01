@@ -1,17 +1,34 @@
-const API_URL = "http://192.168.210.24:8000/chat"; // ← your PC IP
-//172.28.1.64
-export async function askChat(query: string) {
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ query }),
-  });
+import { Platform } from "react-native";
+import { api } from "./../hooks/api";
+export interface ChatResponse {
+  answer: string;
+  audioUri?: string; 
+}
 
-  if (!response.ok) {
-    throw new Error("Failed to get answer");
+export async function askChat(query: string): Promise<ChatResponse> {
+  const response = await api.post("/chat", { query });
+  return response.data;
+}
+
+export async function speechToText(file: string | File): Promise<string> {
+  const formData = new FormData();
+
+  if (file instanceof File) {
+    formData.append("audio", file);
+  } else {
+    formData.append("audio", {
+      uri: file,
+      name: "voice.m4a",
+      type: "audio/m4a",
+    } as any);
   }
 
-  return response.json(); // { answer }
+  const res = await api.post("/stt", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  return res.data.text ?? res.data ?? "";
 }
+
+
+
