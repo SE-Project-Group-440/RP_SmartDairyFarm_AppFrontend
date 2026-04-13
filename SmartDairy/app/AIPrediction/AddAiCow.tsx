@@ -80,10 +80,6 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
       }
     }
 
-    if (!formData["Previous AI Dates"] || formData["Previous AI Dates"].length === 0) {
-      newErrors["Previous AI Dates"] = `${t('addAiCow', 'previousAiDates')} is required`;
-    }
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -363,7 +359,7 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>{t('addAiCow', 'previousAiDates')} *</Text>
+            <Text style={styles.label}>{t('addAiCow', 'previousAiDates')}</Text>
             <View style={styles.aiDatesContainer}>
               {formData["Previous AI Dates"]?.map((date: string, index: number) => (
                 <View key={index} style={styles.aiDateChip}>

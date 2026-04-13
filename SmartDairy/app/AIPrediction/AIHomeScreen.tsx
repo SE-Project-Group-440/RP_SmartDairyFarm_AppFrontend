@@ -36,6 +36,8 @@ import ViewAiCow from "./ViewAiCow";
 import AddAiCow from "./AddAiCow";
 import { useTranslations } from '@/hooks/useTranslations';
 import { useAuthStore } from "@/Store/auth.store";
+import { router } from "expo-router";
+import { CommonFooter } from "../../components/CommonFooter";
 
 
 export default function AIHomeScreen() {
@@ -123,29 +125,38 @@ export default function AIHomeScreen() {
     return matchesSearch;
   });
 
-  const StatusBadge = ({ statusKey }: { statusKey: string }) => (
-  <View
-    style={[
-      styles.badge,
-      {
-        backgroundColor:
-          statusKey === "PENDING" ? "#FFE0B2" : "#A5D6A7",
-      },
-    ]}
-  >
-    <Text
-      style={[
-        styles.badgeText,
-        {
-          color:
-            statusKey === "PENDING" ? "#FB8C00" : "#16A34A",
-        },
-      ]}
-    >
-      {t("addAiCow", statusKey)}
-    </Text>
-  </View>
-);
+  const StatusBadge = ({ cow }: { cow: any }) => {
+    let statusKey = "PENDING";
+    if (cow.recommendation.pregnancy_check_status) {
+      statusKey = "COMPLETED";
+    } else if (cow.recommendation.status === "COMPLETED") {
+      statusKey = "AI_COMPLETED";
+    }
+
+    return (
+      <View
+        style={[
+          styles.badge,
+          {
+            backgroundColor:
+              statusKey === "PENDING" ? "#FFE0B2" : "#A5D6A7",
+          },
+        ]}
+      >
+        <Text
+          style={[
+            styles.badgeText,
+            {
+              color:
+                statusKey === "PENDING" ? "#FB8C00" : "#16A34A",
+            },
+          ]}
+        >
+          {t("addAiCow", statusKey)}
+        </Text>
+      </View>
+    );
+  };
   const user = useAuthStore((s) => s.user);
 
   const handleEdit = (cow: any) => {
@@ -191,15 +202,15 @@ export default function AIHomeScreen() {
         </Text>
       </View>
 
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 16, paddingBottom: 80 }}>
         {loading && <ActivityIndicator size="large" color="#16A34A" />}
- 
+
         {/* LIST VIEW */}
         {view === "list" && (
           <>
             {/* SUMMARY CARDS */}
             <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 20 }}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.summaryCard, { backgroundColor: '#E8F5E9', opacity: filterType === "ALL" ? 1 : 0.5 }]}
                 onPress={() => setFilterType("ALL")}
               >
@@ -210,7 +221,7 @@ export default function AIHomeScreen() {
                 <Text style={[styles.summaryLabel, { color: '#388E3C' }]}>{t('addAiCow', 'totalCows')}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.summaryCard, { backgroundColor: '#E3F2FD', opacity: filterType === "PREGNANT" ? 1 : 0.5 }]}
                 onPress={() => setFilterType("PREGNANT")}
               >
@@ -223,7 +234,7 @@ export default function AIHomeScreen() {
                 <Text style={[styles.summaryLabel, { color: '#1976D2' }]}>{t('addAiCow', 'pregnant')}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[styles.summaryCard, { backgroundColor: '#FFF3E0', opacity: filterType === "PENDING" ? 1 : 0.5 }]}
                 onPress={() => setFilterType("PENDING")}
               >
@@ -258,7 +269,7 @@ export default function AIHomeScreen() {
             <View style={styles.searchContainer}>
               <Search size={18} color="#9E9E9E" style={{ marginRight: 8 }} />
               <TextInput
-                placeholder= {t('addAiCow', 'searchByCowId')}
+                placeholder={t('addAiCow', 'searchByCowId')}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 style={styles.searchInput}
@@ -275,7 +286,7 @@ export default function AIHomeScreen() {
               >
                 <View style={styles.cowCardLeft}>
                   <View style={styles.cowIcon}>
-                    
+
                     <Image
                       source={require("../../assets/images/cow.png")}
                       style={styles.cowImage}
@@ -285,14 +296,14 @@ export default function AIHomeScreen() {
                   <View>
                     <View style={styles.cowRow}>
                       <Text style={styles.cowId}>{cow.cowId}</Text>
-                      <StatusBadge statusKey={cow.recommendation.status} />
+                      <StatusBadge cow={cow} />
                     </View>
                     <Text style={styles.cowSubtitle}>
                       {t('addAiCow', 'lastAi')}:{" "}
                       {cow.recommendation.recommended_next_ai
                         ? new Date(
-                            cow.recommendation.recommended_next_ai
-                          ).toLocaleDateString()
+                          cow.recommendation.recommended_next_ai
+                        ).toLocaleDateString()
                         : "N/A"}
                     </Text>
                   </View>
@@ -319,9 +330,9 @@ export default function AIHomeScreen() {
         )}
 
         {/* DETAIL VIEW */}
-        {view === "detail" && selectedCow && (  
+        {view === "detail" && selectedCow && (
           <ViewAiCow
-            cow={selectedCow}
+            cow={cows.find((c) => c._id === selectedCow._id) || selectedCow}
             aiDates={aiDates}
             setAiDates={setAiDates}
             markDone={markDone}
@@ -332,6 +343,7 @@ export default function AIHomeScreen() {
           />
         )}
       </ScrollView>
+
     </View>
   );
 }
@@ -369,79 +381,79 @@ const styles = StyleSheet.create({
   btnText: { color: "white", fontWeight: "bold" },
   fabBtn: { width: 56, height: 56, borderRadius: 28, backgroundColor: "#16A34A", justifyContent: "center", alignItems: "center", marginBottom: 32 },
   searchContainer: {
-  flexDirection: "row",
-  alignItems: "center",
-  backgroundColor: "white",
-  borderRadius: 20,
-  paddingHorizontal: 12,
-  paddingVertical: 10,
-  marginBottom: 16,
-  borderWidth: 1,
-  borderColor: "#E0E0E0",
-},
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+  },
 
-searchInput: {
-  flex: 1,
-  fontSize: 14,
-},
-summaryCard: {
-  flex: 1,
-  padding: 16,
-  borderRadius: 20,
-  marginHorizontal: 5,
-  alignItems: "flex-start",
-  elevation: 2,
-  shadowColor: "#000",
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 4,
-},
-iconBox: {
-  width: 40,
-  height: 40,
-  borderRadius: 14,
-  justifyContent: "center",
-  alignItems: "center",
-  marginBottom: 14,
-},
-summaryNumber: { fontSize: 24, fontWeight: "800", marginBottom: 4 },
-summaryLabel: { fontSize: 10, fontWeight: "700", textTransform: 'uppercase', letterSpacing: 0.5 },
-addButton: {
-  backgroundColor: "#16A34A",
-  borderRadius: 24,
-  padding: 18,
-  marginBottom: 20,
-  elevation: 5,
-  shadowColor: "#16A34A",
-  shadowOffset: { width: 0, height: 4 },
-  shadowOpacity: 0.4,
-  shadowRadius: 8,
-},
-addContent: {
-  flexDirection: "row",
-  alignItems: "center",
-},
-addIconBg: {
-  width: 52,
-  height: 52,
-  backgroundColor: "white",
-  borderRadius: 18,
-  justifyContent: "center",
-  alignItems: "center",
-},
-addTitle: {
-  color: "white",
-  fontSize: 18,
-  fontWeight: "bold",
-  marginBottom: 4,
-},
-addSubtitle: {
-  color: "#DCFCE7",
-  fontSize: 13,
-},
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+  },
+  summaryCard: {
+    flex: 1,
+    padding: 16,
+    borderRadius: 20,
+    marginHorizontal: 5,
+    alignItems: "flex-start",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  iconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 14,
+  },
+  summaryNumber: { fontSize: 24, fontWeight: "800", marginBottom: 4 },
+  summaryLabel: { fontSize: 10, fontWeight: "700", textTransform: 'uppercase', letterSpacing: 0.5 },
+  addButton: {
+    backgroundColor: "#16A34A",
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 20,
+    elevation: 5,
+    shadowColor: "#16A34A",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+  },
+  addContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  addIconBg: {
+    width: 52,
+    height: 52,
+    backgroundColor: "white",
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  addTitle: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  addSubtitle: {
+    color: "#DCFCE7",
+    fontSize: 13,
+  },
   cowImage: {
-  width: 24,
-  height: 24,
-},
- 
+    width: 24,
+    height: 24,
+  },
+
 });

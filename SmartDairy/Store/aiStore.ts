@@ -146,7 +146,18 @@ export const useAIStore = create<AIStore>((set) => ({
   },
 
   confirmPregnancyStatus: async (recommendationId, status) => {
-    set({ loading: true });
+    // Optimistic update
+    set((state) => ({
+      cows: state.cows.map((c) =>
+        c.recommendation._id === recommendationId
+          ? {
+              ...c,
+              recommendation: { ...c.recommendation, pregnancy_check_status: status },
+            }
+          : c
+      ),
+      loading: true,
+    }));
     try {
       await confirmPregnancy(recommendationId, status);
 
@@ -163,6 +174,15 @@ export const useAIStore = create<AIStore>((set) => ({
     } catch (err) {
       console.log(err);
       set({ loading: false });
+      // Revert fetch on error
+      const updated: Recommendation[] = await fetchPendingCows();
+      const flattened: Cow[] = updated.map((rec) => ({
+        _id: rec._id,
+        cowId: rec.cowId,
+        ...rec.input_data,
+        recommendation: rec,
+      }));
+      set({ cows: flattened });
     }
   },
 

@@ -330,6 +330,7 @@
       "crossbreed": "Crossbreed",
       "PENDING": "PENDING",
       "COMPLETED": "COMPLETED",
+      "AI_COMPLETED": "AI COMPLETED",
       "NOT_PREGNANT": "NOT PREGNANT",
       "PREGNANT": "PREGNANT",
       "Jersey": "Jersey",
@@ -717,7 +718,8 @@
       "friesian": "ෆ්‍රයිසියානු",
       "crossbreed": "ක්‍රොස්බ්‍රීඩ්",
       "PENDING": "AI බලපොරොත්තුවෙන් පවතී",
-      "COMPLETED": "AI සම්පූර්ණ කර ඇත",
+      "COMPLETED": "සම්පූර්ණ කර ඇත",
+      "AI_COMPLETED": "AI සම්පූර්ණ කර ඇත",
       "NOT_PREGNANT": "ගැබ වී නැත",
       "PREGNANT": "ගැබ වී ඇත",
       "-": "-",
@@ -1061,7 +1063,12 @@
       "yes": "ஆம்",
       "no": "இல்லை",
       "milking": "Milking",
-      "dry": "Dry"
+      "dry": "Dry",
+      "PENDING": "PENDING",
+      "COMPLETED": "COMPLETED",
+      "AI_COMPLETED": "AI COMPLETED",
+      "NOT_PREGNANT": "NOT PREGNANT",
+      "PREGNANT": "PREGNANT"
     },
     "cattleHeat": {
       "heatStressDetails": "வெப்ப அழுத்த விவரங்கள்",

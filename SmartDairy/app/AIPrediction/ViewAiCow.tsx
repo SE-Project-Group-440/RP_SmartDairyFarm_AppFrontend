@@ -20,9 +20,9 @@ interface Props {
   setAiDates: React.Dispatch<React.SetStateAction<Record<string, string>>>;
   markDone: (cow: any, date: string) => void;
   confirmPregnancyStatus: (
-  id: string,
-  status: "PREGNANT" | "NOT_PREGNANT"
-) => Promise<void>;
+    id: string,
+    status: "PREGNANT" | "NOT_PREGNANT"
+  ) => Promise<void>;
   onBack: () => void;
   onEdit?: (cow: any) => void;
   onDelete?: (id: string) => void;
@@ -38,42 +38,43 @@ export default function ViewAiCow({
   onEdit,
   onDelete,
 }: Props) {
-    
+
   const progressAnim = useRef(new Animated.Value(0)).current;
   const [showPicker, setShowPicker] = useState(false);
+  const [error, setError] = useState(false);
 
   const FinalStatusHighlight = ({ cow }: { cow: any }) => {
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  const opacityAnim = useRef(new Animated.Value(0)).current;
-    
-  
-  useEffect(() => {
-    if (
-      cow?.recommendation?.pregnancy_check_status === "PREGNANT" ||
-      cow?.recommendation?.pregnancy_check_status === "NOT_PREGNANT"
-    ) {
-      Animated.parallel([
-      Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-    }),
-      Animated.timing(opacityAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-      }),
-      ]).start();
+    const scaleAnim = useRef(new Animated.Value(0.95)).current;
+    const opacityAnim = useRef(new Animated.Value(0)).current;
+
+
+    useEffect(() => {
+      if (
+        cow?.recommendation?.pregnancy_check_status === "PREGNANT" ||
+        cow?.recommendation?.pregnancy_check_status === "NOT_PREGNANT"
+      ) {
+        Animated.parallel([
+          Animated.spring(scaleAnim, {
+            toValue: 1,
+            useNativeDriver: true,
+          }),
+          Animated.timing(opacityAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+        ]).start();
       }
     }, [cow]);
-  
+
     const status = cow?.recommendation?.pregnancy_check_status;
-  
+
     if (status !== "PREGNANT" && status !== "NOT_PREGNANT") {
       return null;
     }
-  
+
     const isPregnant = status === "PREGNANT";
-  
+
     return (
       <Animated.View
         style={[
@@ -98,14 +99,14 @@ export default function ViewAiCow({
             <XCircle size={24} color="white" />
           )}
         </View>
-  
+
         <View>
           <Text style={styles.finalLabel}>{t('addAiCow', 'finalResult')}</Text>
           <Text
             style={[
               styles.finalTitle,
               { color: isPregnant ? "#065f46" : "#9f1239" },
-              
+
             ]}
           >
             {isPregnant
@@ -169,11 +170,11 @@ export default function ViewAiCow({
           <ArrowLeft size={24} color="#333" />
         </TouchableOpacity>
         <View style={[styles.cowIcon, { marginRight: 12 }]}>
-            <Image
-              source={require("../../assets/images/cow.png")}
-              style={styles.cowImage}
-              resizeMode="contain"
-            />
+          <Image
+            source={require("../../assets/images/cow.png")}
+            style={styles.cowImage}
+            resizeMode="contain"
+          />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.cowId}>Cow - {cow.cowId}</Text>
@@ -204,13 +205,13 @@ export default function ViewAiCow({
         <InfoBox label={t('addAiCow', 'estrusCycle')} value={cow?.["Estrus Cycle Length"]} />
         <InfoBox label={t('addAiCow', 'hormonalTreatment')} value={t('addAiCow', cow?.["Hormonal Treatment"])} />
       </View>
-                  
+
       <View style={styles.row}>
-        <InfoBox label={t('addAiCow', 'previousAiDates')} value={cow?.["Previous AI Dates"]} />
+        <InfoBox label={t('addAiCow', 'previousAiDates')} value={cow?.["Previous AI Dates"]?.length ? cow["Previous AI Dates"].join(", ") : "-"} />
         <InfoBox label={t('addAiCow', 'lastCalvingDate')} value={cow?.["Last Caving Date"]} />
       </View>
       <View style={styles.row}>
-        <InfoBox label={t('addAiCow', 'milkingDry')} value={t('addAiCow', cow?.["Milking/Dry"])} />      
+        <InfoBox label={t('addAiCow', 'milkingDry')} value={t('addAiCow', cow?.["Milking/Dry"])} />
       </View>
 
       {cow.recommendation.pregnancy_check_status !== "PREGNANT" && (
@@ -222,8 +223,8 @@ export default function ViewAiCow({
                 <Text style={styles.aiValue}>
                   {cow.recommendation.recommended_next_ai
                     ? new Date(
-                        cow.recommendation.recommended_next_ai
-                      ).toDateString()
+                      cow.recommendation.recommended_next_ai
+                    ).toDateString()
                     : "N/A"}
                 </Text>
               </View>
@@ -238,8 +239,8 @@ export default function ViewAiCow({
                 <Text style={styles.aiValue}>
                   {cow.recommendation.pregnancy_check_date
                     ? new Date(
-                        cow.recommendation.pregnancy_check_date
-                      ).toDateString()
+                      cow.recommendation.pregnancy_check_date
+                    ).toDateString()
                     : "Not Scheduled"}
                 </Text>
               </View>
@@ -255,17 +256,17 @@ export default function ViewAiCow({
             <View style={styles.row}>
               <InfoBox label={t('addAiCow', 'aiDate')} value={
                 cow.recommendation.recommended_next_ai
-                ? new Date(cow.recommendation.recommended_next_ai)
-                .toISOString()
-                .split("T")[0]
-                : "-"
+                  ? new Date(cow.recommendation.recommended_next_ai)
+                    .toISOString()
+                    .split("T")[0]
+                  : "-"
               } />
               <InfoBox label={t('addAiCow', 'pregnancyCheckDate')} value={
                 cow.recommendation.pregnancy_check_date
-                ? new Date(cow.recommendation.pregnancy_check_date)
-                .toISOString()
-                .split("T")[0]
-                : "-"
+                  ? new Date(cow.recommendation.pregnancy_check_date)
+                    .toISOString()
+                    .split("T")[0]
+                  : "-"
               }
               />
             </View>
@@ -277,15 +278,15 @@ export default function ViewAiCow({
         <View style={{ marginTop: 16 }}>
           <Text style={{ fontWeight: "bold", marginBottom: 8 }}>{t('addAiCow', 'pregnancyPrediction')}</Text>
           <View style={styles.row}>
-            <InfoBox label={t('addAiCow', 'probability')} value={`${cow.recommendation.pregnancy_probability || 0}%`} />
-            <InfoBox label={t('addAiCow', 'riskLevel')} value={t('addAiCow', cow.recommendation.risk_level || "-")} />   
+            <InfoBox label={t('addAiCow', 'probability')} value={`${((parseFloat(cow.recommendation.pregnancy_probability as unknown as string) || 0) * 100).toFixed(1)}%`} />
+            <InfoBox label={t('addAiCow', 'riskLevel')} value={t('addAiCow', cow.recommendation.risk_level || "-")} />
           </View>
-            
+
           {!cow.recommendation.pregnancy_check_status && (
             <View style={{ flexDirection: "row", marginTop: 8 }}>
               <TouchableOpacity
                 style={styles.successBtn}
-                  onPress={() =>
+                onPress={() =>
                   confirmPregnancyStatus(cow.recommendation._id, "PREGNANT")
                 }
               >
@@ -300,64 +301,71 @@ export default function ViewAiCow({
                 <Text style={styles.btnText}>{t('addAiCow', 'notPregnant')}</Text>
               </TouchableOpacity>
             </View>
-          )}  
+          )}
         </View>
       )}
       {cow.recommendation.status === "PENDING" && (
         <View style={{ marginTop: 16 }}>
           {Platform.OS === 'web' ? (
-              React.createElement('input', {
-                type: 'date',
-                value: aiDates[cow._id] || "",
-                onChange: (e: any) => {
-                  const val = e.target.value;
-                  if (val) {
-                    setAiDates((prev) => ({ ...prev, [cow._id]: val }));
-                  }
-                },
-                style: {
-                  padding: '14px',
-                  borderRadius: '12px',
-                  border: '1px solid #E5E7EB',
-                  backgroundColor: '#F9FAFB',
-                  fontSize: '15px',
-                  color: '#1F2937',
-                  outline: 'none',
-                  fontFamily: 'inherit',
-                  width: '100%',
-                  marginBottom: '12px'
+            React.createElement('input', {
+              type: 'date',
+              value: aiDates[cow._id] || "",
+              onChange: (e: any) => {
+                const val = e.target.value;
+                if (val) {
+                  setAiDates((prev) => ({ ...prev, [cow._id]: val }));
+                  setError(false);
                 }
-              })
-            ) : (
-              <>
-                <TouchableOpacity style={styles.input} onPress={() => setShowPicker(true)}>
-                  <Text style={{ color: aiDates[cow._id] ? "#1F2937" : "#9CA3AF" }}>
-                    {aiDates[cow._id] || t('addAiCow', 'enterAiDate')}
-                  </Text>
-                </TouchableOpacity>
-                {showPicker && (
-                  <DateTimePicker
-                    value={aiDates[cow._id] ? new Date(aiDates[cow._id]) : new Date()}
-                    mode="date"
-                    display="default"
-                    onChange={(event, selectedDate: Date | undefined) => {
-                      setShowPicker(Platform.OS === "ios");
-                      if (event.type === 'set' && selectedDate) {
-                        setAiDates((prev) => ({ ...prev, [cow._id]: selectedDate.toISOString().split("T")[0] }));
-                      }
-                    }}
-                  />
-                )}
-              </>
-            )}
+              },
+              style: {
+                padding: '14px',
+                borderRadius: '12px',
+                border: error ? '1px solid red' : '1px solid #E5E7EB',
+                backgroundColor: '#F9FAFB',
+                fontSize: '15px',
+                color: '#1F2937',
+                outline: 'none',
+                fontFamily: 'inherit',
+                width: '100%',
+                marginBottom: '12px'
+              }
+            })
+          ) : (
+            <>
+              <TouchableOpacity style={[styles.input, error && { borderColor: 'red' }]} onPress={() => setShowPicker(true)}>
+                <Text style={{ color: aiDates[cow._id] ? "#1F2937" : "#9CA3AF" }}>
+                  {aiDates[cow._id] || t('addAiCow', 'enterAiDate')}
+                </Text>
+              </TouchableOpacity>
+              {showPicker && (
+                <DateTimePicker
+                  value={aiDates[cow._id] ? new Date(aiDates[cow._id]) : new Date()}
+                  mode="date"
+                  display="default"
+                  onChange={(event, selectedDate: Date | undefined) => {
+                    setShowPicker(Platform.OS === "ios");
+                    if (event.type === 'set' && selectedDate) {
+                      setAiDates((prev) => ({ ...prev, [cow._id]: selectedDate.toISOString().split("T")[0] }));
+                      setError(false);
+                    }
+                  }}
+                />
+              )}
+            </>
+          )}
+          {error && <Text style={{ color: 'red', marginBottom: 12 }}>{t('addAiCow', 'Date is Required') || 'Date is required!'}</Text>}
           <TouchableOpacity
             style={styles.saveBtn}
             onPress={async () => {
+              if (!aiDates[cow._id]?.trim()) {
+                setError(true);
+                return;
+              }
               await markDone(cow, aiDates[cow._id]);
               onBack();
             }}
           >
-           <Text style={styles.saveBtnText}>{t('addAiCow', 'markAIDone')}</Text>
+            <Text style={styles.saveBtnText}>{t('addAiCow', 'markAIDone')}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -439,31 +447,31 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   finalContainer: {
-  marginBottom: 20,
-  padding: 16,
-  borderRadius: 20,
-  borderWidth: 2,
-  flexDirection: "row",
-  alignItems: "center",
-  gap: 16,
-},
+    marginBottom: 20,
+    padding: 16,
+    borderRadius: 20,
+    borderWidth: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
 
-finalLabel: {
-  fontSize: 10,
-  fontWeight: "900",
-  textTransform: "uppercase",
-  letterSpacing: 1.5,
-  opacity: 0.7,
-},
+  finalLabel: {
+    fontSize: 10,
+    fontWeight: "900",
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
+    opacity: 0.7,
+  },
 
-finalTitle: {
-  fontSize: 18,
-  fontWeight: "900",
-},
-iconCircle: { width: 48, height: 48, borderRadius: 24, justifyContent: "center", alignItems: "center", elevation: 4, },
-saveBtnText: { color: "white", fontWeight: "bold" },
-cowImage: {
-  width: 24,
-  height: 24,
-},
+  finalTitle: {
+    fontSize: 18,
+    fontWeight: "900",
+  },
+  iconCircle: { width: 48, height: 48, borderRadius: 24, justifyContent: "center", alignItems: "center", elevation: 4, },
+  saveBtnText: { color: "white", fontWeight: "bold" },
+  cowImage: {
+    width: 24,
+    height: 24,
+  },
 });

@@ -31,6 +31,7 @@ export const AiRecommendationScreen = () => {
   });
 
   const [aiDate, setAiDate] = useState("");
+  const [error, setError] = useState("");
   useEffect(() => {
     fetchPending(); // fetch PENDING cows from DB on mount
   }, []);
@@ -97,10 +98,20 @@ export const AiRecommendationScreen = () => {
                   <TextInput
                     placeholder="Enter AI done date (YYYY-MM-DD)"
                     value={aiDate}
-                    onChangeText={setAiDate}
-                    style={{ borderWidth: 1, padding: 5, marginVertical: 5 }}
+                    onChangeText={(text) => {
+                      setAiDate(text);
+                      setError("");
+                    }}
+                    style={{ borderWidth: 1, padding: 5, marginVertical: 5, borderColor: error ? 'red' : 'gray' }}
                   />
-                  <Button title="Mark AI as Done" onPress={() => markDone(cow, aiDate)} />
+                  {error ? <Text style={{ color: 'red', marginBottom: 5 }}>{error}</Text> : null}
+                  <Button title="Mark AI as Done" onPress={() => {
+                    if (!aiDate.trim()) {
+                      setError("Date is required!");
+                      return;
+                    }
+                    markDone(cow, aiDate);
+                  }} />
                 </View>
               )}
 

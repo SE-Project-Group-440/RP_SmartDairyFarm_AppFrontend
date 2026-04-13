@@ -20,33 +20,34 @@ export const AiRecommendationScreen = () => {
     confirmPregnancyStatus,
   } = useAIStore();
   type CowForm = {
-  cowId: string;
-  "Lactation No": string;
-  Milk_Yield: string;
-  Breed: string;
-  "Milking/Dry": string;
-  "Hormonal Treatment": string;
-  "Estrus Cycle Length": string;
-  "Previous AI Dates": string;
-  "Last Caving Date": string;
-  "E. Age (Month)": string;
-};
+    cowId: string;
+    "Lactation No": string;
+    Milk_Yield: string;
+    Breed: string;
+    "Milking/Dry": string;
+    "Hormonal Treatment": string;
+    "Estrus Cycle Length": string;
+    "Previous AI Dates": string;
+    "Last Caving Date": string;
+    "E. Age (Month)": string;
+  };
 
-const [form, setForm] = useState<CowForm>({
-  cowId: "",
-  "Lactation No": "",
-  Milk_Yield: "",
-  Breed: "",
-  "Milking/Dry": "",
-  "Hormonal Treatment": "",
-  "Estrus Cycle Length": "",
-  "Previous AI Dates": "",
-  "Last Caving Date": "",
-  "E. Age (Month)": "",
-});
+  const [form, setForm] = useState<CowForm>({
+    cowId: "",
+    "Lactation No": "",
+    Milk_Yield: "",
+    Breed: "",
+    "Milking/Dry": "",
+    "Hormonal Treatment": "",
+    "Estrus Cycle Length": "",
+    "Previous AI Dates": "",
+    "Last Caving Date": "",
+    "E. Age (Month)": "",
+  });
 
-  
+
   const [aiDates, setAiDates] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetchPending();
@@ -62,7 +63,7 @@ const [form, setForm] = useState<CowForm>({
 
   return (
     <ScrollView style={styles.container}>
-      
+
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>🐄 AI Reproductive Advisor</Text>
@@ -73,14 +74,14 @@ const [form, setForm] = useState<CowForm>({
         <Text style={styles.sectionTitle}>Add New Cow</Text>
 
         {(Object.keys(form) as (keyof CowForm)[]).map((key) => (
-  <TextInput
-    key={key}
-    placeholder={key}
-    value={form[key]}
-    onChangeText={(text) => setForm({ ...form, [key]: text })}
-    style={styles.input}
-  />
-))}
+          <TextInput
+            key={key}
+            placeholder={key}
+            value={form[key]}
+            onChangeText={(text) => setForm({ ...form, [key]: text })}
+            style={styles.input}
+          />
+        ))}
 
         <TouchableOpacity style={styles.primaryBtn} onPress={handleAddCow}>
           <Text style={styles.btnText}>Add Cow</Text>
@@ -94,7 +95,7 @@ const [form, setForm] = useState<CowForm>({
 
       {cows.map((cow) => (
         <View key={cow._id} style={styles.card}>
-          
+
           <Text style={styles.cowTitle}>Cow ID: {cow.cowId}</Text>
 
           <Text>Milk Yield: {cow["Milk_Yield"]}</Text>
@@ -125,8 +126,8 @@ const [form, setForm] = useState<CowForm>({
                 </Text>
                 <Text>
                   {cow.recommendation.recommended_next_ai && (
-  <Text>{new Date(cow.recommendation.recommended_next_ai).toDateString()}</Text>
-)}
+                    <Text>{new Date(cow.recommendation.recommended_next_ai).toDateString()}</Text>
+                  )}
                 </Text>
               </View>
 
@@ -136,17 +137,25 @@ const [form, setForm] = useState<CowForm>({
                   <TextInput
                     placeholder="Enter AI done date (YYYY-MM-DD)"
                     value={aiDates[cow._id] || ""}
-                    onChangeText={(text) =>
-                      setAiDates((prev) => ({ ...prev, [cow._id]: text }))
-                    }
-                    style={styles.input}
+                    onChangeText={(text) => {
+                      setAiDates((prev) => ({ ...prev, [cow._id]: text }));
+                      setErrors((prev) => ({ ...prev, [cow._id]: "" }));
+                    }}
+                    style={[styles.input, errors[cow._id] ? { borderColor: 'red' } : null]}
                   />
+                  {errors[cow._id] ? (
+                    <Text style={{ color: 'red', marginBottom: 10, marginTop: -5 }}>{errors[cow._id]}</Text>
+                  ) : null}
 
                   <TouchableOpacity
                     style={styles.primaryBtn}
-                    onPress={() =>
-                      markDone(cow, aiDates[cow._id])
-                    }
+                    onPress={() => {
+                      if (!aiDates[cow._id]?.trim()) {
+                        setErrors((prev) => ({ ...prev, [cow._id]: "Date is required!" }));
+                        return;
+                      }
+                      markDone(cow, aiDates[cow._id]);
+                    }}
                   >
                     <Text style={styles.btnText}>Mark AI as Done</Text>
                   </TouchableOpacity>
@@ -158,7 +167,7 @@ const [form, setForm] = useState<CowForm>({
                 <>
                   <Text>
                     Pregnancy Probability:{" "}
-                    {cow.recommendation.pregnancy_probability}
+                    {((parseFloat(cow.recommendation.pregnancy_probability as unknown as string) || 0) * 100).toFixed(1)}%
                   </Text>
                   <Text>
                     Risk Level: {cow.recommendation.risk_level}
