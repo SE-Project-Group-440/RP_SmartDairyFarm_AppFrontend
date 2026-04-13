@@ -10,6 +10,7 @@ export async function askChat(query: string): Promise<ChatResponse> {
   return response.data;
 }
 
+
 export async function speechToText(file: string | File): Promise<string> {
   const formData = new FormData();
 
@@ -23,12 +24,12 @@ export async function speechToText(file: string | File): Promise<string> {
     } as any);
   }
 
+  // ✅ call Node backend
   const res = await api.post("/stt", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 
-  return res.data.text ?? res.data ?? "";
+  return res.data.text ?? "";
 }
-
 
 

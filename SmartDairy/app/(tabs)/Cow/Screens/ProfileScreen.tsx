@@ -24,7 +24,7 @@ import { router} from "expo-router";
 import { Brain } from "lucide-react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ onNavigateToAI }: { onNavigateToAI?: () => void }) {
   const [darkMode, setDarkMode] = useState(false);
   const logout = useAuthStore((s) => s.logout);
   const user = useAuthStore((s) => s.user);
@@ -242,7 +242,13 @@ export default function ProfileScreen() {
   </View>
 
   <Pressable
-    onPress={() => navigation.navigate("AIPrediction/AIHomeScreen" as never)}
+    onPress={() => {
+      if (onNavigateToAI) {
+        onNavigateToAI();
+      } else {
+        navigation.navigate("AIPrediction/AIHomeScreen" as never);
+      }
+    }}
     className="bg-white rounded-2xl border border-slate-100 p-4 flex-row justify-between items-center"
   >
     <View className="flex-row items-center gap-3">

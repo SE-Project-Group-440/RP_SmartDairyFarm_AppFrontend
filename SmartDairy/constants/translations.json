@@ -42,8 +42,8 @@
       "version": "Version",
       "builtWith": "Built with ❤️ for farmers",
       "logout": "Log Out",
-      "ai":"AI Monitoring",
-      "aiSub":"Monitor Cow Reproduction"
+      "ai": "AI Monitoring",
+      "aiSub": "Monitor Cow Reproduction"
     },
     "dashboard": {
       "goodMorning": "Good Morning",
@@ -127,18 +127,15 @@
       "milkDataRecorded": "Milk data recorded successfully.",
       "recommendation": "Recommendation",
       "gotIt": "Got it",
-      
       "recommendation_above_expected_title": "Excellent Performance",
       "recommendation_above_expected_message": "Milk yield is significantly higher than the predicted value.",
       "recommendation_above_expected_action_1": "Maintain the current feeding schedule",
       "recommendation_above_expected_action_2": "Continue regular health monitoring",
       "recommendation_above_expected_action_3": "This cow is performing better than expected",
-
       "recommendation_on_track_title": "On Track",
       "recommendation_on_track_message": "Milk yield is within the expected prediction range.",
       "recommendation_on_track_action_1": "No immediate action required",
       "recommendation_on_track_action_2": "Continue the current management routine",
-
       "recommendation_below_expected_title": "Needs Attention",
       "recommendation_below_expected_message": "Milk yield is lower than predicted.",
       "recommendation_below_expected_action_1": "Review feed quality and quantity",
@@ -159,8 +156,6 @@
     "alerts": {
       "alertsRecommendations": "Alerts & Recommendations",
       "noAlerts": "No active alerts",
-
-    
       "header": "Alerts & Notifications",
       "subheader": "Stay on top of your farm's needs",
       "allClear": "All Clear!",
@@ -173,18 +168,15 @@
       "dismiss": "Dismiss",
       "takeAction": "Take Action",
       "stayInformed": "Stay informed and take action",
-
       "alert_sudden_drop_title": "Sudden Milk Drop Detected",
       "alert_sudden_drop_description": "Milk production decreased by 12% over the last 3 days",
       "alert_lactation_milestone_title": "Lactation Day Milestone",
       "alert_lactation_milestone_description": "Daisy has reached day 200 of lactation",
       "alert_above_average_title": "Above Average Performance",
       "alert_above_average_description": "Lassie is producing 8% above expected",
-
       "below_expected_title": "Needs Attention",
       "below_expected_message": "Milk yield is lower than predicted."
     },
-
     "history": {
       "history": "History",
       "viewHistory": "View History",
@@ -202,7 +194,6 @@
       "today": "Today",
       "yesterday": "Yesterday"
     },
-
     "disease": {
       "diseaseDetection": "Disease Detection",
       "uploadImage": "Upload Image",
@@ -214,24 +205,20 @@
       "predictionHistory": "Prediction History",
       "clearHistory": "Clear History",
       "noHistory": "No prediction history yet",
-      
       "imageUpload": "Image Upload",
       "takePhoto": "Take Photo",
       "selectFromGallery": "Select from Gallery",
       "imageSelected": "Image selected",
       "noImageSelected": "No image selected",
-      
       "bloodReportUpload": "Blood Report Upload",
       "selectBloodReport": "Select Blood Report",
       "bloodReportSelected": "Blood report selected",
       "noBloodReportSelected": "No blood report selected",
-      
       "symptoms": "Symptoms",
       "enterSymptomsHere": "Enter symptoms here",
       "symptomsPlaceholder": "Describe any symptoms you've observed in your cattle (e.g., fever, loss of appetite, skin lesions, etc.)",
-      
       "salivation": "Salivation",
-      "blisters": "Blisters", 
+      "blisters": "Blisters",
       "fever": "Fever",
       "lameness": "Lameness",
       "nodules": "Nodules",
@@ -239,7 +226,6 @@
       "swollenLymphNodes": "Swollen Lymph Nodes",
       "nasalDischarge": "Nasal Discharge",
       "reducedAppetite": "Reduced Appetite",
-      
       "finalDecision": "Final Decision",
       "imageAnalysis": "Image Analysis",
       "bloodReportAnalysis": "Blood Report Analysis",
@@ -247,47 +233,37 @@
       "healthIndicators": "Health Indicators",
       "parameterAnalysis": "Parameter Analysis",
       "confidence": "Confidence",
-      
       "fmd": "Foot and Mouth Disease (FMD)",
       "lsd": "Lumpy Skin Disease (LSD)",
       "healthy": "Healthy",
       "uncertain": "Uncertain",
       "unknown": "Unknown",
-      
       "uncertainGuidanceHeader": "What this means:",
       "uncertainReason1": "More information is needed for a clear diagnosis",
       "uncertainReason2": "This could be due to insufficient data or early-stage symptoms",
       "uncertainReason3": "Consider consulting a veterinarian for professional assessment",
       "uncertainReason4": "Monitor the animal closely for symptom changes",
-      
       "careInstructions": "Care Instructions",
       "prevention": "Prevention",
       "treatment": "Treatment",
       "monitoring": "Monitoring",
-      
       "authenticationError": "Authentication Error",
       "tokenNotFound": "Token not found",
       "provideAtLeastOneInput": "Provide at least one input!",
       "predictionFailed": "Prediction failed. Please try again.",
-      
       "loadingCareInstructions": "Loading care instructions...",
-      
       "predictionDate": "Prediction Date",
       "viewDetails": "View Details",
-      
       "immediateActions": "Immediate Actions",
-      "careAndTreatment": "Care & Treatment", 
+      "careAndTreatment": "Care & Treatment",
       "vectorControl": "Vector Control",
-      
       "diseaseInfo": "Disease Information",
       "noCareInstructions": "No specific care instructions available for this prediction.",
-      
       "homeTitle": "Healthy Cows, Better Yield 🐄",
       "homeSubtitle": "AI-Powered Disease Detection",
       "cows": "Cows",
       "lastCheck": "Last Check",
       "alerts": "Alerts",
-      
       "cowsNeedAttention": "cows need attention",
       "cowsShowingSymptoms": "showing symptoms",
       "quickActions": "Quick Actions",
@@ -304,7 +280,7 @@
     "addAiCow": {
       "title": "New Cow for AI Observation",
       "cowId": "Cow ID",
-      "lactationNo": "Lactation No",
+      "lactationNo": "Number of times Lactated",
       "breed": "Breed",
       "milkingDry": "Milking / Dry",
       "hormonalTreatment": "Hormonal Treatment",
@@ -312,6 +288,9 @@
       "estrusCycle": "Estrus Cycle Length",
       "ageMonths": "Age (Months)",
       "previousAiDates": "Previous AI Dates",
+      "estrusSigns": "Estrus Signs",
+      "pastAiSuccessRate": "Past AI Success Rate (%)",
+      "daysSinceLastEstrus": "Days Since Last Estrus",
       "addAiDate": "Add AI Date",
       "lastCalvingDate": "Last Calving Date",
       "selectDate": "Select Date",
@@ -321,6 +300,10 @@
       "select": "Select...",
       "yes": "Yes",
       "no": "No",
+      "weakEstrus": "Weak Estrus",
+      "silentHeat": "Silent Heat",
+      "standingHeat": "Standing Heat",
+      "mounting": "Mounting",
       "milking": "Milking",
       "dry": "Dry",
       "remove": "Remove",
@@ -347,6 +330,7 @@
       "crossbreed": "Crossbreed",
       "PENDING": "PENDING",
       "COMPLETED": "COMPLETED",
+      "AI_COMPLETED": "AI COMPLETED",
       "NOT_PREGNANT": "NOT PREGNANT",
       "PREGNANT": "PREGNANT",
       "Jersey": "Jersey",
@@ -356,7 +340,13 @@
       "No": "No",
       "Milking": "Milking",
       "Dry": "Dry",
-      "Medium": "Medium" 
+      "Medium": "Medium",
+      "editTitle": "Edit AI Record",
+      "updateRecord": "Update Record",
+      "confirmDelete": "Are you sure you want to delete this record?",
+      "deleteTitle": "Delete Record",
+      "deleteMessage": "Are you sure you want to delete this cow record?",
+      "delete": "Delete"
     },
     "buttons": {
       "save": "Save",
@@ -364,9 +354,9 @@
       "submit": "Submit",
       "delete": "Delete",
       "edit": "Edit",
-      "add": "Add"},
-
-      "cattleHeat": {
+      "add": "Add"
+    },
+    "cattleHeat": {
       "heatStressDetails": "Heat Stress Details",
       "sprinklerAutoMessage": "Sprinkler is automatically controlled by prediction system.",
       "sprinklerSystem": "Sprinkler System",
@@ -396,7 +386,6 @@
       "heatMapView": "Heat Map View",
       "thiLabel": "THI",
       "cattleHeader": "Cattle Heat Stress Prediction"
-
     }
   },
   "sinhala": {
@@ -412,7 +401,7 @@
       "loading": "පූරණය වෙමින්...",
       "noData": "දත්ත නැත",
       "health": "සෞඛ්‍යය",
-       "dairy": "කිරි",
+      "dairy": "කිරි",
       "heatstress": "උෂ්ණතා ආතතිය",
       "chatbot": "උපදේශක",
       "profile": "පැතිකඩ"
@@ -442,8 +431,8 @@
       "version": "සංස්කරණය",
       "builtWith": "ගොවීන් සඳහා ඉදි කර ඇත",
       "logout": "ඉවත් වන්න",
-      "ai":"AI නිරීක්ෂණ",
-      "aiSub":"කෘත්‍රිම සංසේචන තොරතුරැ"
+      "ai": "AI නිරීක්ෂණ",
+      "aiSub": "කෘත්‍රිම සංසේචන තොරතුරැ"
     },
     "dashboard": {
       "goodMorning": "සුභ උදෑසනක්",
@@ -527,18 +516,15 @@
       "milkDataRecorded": "කිරි දත්ත ඇතුලත් කලා.",
       "recommendation": "නිර්දේශ",
       "gotIt": "තේරුම් ගත්තා",
-      
       "recommendation_above_expected_title": "අති විශිෂ්ට කාර්ය්‍ය සාධනය",
       "recommendation_above_expected_message": "ඉදිරිපත් කල ප්‍රවේශයට සාපේක්ෂව කිරි ප්‍රමාණය සුවිශේෂී ලෙස ඉහළයි.",
       "recommendation_above_expected_action_1": "වත්මන් ආහාර සැලැස්වීම පැවැත්ම",
       "recommendation_above_expected_action_2": "සම්මත සෞඛ්‍ය පරීක්ෂණය පවත්වාගන්න",
       "recommendation_above_expected_action_3": "මෙම ගවය ඉතා හොඳින් කාර්යයයන් ඉටු කරමින් ඇත",
-
       "recommendation_on_track_title": "පියවරේ",
       "recommendation_on_track_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ පරාසය තුළ පවතී.",
       "recommendation_on_track_action_1": "ඉක්මන් ක්‍රියාකාරකම් අවශ්‍ය නැත",
       "recommendation_on_track_action_2": "වත්මන් කළමනාකරණ රීති පවත්වාගන්න",
-
       "recommendation_below_expected_title": "අවධානය අවශ්‍යයි",
       "recommendation_below_expected_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ තරමට වඩා පහළ වේ.",
       "recommendation_below_expected_action_1": "ආහාර ප්‍රමාණය සහ තත්ත්වය සමාලෝචනය කරන්න",
@@ -559,7 +545,6 @@
     "alerts": {
       "alertsRecommendations": "ඇඟවීම් සහ නිර්දේශ",
       "noAlerts": "ක්‍රියාකාරී ඇඟවීම් නැත",
-
       "header": "ඇඟවීම් සහ දැනුම්දීම්",
       "subheader": "ඔබේ ගොවිපළ අවශ්‍යතා ඉහළින් පවත්වා ගන්න",
       "allClear": "සියල්ල පැහැදිලියි!",
@@ -572,14 +557,12 @@
       "markDone": "සම්පූර්ණයි ලෙස ලකුණු කරන්න",
       "dismiss": "ඉවතලන්න",
       "takeAction": "ක්‍රියා කරන්න",
-
       "alert_sudden_drop_title": "අහඹු කිරි අඩු වීම සොයා ගන්නා ලදී",
       "alert_sudden_drop_description": "අවසාන දින තුන තුළ කිරි නිෂ්පාදනය 12% කින් පහත වැටුණි",
       "alert_lactation_milestone_title": "කිරිදීම දිනය සීමාව සලකා බැලීම",
       "alert_lactation_milestone_description": "Daisy යට පසු කිරිදීමේ 200වන දිනට පත් විය",
       "alert_above_average_title": "සාමාන්‍යයට மேல் செயல்திறன்",
       "alert_above_average_description": "Lassie எதிர்பார்த்ததைவிட 8% மேல் உற்பத்தி செய்கிறது",
-
       "below_expected_title": "අවධානය අවශ්‍යයි",
       "below_expected_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ තරමට වඩා පහළ වේ."
     },
@@ -600,7 +583,6 @@
       "today": "අද",
       "yesterday": "ඊය්ගිමහින්"
     },
-
     "disease": {
       "diseaseDetection": "රෝග හඳුනාගැනීම",
       "uploadImage": "ප්‍රතිමාව උඩුගත කරන්න",
@@ -612,24 +594,20 @@
       "predictionHistory": "පූර්වකථන ඉතිහාසය",
       "clearHistory": "ඉතිහාසය මකන්න",
       "noHistory": "තවම පූර්වකථන ඉතිහාසයක් නැත",
-      
       "imageUpload": "ප්‍රතිමාව උඩුගත කරන්න",
       "takePhoto": "ඡායාරූපයක් ගන්න",
       "selectFromGallery": "ගැලරියෙන් තෝරන්න",
       "imageSelected": "ප්‍රතිමාව තෝරාගත්තා",
       "noImageSelected": "ප්‍රතිමාවක් තෝරා නැත",
-      
       "bloodReportUpload": "රුධිර වාර්තාව උඩුගත කරන්න",
       "selectBloodReport": "රුධිර වාර්තාව තෝරන්න",
       "bloodReportSelected": "රුධිර වාර්තාව තෝරාගත්තා",
       "noBloodReportSelected": "රුධිර වාර්තාවක් තෝරා නැත",
-      
       "symptoms": "රෝග ලක්ෂණ",
       "enterSymptomsHere": "මෙහි රෝග ලක්ෂණ ඇතුළත් කරන්න",
       "symptomsPlaceholder": "ඔබේ ගවයන් තුළ දක්නට ලැබෙන ඕනෑම රෝග ලක්ෂණයක් විස්තර කරන්න (උදා: උණ, ආහාර රුචිය නැතිවීම, සම තුවාල, ආදිය)",
-      
       "salivation": "ලොවට පිටවීම",
-      "blisters": "බිඳී ගිනි", 
+      "blisters": "බිඳී ගිනි",
       "fever": "උණ",
       "lameness": "කර්ගරතාව",
       "nodules": "ගැටිති",
@@ -637,7 +615,6 @@
       "swollenLymphNodes": "ඉදිමුණු ලිම්ෆ් ගාන්ධි",
       "nasalDischarge": "නාසික ස්‍රාවය",
       "reducedAppetite": "අඩු ආහාර රුචිය",
-      
       "finalDecision": "අවසාන තීරණය",
       "imageAnalysis": "ප්‍රතිමා විශ්ලේෂණය",
       "bloodReportAnalysis": "රුධිර වාර්තා විශ්ලේෂණය",
@@ -645,46 +622,37 @@
       "healthIndicators": "සෞඛ්‍ය දර්ශක",
       "parameterAnalysis": "පරාමිති විශ්ලේෂණය",
       "confidence": "විශ්වාසය",
-      
       "fmd": "පාද හා මුඛ රෝගය (FMD)",
       "lsd": "ගැටිති සම රෝගය (LSD)",
       "healthy": "සෞඛ්‍ය සම්පන්න",
       "uncertain": "අවිනිශ්චිත",
       "unknown": "නොදන්නා",
-      
       "uncertainGuidanceHeader": "මෙයින් අදහස් කරන්නේ:",
       "uncertainReason1": "පැහැදිලි රෝග නිර්ණයක් සඳහා වැඩි තොරතුරු අවශ්‍යයි",
       "uncertainReason2": "මෙය ප්‍රමාණවත් නොවන දත්ත හෝ මුල් අවධි රෝග ලක්ෂණ නිසා විය හැකිය",
       "uncertainReason3": "වෘත්තීය තක්සේරුවක් සඳහා පශු වෛද්‍යවරයකු සමඟ සම්මන්ත්‍රණය කිරීම සලකා බලන්න",
-      "uncertainReason4": "රෝග ලක්ෂණ වෙනස්කම් සඳහා සතුන් සමීපව අධීක්ෂණය කරන්න",      
+      "uncertainReason4": "රෝග ලක්ෂණ වෙනස්කම් සඳහා සතුන් සමීපව අධීක්ෂණය කරන්න",
       "careInstructions": "සත්කාර උපදෙස්",
       "prevention": "වැලැක්වීම",
       "treatment": "ප්‍රතිකාර",
       "monitoring": "අධීක්ෂණය",
-      
       "authenticationError": "සත්‍යාපන දෝෂය",
       "tokenNotFound": "ටෝකනය හමු නොවිණි",
       "provideAtLeastOneInput": "අවම වශයෙන් එක් ආදානයක් ලබා දෙන්න!",
       "predictionFailed": "පූර්වකථනය අසාර්ථකයි. කරුණාකර නැවත උත්සාහ කරන්න.",
-      
       "loadingCareInstructions": "සත්කාර උපදෙස් පූරණය වෙමින්...",
-      
       "predictionDate": "පූර්වකථන දිනය",
       "viewDetails": "විස්තර බලන්න",
-      
       "immediateActions": "ක්ෂණික ක්‍රියා",
       "careAndTreatment": "සත්කාර සහ ප්‍රතිකාර",
-      "vectorControl": "වාහක පාලනය", 
-      
+      "vectorControl": "වාහක පාලනය",
       "diseaseInfo": "රෝග තොරතුරු",
       "noCareInstructions": "මෙම පූර්වකථනය සඳහා විශේෂ සත්කාර උපදෙස් නොමැත.",
-      
       "homeTitle": "සෞඛ්‍ය සම්පන්න ගවයන්, වඩා හොඳ අස්වැන්න 🐄",
       "homeSubtitle": "AI-ශක්තිමත් රෝග නිර්ණය",
       "cows": "ගවයන්",
       "lastCheck": "අවසන් පරීක්ෂණය",
       "alerts": "අනතුරු ඇඟවීම්",
-      
       "cowsNeedAttention": "ගවයන්ට අවධානය අවශ්‍යයි",
       "cowsShowingSymptoms": "රෝග ලක්ෂණ පෙන්වයි",
       "quickActions": "ක්ෂණික ක්‍රියා",
@@ -709,6 +677,9 @@
       "estrusCycle": "එස්ට්‍රස් චක්‍රයේ දින ගණන",
       "ageMonths": "වයස (මාස වලින්)",
       "previousAiDates": "පැරණි AI දිනයන්",
+      "estrusSigns": "එස්ට්‍රස් ලක්ෂණ",
+      "pastAiSuccessRate": "අතීත AI සාර්ථකත්වයේ ප්‍රතිශතය (%)",
+      "daysSinceLastEstrus": "අවසන් එස්ට්‍රස් සිට දින ගණන",
       "addAiDate": "AI දිනයක් එක් කරන්න",
       "lastCalvingDate": "ගැබි අවසාන දිනය",
       "selectDate": "දිනය තෝරන්න",
@@ -718,6 +689,10 @@
       "select": "පහළින් තෝරන්න...",
       "yes": "ඔව්",
       "no": "නැහැ",
+      "weakEstrus": "Weak Estrus",
+      "silentHeat": "Silent Heat",
+      "standingHeat": "Standing Heat",
+      "mounting": "Mounting",
       "milking": "කිරි ගැනීම සිදුවෙමින් පවතී",
       "dry": "කිරි ගැනීම නතර වී ඇත",
       "remove": "ඉවත් කරන්න",
@@ -735,7 +710,7 @@
       "addtitle": "කෘතිම සංසේචනය නිරීක්ෂණ සඳහා නව ගවයෙක් එක් කරන්න",
       "pregnancyPrediction": "ගැබ වීමේ අනාවැකි",
       "probability": "සම්භාව්‍යතාව",
-      "riskLevel": "අවදානම් මට්ටම",  
+      "riskLevel": "අවදානම් මට්ටම",
       "notPregnant": "ගැබ වී නැත",
       "enterAiDate": "AI කරන දිනය ඇතුළත් කරන්න (YYYY-MM-DD)",
       "markAIDone": "AI සම්පූර්ණ ලෙස සලකන්න",
@@ -743,7 +718,8 @@
       "friesian": "ෆ්‍රයිසියානු",
       "crossbreed": "ක්‍රොස්බ්‍රීඩ්",
       "PENDING": "AI බලපොරොත්තුවෙන් පවතී",
-      "COMPLETED": "AI සම්පූර්ණ කර ඇත",
+      "COMPLETED": "සම්පූර්ණ කර ඇත",
+      "AI_COMPLETED": "AI සම්පූර්ණ කර ඇත",
       "NOT_PREGNANT": "ගැබ වී නැත",
       "PREGNANT": "ගැබ වී ඇත",
       "-": "-",
@@ -754,7 +730,13 @@
       "No": "නැත",
       "Milking": "කිරි ගැනීම සිදුවෙමින් පවතී",
       "Dry": "කිරි ගැනීම නතර වී ඇත",
-      "Medium": "මධ්‍යම"
+      "Medium": "මධ්‍යම",
+      "editTitle": "AI වාර්තාව සංස්කරණය",
+      "updateRecord": "වාර්තාව යාවත්කාලීන කරන්න",
+      "confirmDelete": "ඔබට මෙම වාර්තාව මකා දැමීමට අවශ්‍ය බව සහතිකද?",
+      "deleteTitle": "වාර්තාව මකාදමන්න",
+      "deleteMessage": "ඔබට මෙම ගවයාගේ වාර්තාව මකා දැමීමට අවශ්‍ය බව සහතිකද?",
+      "delete": "මකා දමන්න"
     },
     "buttons": {
       "save": "සුරකින්න",
@@ -762,9 +744,9 @@
       "submit": "යොමු කරන්න",
       "delete": "මකා දමන්න",
       "edit": "සංස්කරණය කරන්න",
-      "add": "එක් කරන්න"},
-
-         "cattleHeat": {
+      "add": "එක් කරන්න"
+    },
+    "cattleHeat": {
       "heatStressDetails": "උෂ්ණතා ආතති විස්තර",
       "sprinklerAutoMessage": "ජල විහිදුම් පද්ධතිය ස්වයංක්‍රීයව පාලනය වේ.",
       "sprinklerSystem": "ජල විහිදුම් පද්ධතිය",
@@ -794,7 +776,6 @@
       "heatMapView": "උෂ්ණතා සිතියම් දර්ශනය",
       "thiLabel": "THI",
       "cattleHeader": "ගව තාප පීඩන පුරෝකථනය"
-
     }
   },
   "tamil": {
@@ -810,7 +791,7 @@
       "loading": "ஏற்றுகிறது...",
       "noData": "தரவு இல்லை",
       "health": "சுகாதாரம்",
-        "dairy": "பால்",
+      "dairy": "பால்",
       "heatstress": "வெப்ப அழுத்தம்",
       "chatbot": "ஆலோசகர்",
       "profile": "சுயவிவரம்"
@@ -923,18 +904,15 @@
       "milkDataRecorded": "பால் தரவு வெற்றிகரமாக பதிவு செய்யப்பட்டுள்ளது.",
       "recommendation": "பரிந்துரை",
       "gotIt": "புரிந்துகொண்டேன்",
-      
       "recommendation_above_expected_title": "சிறந்த செயல்திறன்",
       "recommendation_above_expected_message": "எதிர்பார்த்த மதிப்பை விட பால் உற்பத்தி குறிப்பிடத்தக்க அளவு அதிகமாக உள்ளது.",
       "recommendation_above_expected_action_1": "தற்போதைய உணவு திட்டத்தை தொடரவும்",
       "recommendation_above_expected_action_2": "சார்ந்த சுகாதார பின்வழிப்புகளை தொடரவும்",
       "recommendation_above_expected_action_3": "இந்த மாடு எதிர்பார்த்ததைவிட சிறப்பாக செயல்படுகிறது",
-
       "recommendation_on_track_title": "வழியில்",
       "recommendation_on_track_message": "பால் உற்பத்தி எதிர்பார்த்த வரம்பிற்குள் உள்ளதாகும்.",
       "recommendation_on_track_action_1": "உடனடி நடவடிக்கை தேவையில்லை",
       "recommendation_on_track_action_2": "தற்போதைய முகாமைத்துவ நடைமுறையை தொடரவும்",
-
       "recommendation_below_expected_title": "கவனத்தை தேவை",
       "recommendation_below_expected_message": "பால் உற்பத்தி எதிர்பார்ப்பிற்குக் கீழே உள்ளது.",
       "recommendation_below_expected_action_1": "உணவு தரம் மற்றும் அளவை பரிசீலிக்கவும்",
@@ -955,7 +933,6 @@
     "alerts": {
       "alertsRecommendations": "எச்சரிக்கைகள் மற்றும் பரிந்துரைகள்",
       "noAlerts": "செயல்பட்ட எச்சரிக்கைகள் இல்லை",
-
       "header": "எச்சரிக்கைகள் & அறிவிப்புகள்",
       "subheader": "உங்கள் பண்ணையின் தேவைகளை முன்னிலையில் வைத்திருங்கள்",
       "allClear": "அனைத்தும் மறு!",
@@ -968,14 +945,12 @@
       "markDone": "முடித்ததாக குறியீடு செய்",
       "dismiss": "நிராகரிக்கவும்",
       "takeAction": "செயலாற்றவும்",
-
       "alert_sudden_drop_title": "அவசரமாக கதி குறைவு கண்டறிதல்",
       "alert_sudden_drop_description": "கடந்த 3 நாட்களில் கதிர் உற்பத்தி 12% குறைந்தது",
       "alert_lactation_milestone_title": "பால் நாள் மைல்கல்",
       "alert_lactation_milestone_description": "Daisy பால் தாழ்வு 200 ஆம் நாளை அடைந்தது",
       "alert_above_average_title": "சராசரியை மீறிய செயல்திறன்",
       "alert_above_average_description": "Lassie எதிர்பார்த்ததைவிட 8% மேலாக உற்பத்தி செய்கிறது",
-
       "below_expected_title": "கவனத்தை தேவை",
       "below_expected_message": "பால் உற்பத்தி எதிர்பார்ப்பிற்குக் கீழே உள்ளது."
     },
@@ -996,7 +971,6 @@
       "today": "இன்று",
       "yesterday": "நன்னாடக்கன்"
     },
-
     "disease": {
       "diseaseDetection": "நோய் கண்டறிதல்",
       "uploadImage": "படத்தை அப்லோட் செய்க",
@@ -1008,24 +982,20 @@
       "predictionHistory": "முன்கணிப்பு வரலாறு",
       "clearHistory": "வரலாறு அழிக்க",
       "noHistory": "இன்னும் முன்கணிப்பு வரலாறு இல்லை",
-      
       "imageUpload": "படத்தை அப்லோட் செய்க",
       "takePhoto": "புகைப்படம் எடுக்க",
       "selectFromGallery": "கேலரியில் இருந்து தேர்ந்தெடுக்க",
       "imageSelected": "படம் தேர்ந்தெடுக்கப்பட்டது",
       "noImageSelected": "படம் எதுவும் தேர்ந்தெடுக்கப்படவில்லை",
-      
       "bloodReportUpload": "இரத்த அறிக்கையை அப்லோட் செய்க",
       "selectBloodReport": "இரத்த அறிக்கையை தேர்ந்தெடுக்க",
       "bloodReportSelected": "இரத்த அறிக்கை தேர்ந்தெடுக்கப்பட்டது",
       "noBloodReportSelected": "இரத்த அறிக்கை எதுவும் தேர்ந்தெடுக்கப்படவில்லை",
-      
       "symptoms": "அறிகுறிகள்",
       "enterSymptomsHere": "இங்கே அறிகுறிகளை உள்ளிடுக",
       "symptomsPlaceholder": "உங்கள் கால்நடைகளில் நீங்கள் கவனித்த ஏதேனும் அறிகுறிகளை விவரிக்கவும் (எ.கா.: காய்ச்சல், பசியின்மை, தோல் புண்கள் போன்றவை)",
-      
       "salivation": "எச்சில் சுரப்பு",
-      "blisters": "கொப்புளங்கள்", 
+      "blisters": "கொப்புளங்கள்",
       "fever": "காய்ச்சல்",
       "lameness": "தகளிப்பு",
       "nodules": "கணுக்கள்",
@@ -1033,7 +1003,6 @@
       "swollenLymphNodes": "வீங்கிய நிணநீர் கணுக்கள்",
       "nasalDischarge": "நாசி சுரப்பு",
       "reducedAppetite": "குறைந்த பசி",
-      
       "finalDecision": "இறுதி முடிவு",
       "imageAnalysis": "படப் பகுப்பாய்வு",
       "bloodReportAnalysis": "இரத்த அறிக்கை பகுப்பாய்வு",
@@ -1041,47 +1010,37 @@
       "healthIndicators": "ஆரோக்கிய குறிகாட்டிகள்",
       "parameterAnalysis": "அளவுரு பகுப்பாய்வு",
       "confidence": "நம்பிக்கை",
-      
       "fmd": "கால் மற்றும் வாய் நோய் (FMD)",
       "lsd": "குமிழ் தோல் நோய் (LSD)",
       "healthy": "ஆரோக்கியமான",
       "uncertain": "நிச்சயமற்ற",
       "unknown": "தெரியாத",
-      
       "uncertainGuidanceHeader": "இதன் அர்த்தம்:",
       "uncertainReason1": "தெளிவான நோயறிக்குறிப்புக்கு மேலும் தகவல் தேவை",
       "uncertainReason2": "இது போதுமான தரவு இல்லாமை அல்லது ஆரம்ப நிலை அறிகுறிகள் காரணமாக இருக்கலாம்",
       "uncertainReason3": "தொழிலுர் மதிப்பீட்டிற்கு கால்நடை மருத்துவரை அணுகுங்கள்",
       "uncertainReason4": "அறிகுறி மாற்றங்களுக்காக விலங்கை நெருக்கமாக கண்காணிக்கவும்",
-      
       "careInstructions": "கவனிப்பு வழிமுறைகள்",
       "prevention": "தடுப்பு",
       "treatment": "சிகிச்சை",
       "monitoring": "கண்காணிப்பு",
-      
       "authenticationError": "அங்கீகார பிழை",
       "tokenNotFound": "டோக்கன் காணப்படவில்லை",
       "provideAtLeastOneInput": "குறைந்தம் ஒரு உள்ளீட்டை வழங்கவும்!",
       "predictionFailed": "முன்கணிப்பு தோல்வியுற்றது. மீண்டும் முயற்சி செய்க.",
-      
       "loadingCareInstructions": "கவனிப்பு வழிமுறைகள் ஏற்றப்படுகின்றன...",
-      
       "predictionDate": "முன்கணிப்பு தேதி",
       "viewDetails": "விவரங்களைப் பார்க்க",
-      
       "immediateActions": "உடனடி நடவடிக்கைகள்",
       "careAndTreatment": "பராமரிப்பு மற்றும் சிகிச்சை",
       "vectorControl": "வெக்டர் கட்டுப்பாடு",
-      
       "diseaseInfo": "நோய் தகவல்",
       "noCareInstructions": "இந்த முன்கணிப்புக்கு குறிப்பிட்ட பராமரிப்பு வழிமுறைகள் கிடைக்கவில்லை.",
-      
       "homeTitle": "ஆரோக்கியமான பசுக்கள், சிறந்த மகசூல் 🐄",
       "homeSubtitle": "AI-சக்தி வாய்ந்த நோய் கண்டறிதல்",
       "cows": "பசுக்கள்",
       "lastCheck": "கடைசி சோதனை",
       "alerts": "எச்சரிக்கைகள்",
-      
       "cowsNeedAttention": "பசுக்களுக்கு கவனம் தேவை",
       "cowsShowingSymptoms": "அறிகுறிகளைக் காட்டுகிறது",
       "quickActions": "விரைவு நடவடிக்கைகள்",
@@ -1093,9 +1052,25 @@
       "aiPoweredAnalysis": "AI-சக்தி வாய்ந்த பகுப்பாய்வு",
       "healthHistory": "சுகாதார வரலாறு",
       "viewPastRecords": "கடந்தகால பதிவுகளைப் பார்க்க",
-      "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"},
-
-         "cattleHeat": {
+      "startDiseasePrediction": "🔍 நோய் முன்கணிப்பை தொடங்கவும்"
+    },
+    "addAiCow": {
+      "select": "தேர்ந்தெடு...",
+      "weakEstrus": "Weak Estrus",
+      "silentHeat": "Silent Heat",
+      "standingHeat": "Standing Heat",
+      "mounting": "Mounting",
+      "yes": "ஆம்",
+      "no": "இல்லை",
+      "milking": "Milking",
+      "dry": "Dry",
+      "PENDING": "PENDING",
+      "COMPLETED": "COMPLETED",
+      "AI_COMPLETED": "AI COMPLETED",
+      "NOT_PREGNANT": "NOT PREGNANT",
+      "PREGNANT": "PREGNANT"
+    },
+    "cattleHeat": {
       "heatStressDetails": "வெப்ப அழுத்த விவரங்கள்",
       "sprinklerAutoMessage": "தண்ணீர் தெளிப்பு அமைப்பு முன்னறிவிப்பு முறையால் தானாக கட்டுப்படுத்தப்படுகிறது.",
       "sprinklerSystem": "தண்ணீர் தெளிப்பு அமைப்பு",
@@ -1125,7 +1100,6 @@
       "heatMapView": "வெப்ப வரைபட காட்சி",
       "thiLabel": "THI",
       "cattleHeader": "கால்நடை வெப்ப அழுத்த கணிப்பு"
-
     }
   }
 }

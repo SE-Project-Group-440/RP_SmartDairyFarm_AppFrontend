@@ -228,17 +228,19 @@ const stopRecording = async () => {
     try {
       const data: ChatResponse = await askChat(userMsg.text);
 
-      // Map backend answer to a Message with optional pre-generated audio
+      // Text and Audio arrive together
       const botMsg: Message = {
         id: Date.now() + 1,
         text: data.answer,
         isUser: false,
-        audioUri: data.audioUri, // backend should send pre-generated audio URL
+        audioUri: data.audioUri,
       };
       setMessages((prev) => [...prev, botMsg]);
 
-      // Auto-play
-      playPauseAudio(botMsg);
+      // Auto-play when ready
+      if (botMsg.audioUri) {
+          playPauseAudio(botMsg);
+      }
     } catch {
       const botMsg: Message = {
         id: Date.now() + 2,
