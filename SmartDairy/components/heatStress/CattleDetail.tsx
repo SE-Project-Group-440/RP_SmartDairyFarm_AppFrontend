@@ -122,7 +122,10 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+  showsVerticalScrollIndicator={false}
+  contentContainerStyle={{ flexGrow: 1 }}
+>
 
         {/* Header */}
         <View style={styles.header}>
@@ -179,7 +182,7 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
             </Text>
             <CattleBody3D thiIndex={cattle.thi} stressLevel={cattle.stressLevel} />
             <View style={styles.tempDisplay}>
-              <Text style={styles.tempValue}>{cattle.bodyTemp}°C</Text>
+              <Text style={styles.tempValue}>{cattle.envTemp}°C</Text>
              <Text style={styles.cardTitle}>
                 {t('cattleHeat', 'currentBodyTemperature')}
               </Text>
@@ -287,13 +290,11 @@ export function CattleDetail({ cattle, onBack }: CattleDetailProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f0fdf4',
-    maxWidth: 390,
-    width: '100%',
-    alignSelf: 'center',
-  },
+container: {
+  flex: 1,
+  backgroundColor: '#f0fdf4',
+  width: '100%',
+},
   header: {
     backgroundColor: '#22c55e',
     borderBottomLeftRadius: 24,
