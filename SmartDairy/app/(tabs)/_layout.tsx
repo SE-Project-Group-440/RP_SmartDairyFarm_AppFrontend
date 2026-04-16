@@ -13,27 +13,27 @@ import {
 } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useTranslation from "../../hooks/useTranslation";
+import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
+import { AiRecommendationScreen } from "../AIPrediction/AiRecommendationScreen";
+import AiHomeScreen from "../AIPrediction/AIHomeScreen";
+import { CommonFooter, NavTab } from "../../components/CommonFooter";
 
 import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 import CattleListScreen from "../(tabs)/cattleHeat/Screens/CattleListScreen";
 import DairyManagementScreen from "../(tabs)/Cow/Screens/DairyManagementScreen";
 import ProfileScreen from "../(tabs)/Cow/Screens/ProfileScreen";
 
-import DiseaseHomeScreen, {
-  DiseaseScreen,
-} from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
+import CattleListScreen from "../(tabs)/cattleHeat/Screens/CattleListScreen";
+import DairyManagementScreen from "../(tabs)/Cow/Screens/DairyManagementScreen";
+import ProfileScreen from "../(tabs)/Cow/Screens/ProfileScreen";
+import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
 import DiseaseScreenComponent from "../(tabs)/Disease/Screens/DiseaseScreen";
 import UploadImageScreen from "../(tabs)/Disease/Screens/UploadImageScreen";
 import UploadReportScreen from "../(tabs)/Disease/Screens/UploadReportScreen";
 import HealthHistoryScreen from "../(tabs)/Disease/Screens/HealthHistoryScreen";
 import DiseasePredictionInfoScreen from "../(tabs)/Disease/Screens/DiseasePredictionInfoScreen";
 
-export type MainTab =
-  | "Dairy"
-  | "Chatbot"
-  | "HeatStress"
-  | "Health"
-  | "profile";
+export type MainTab = NavTab;
 
 export type DairyScreen =
   | "dashboard"
@@ -61,6 +61,9 @@ export default function LactationCurveHome() {
 
   const [selectedCowId, setSelectedCowId] =
     useState<string | null>(null);
+
+  const [profileScreen, setProfileScreen] =
+    useState<"home" | "ai">("home");
 
   const handleCowSelect = (cowId: string) => {
     setSelectedCowId(cowId);
@@ -104,7 +107,10 @@ export default function LactationCurveHome() {
         }
 
       case "profile":
-        return <ProfileScreen />;
+        if (profileScreen === "ai") {
+          return <AiHomeScreen />;
+        }
+        return <ProfileScreen onNavigateToAI={() => setProfileScreen("ai")} />;
 
       default:
         return null;
@@ -195,6 +201,15 @@ export default function LactationCurveHome() {
 
         </View>
       </View>
+      <CommonFooter 
+        currentTab={currentTab}
+        onTabPress={(tab) => {
+          setCurrentTab(tab);
+          if (tab === "Dairy") setDairyScreen("dashboard");
+          if (tab === "Health") setDiseaseScreen("home");
+          if (tab === "profile") setProfileScreen("home");
+        }}
+      />
     </SafeAreaView>
   );
 }

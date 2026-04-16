@@ -228,17 +228,19 @@ const stopRecording = async () => {
     try {
       const data: ChatResponse = await askChat(userMsg.text);
 
-      // Map backend answer to a Message with optional pre-generated audio
+      // Text and Audio arrive together
       const botMsg: Message = {
         id: Date.now() + 1,
         text: data.answer,
         isUser: false,
-        audioUri: data.audioUri, // backend should send pre-generated audio URL
+        audioUri: data.audioUri,
       };
       setMessages((prev) => [...prev, botMsg]);
 
-      // Auto-play
-      playPauseAudio(botMsg);
+      // Auto-play when ready
+      if (botMsg.audioUri) {
+          playPauseAudio(botMsg);
+      }
     } catch {
       const botMsg: Message = {
         id: Date.now() + 2,
@@ -278,15 +280,18 @@ const stopRecording = async () => {
   };
 
   mediaRecorder.onstop = async () => {
-    const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-    const url = URL.createObjectURL(audioBlob);
-    try {
-      const text = await speechToText(url);
-      setInputText(text);
-    } catch (err) {
-      console.error("STT failed:", err);
-    }
-  };
+  const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+  // ✅ Convert blob to File
+  const audioFile = new File([audioBlob], "voice.wav", { type: "audio/wav" });
+
+  try {
+    const text = await speechToText(audioFile); // send File instead of blob URL
+    setInputText(text);
+  } catch (err) {
+    console.error("STT failed:", err);
+  }
+};
 
   mediaRecorder.start();
   setRecording(mediaRecorder as any); // cast to match Audio.Recording type

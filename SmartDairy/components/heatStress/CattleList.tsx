@@ -43,7 +43,10 @@ export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+  showsVerticalScrollIndicator={false}
+  contentContainerStyle={{ flexGrow: 1 }}
+>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
@@ -102,13 +105,11 @@ export function CattleList({ cattleData, onSelectCattle }: CattleListProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f0fdf4',
-    maxWidth: 390,
-    width: '100%',
-    alignSelf: 'center',
-  },
+container: {
+  flex: 1,
+  backgroundColor: '#f0fdf4',
+  width: '100%',
+},
   header: {
     backgroundColor: '#22c55e',
     borderBottomLeftRadius: 24,
@@ -147,6 +148,8 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '48%',
+    minWidth: 160,
+    flexGrow: 1,
     backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 16,
