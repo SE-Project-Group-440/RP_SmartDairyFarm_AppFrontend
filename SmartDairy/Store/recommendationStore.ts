@@ -10,6 +10,9 @@ interface Recommendation {
   title: string;
   message: string;
   actions: string[];
+  status: string;
+  actualMilk?: number;
+  expectedMilk?: number;
   createdAt: string;
 }
 

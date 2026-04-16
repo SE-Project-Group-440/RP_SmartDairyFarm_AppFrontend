@@ -7,7 +7,8 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import { ArrowLeft, Check, Droplet } from "lucide-react-native";
+import { ArrowLeft, Check, Droplet, Calendar } from "lucide-react-native";
+import CustomDatePicker from "../ui/CustomDatePicker";
 
 import { useCowListStore } from "../../Store/cowStore";
 import { api } from "../../hooks/api";
@@ -32,11 +33,15 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
   const [milkSlot, setMilkSlot] = useState<MilkSlot>("morning");
   const [milkValue, setMilkValue] = useState("");
   const [morningMilk, setMorningMilk] = useState<number | null>(null);
+  const [eveningMilk, setEveningMilk] = useState<number | null>(null);
+  const [isCompletedToday, setIsCompletedToday] = useState(false);
 
   const [notes, setNotes] = useState("");
 
   const [showCalvingModal, setShowCalvingModal] = useState(false);
   const [calvingDate, setCalvingDate] = useState("");
+
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -44,8 +49,9 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // ✅ NEW
+
   const [showRecommendation, setShowRecommendation] = useState(false);
+  const [activeCycle, setActiveCycle] = useState<any>(null); // NEW
 
   useEffect(() => {
     fetchCows();
@@ -57,30 +63,52 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
     );
   }, [search, cows]);
 
+  const checkActiveCycle = async (id: string) => {
+    try {
+      const res = await api.get(`/lact/cow/${id}`);
+      const active = res.data.find((c: any) => c.LactationStatus === "Active");
+      setActiveCycle(active || null);
+    } catch (error) {
+      console.log("Error checking active cycle");
+      setActiveCycle(null);
+    }
+  };
+
   const syncTodayMilk = async (cowId: string) => {
-  try {
-    const res = await api.get(`/milk/today/${cowId}`);
+    try {
+      const res = await api.get(`/milk/today/${cowId}`);
 
-    const todayMilk = res.data;
+      const todayMilk = res.data;
 
-    if (todayMilk?.morning && !todayMilk?.evening) {
-      // Morning exists, evening not yet entered
-      setMilkSlot("evening");
-      setMorningMilk(todayMilk.morning);
-    } 
-    else if (todayMilk?.morning && todayMilk?.evening) {
-      // Both already entered → reset to morning for next day
-      resetForm();
-    } 
-    else {
-      // Nothing entered yet
+      if (todayMilk?.morning && !todayMilk?.evening) {
+        // Morning exists, evening not yet entered
+        setMilkSlot("evening");
+        setMorningMilk(todayMilk.morning);
+        setEveningMilk(null);
+        setIsCompletedToday(false);
+      }
+      else if (todayMilk?.morning && todayMilk?.evening) {
+        // Both already entered → reset to morning for next day
+        setMilkSlot("morning");
+        setMorningMilk(todayMilk.morning);
+        setEveningMilk(todayMilk.evening);
+        setIsCompletedToday(true);
+      }
+      else {
+        // Nothing entered yet
+        setMilkSlot("morning");
+        setMorningMilk(null);
+        setEveningMilk(null);
+        setIsCompletedToday(false);
+      }
+    } catch (error) {
+      console.log("No milk data for today");
       setMilkSlot("morning");
       setMorningMilk(null);
+      setEveningMilk(null);
+      setIsCompletedToday(false);
     }
-  } catch (error) {
-    console.log("No milk data for today");
-  }
-};
+  };
 
   const handleSubmit = async () => {
     if (!cowId || !milkValue) return;
@@ -89,25 +117,6 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
     try {
       setIsSubmitting(true);
       setErrorMessage("");
-
-      
-       if (calvingDate) {
-        try {
-          await api.post("/lact/", {
-            cowId,
-            calvingDate,
-            healthStatus: "Healthy",
-            lactationRound: 1, 
-          });
-          console.log("New lactation cycle created and predictions generating...");
-        } catch (cycleErr: any) {
-          const cycleErrMsg = cycleErr?.response?.data?.error || "Failed to create lactation cycle";
-          setErrorMessage(cycleErrMsg);
-          setShowError(true);
-          setIsSubmitting(false);
-          return;
-        }
-      }
 
       const payload: any = {
         cowId,
@@ -120,10 +129,6 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         payload.evening = Number(milkValue);
       }
 
-      if (calvingDate) {
-        payload.calvingDate = calvingDate;
-      }
-
       const res = await api.post("/milk/milktoml", payload);
       setResult(res.data);
 
@@ -132,16 +137,17 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
         setMilkSlot("evening");
         setMilkValue("");
       } else {
-        // Evening entry - show recommendation or success
+        // Evening entry - show recommendation or success, and block further entries
+        setEveningMilk(Number(milkValue));
+        setIsCompletedToday(true);
         if (res.data?.recommendation) {
           setShowRecommendation(true);
         } else {
           setSuccess(true);
-          resetForm();
         }
       }
     } catch (err: any) {
-      const errorMsg =  err?.response?.data?.error || err?.response?.data?.message || err?.message || "Failed to save milk entry";
+      const errorMsg = err?.response?.data?.error || err?.response?.data?.message || err?.message || "Failed to save milk entry";
       setErrorMessage(errorMsg);
       setShowError(true);
 
@@ -153,10 +159,51 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
     }
   };
 
+  const handleStartCycle = async () => {
+    if (!cowId || !calvingDate) return;
+    try {
+      setIsSubmitting(true);
+      await api.post("/lact/", {
+        cowId,
+        calvingDate,
+        healthStatus: "Healthy",
+      });
+      setCalvingDate("");
+      await checkActiveCycle(cowId);
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.error || err?.response?.data?.message || err?.message || "Failed to start lactation cycle";
+      setErrorMessage(errorMsg);
+      setShowError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleStopCycle = async () => {
+    if (!activeCycle) return;
+    try {
+      setIsSubmitting(true);
+      await api.put(`/lact/${activeCycle._id}`, {
+        LactationStatus: "Completed",
+        actualDryDate: new Date().toISOString(),
+      });
+      await checkActiveCycle(cowId!);
+      resetForm();
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.error || err?.response?.data?.message || err?.message || "Failed to stop lactation cycle";
+      setErrorMessage(errorMsg);
+      setShowError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const resetForm = () => {
     setMilkSlot("morning");
     setMilkValue("");
     setMorningMilk(null);
+    setEveningMilk(null);
+    setIsCompletedToday(false);
     setNotes("");
     setCalvingDate("");
   };
@@ -182,61 +229,121 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
           <Text>{cowName || t('milkEntry', 'tapToSelectCow')}</Text>
         </Pressable>
 
-        {milkSlot === "evening" && morningMilk !== null && (
-          <View className="bg-blue-100 rounded-xl p-3 mb-4">
-            <Text className="text-blue-700">
-              {t('milkEntry', 'morningMilk')}: {" "}
-              <Text className="font-semibold">{morningMilk} L</Text>
-            </Text>
+        {cowId && !activeCycle ? (
+          <View className="bg-amber-50 border border-amber-200 rounded-2xl p-6 items-center mb-6">
+            <Text className="text-amber-800 font-bold mb-2 text-lg">No Active Lactation</Text>
+            <Text className="text-amber-700 text-center mb-6">This cow is currently dry. Start a new lactation cycle to record milk.</Text>
+
+
+            <View className="w-full mb-6">
+              <Text className="text-sm text-amber-900 mb-2">
+                {t('milkEntry', 'calvingDate')} *
+              </Text>
+
+              <CustomDatePicker
+                value={calvingDate}
+                onChange={(date) => setCalvingDate(date)}
+              />
+            </View>
+
+
+            <Pressable
+              onPress={handleStartCycle}
+              disabled={isSubmitting || !calvingDate}
+              className={`py-4 px-6 rounded-xl w-full items-center ${isSubmitting || !calvingDate ? 'bg-amber-400' : 'bg-amber-600'}`}
+            >
+              <Text className="text-white font-bold text-lg">Start Lactation Cycle</Text>
+            </Pressable>
           </View>
-        )}
+        ) : isCompletedToday ? (
+          <View className="bg-green-100/50 border border-green-200 rounded-2xl p-6 items-center mb-6">
+            <View className="bg-green-100 p-3 rounded-full mb-3">
+              <Check size={28} color="#16a34a" />
+            </View>
+            <Text className="text-green-800 font-bold text-lg mb-4 text-center">
+              {t('milkEntry', 'completedForToday')}
+            </Text>
 
-        <View className="mb-4">
-          <Text className="text-sm text-slate-600 mb-1">
-            {milkSlot === "morning"
-              ? t('milkEntry', 'morningMilk')
-              : t('milkEntry', 'eveningMilk')} {t('milkEntry', 'milkUnit')}
-          </Text>
+            <View className="w-full bg-white rounded-xl p-4 shadow-sm border border-green-50">
+              <View className="flex-row justify-between mb-2">
+                <Text className="text-slate-500">{t('milkEntry', 'morningMilk')}</Text>
+                <Text className="text-slate-800 font-semibold">{morningMilk} L</Text>
+              </View>
+              <View className="flex-row justify-between">
+                <Text className="text-slate-500">{t('milkEntry', 'eveningMilk')}</Text>
+                <Text className="text-slate-800 font-semibold">{eveningMilk} L</Text>
+              </View>
+            </View>
 
-          <TextInput
-            keyboardType="decimal-pad"
-            value={milkValue}
-            onChangeText={setMilkValue}
-            placeholder="0.0"
-            className="bg-white border rounded-xl p-4"
-          />
-        </View>
+            <Text className="text-slate-500 mt-5 text-center text-sm">
+              {t('milkEntry', 'cannotAddMoreRecords')}
+            </Text>
 
-        <TextInput
-          placeholder={`${t('milkEntry', 'notes')} ${t('milkEntry', 'optional')}`}
-          value={notes}
-          onChangeText={setNotes}
-          className="bg-white border rounded-xl p-4 mb-6"
-          multiline
-        />
+            <Pressable
+              onPress={handleStopCycle}
+              disabled={isSubmitting}
+              className="mt-6 border border-red-300 bg-red-50 py-3 px-6 rounded-xl w-full items-center"
+            >
+              <Text className="text-red-700 font-semibold">Stop Current Lactation (Dry Off)</Text>
+            </Pressable>
+          </View>
+        ) : cowId ? (
+          <>
+            {milkSlot === "evening" && morningMilk !== null && (
+              <View className="bg-blue-100 rounded-xl p-3 mb-4">
+                <Text className="text-blue-700">
+                  {t('milkEntry', 'morningMilk')}: {" "}
+                  <Text className="font-semibold">{morningMilk} L</Text>
+                </Text>
+              </View>
+            )}
 
-        <View className="mb-6">
-          <Text className="text-sm text-slate-600 mb-2">{t('milkEntry', 'calvingDate')} {t('milkEntry', 'ifNewCycle')}</Text>
-          <TextInput
-            placeholder={t('milkEntry', 'dateFormat')}
-            value={calvingDate}
-            onChangeText={setCalvingDate}
-            className="bg-white border rounded-xl p-4"
-          />
-        </View>
+            <View className="mb-4">
+              <Text className="text-sm text-slate-600 mb-1">
+                {milkSlot === "morning"
+                  ? t('milkEntry', 'morningMilk')
+                  : t('milkEntry', 'eveningMilk')} {t('milkEntry', 'milkUnit')}
+              </Text>
 
-        <Pressable
-          disabled={isSubmitting || !milkValue || Number(milkValue) <= 0}
-          onPress={handleSubmit}
-          className="bg-green-600 py-5 rounded-2xl items-center flex-row justify-center gap-2"
-        >
-          <Droplet color="white" />
-          <Text className="text-white text-lg">
-            {milkSlot === "morning"
-              ? t('milkEntry', 'saveMorningMilk')
-              : t('milkEntry', 'saveEveningMilk')}
-          </Text>
-        </Pressable>
+              <TextInput
+                keyboardType="decimal-pad"
+                value={milkValue}
+                onChangeText={setMilkValue}
+                placeholder="0.0"
+                className="bg-white border rounded-xl p-4"
+              />
+            </View>
+
+            <TextInput
+              placeholder={`${t('milkEntry', 'notes')} ${t('milkEntry', 'optional')}`}
+              value={notes}
+              onChangeText={setNotes}
+              className="bg-white border rounded-xl p-4 mb-6"
+              multiline
+            />
+
+            <Pressable
+              disabled={isSubmitting || !milkValue || Number(milkValue) <= 0}
+              onPress={handleSubmit}
+              className="bg-green-600 py-5 rounded-2xl items-center flex-row justify-center gap-2 mb-4"
+            >
+              <Droplet color="white" />
+              <Text className="text-white text-lg">
+                {milkSlot === "morning"
+                  ? t('milkEntry', 'saveMorningMilk')
+                  : t('milkEntry', 'saveEveningMilk')}
+              </Text>
+            </Pressable>
+
+            <Pressable
+              onPress={handleStopCycle}
+              disabled={isSubmitting}
+              className="border border-red-300 bg-red-50 py-3 px-6 rounded-xl w-full items-center"
+            >
+              <Text className="text-red-700 font-semibold">Stop Current Lactation (Dry Off)</Text>
+            </Pressable>
+          </>
+        ) : null}
       </ScrollView>
 
       {/* Cow Modal */}
@@ -259,6 +366,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
                   setShowCowModal(false);
                   setSearch("");
                   resetForm();
+                  await checkActiveCycle(cow._id);
                   await syncTodayMilk(cow._id);
                 }}
                 className="p-4 border-b"
@@ -281,7 +389,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               <Text className="text-5xl mb-3">⚠️</Text>
               <Text className="text-2xl font-bold text-red-600 text-center">{t('common', 'error')}</Text>
             </View>
-            
+
             <View className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-6">
               <Text className="text-base text-red-900 text-center font-semibold">
                 {errorMessage}
@@ -296,7 +404,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
                 </Text>
               </View>
             )}
-            
+
             <Pressable
               onPress={() => setShowError(false)}
               className="bg-red-600 py-4 rounded-xl items-center"
@@ -332,49 +440,69 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
       </Modal>
 
       {/* Recommendation Modal */}
-<Modal visible={showRecommendation} transparent animationType="fade">
-  <View className="flex-1 bg-black/40 justify-center items-center">
-    <View className={`bg-white p-6 rounded-3xl w-[90%] ${result?.recommendation?.key === 'below_expected' ? 'border-red-500 border-2' : 'border-green-500 border-2'}`}>
-      <Text className="text-xl font-semibold mb-2 text-center">
-        {t('milkEntry', 'recommendation')}
-      </Text>
+      <Modal visible={showRecommendation} transparent animationType="fade">
+        <View className="flex-1 bg-black/40 justify-center items-center">
+          <View className={`bg-white p-6 rounded-3xl w-[90%] ${result?.recommendation?.key === 'below_expected' ? 'border-red-500 border-2' : 'border-green-500 border-2'}`}>
+            <Text className="text-xl font-semibold mb-2 text-center">
+              {t('milkEntry', 'recommendation')}
+            </Text>
 
-{/* translate title and message using the key returned from the backend */}
-        <Text className={`text-base font-medium mb-2 ${result?.recommendation?.key === 'below_expected' ? 'text-red-600' : 'text-green-600'}`}>
-          {t('milkEntry', `recommendation_${result?.recommendation?.key}_title`)}
-        </Text>
+            {/* translate title and message using the key returned from the backend */}
+            <Text className={`text-base font-medium mb-2 ${result?.recommendation?.key === 'below_expected' ? 'text-red-600' : 'text-green-600'}`}>
+              {t('milkEntry', `recommendation_${result?.recommendation?.key}_title`)}
+            </Text>
 
-        <Text className="text-slate-600 mb-3">
-          {t('milkEntry', `recommendation_${result?.recommendation?.key}_message`)}
-        </Text>
+            <Text className="text-slate-600 mb-3">
+              {t('milkEntry', `recommendation_${result?.recommendation?.key}_message`)}
+            </Text>
 
-        {result?.recommendation?.actions?.length > 0 && (
-          <View className="mt-2">
-            {result.recommendation.actions.map(
-              (actionKey: string, index: number) => (
-                <Text
-                  key={index}
-                  className="text-slate-600 mb-1"
-                >
-                  • {t('milkEntry', actionKey)}
-                </Text>
-              )
+            {/* Detailed Metrics */}
+            <View className="bg-slate-50 border border-slate-100 rounded-xl p-4 w-full mb-3">
+              <View className="flex-row justify-between mb-1">
+                <Text className="text-slate-500">{t('milkEntry', 'morningMilk')}</Text>
+                <Text className="text-slate-900 font-semibold">{result?.recommendation?.morningMilk} L</Text>
+              </View>
+              <View className="flex-row justify-between mb-1">
+                <Text className="text-slate-500">{t('milkEntry', 'eveningMilk')}</Text>
+                <Text className="text-slate-900 font-semibold">{result?.recommendation?.eveningMilk} L</Text>
+              </View>
+              <View className="h-[1px] bg-slate-200 my-2" />
+              <View className="flex-row justify-between mb-1">
+                <Text className="text-slate-600 font-medium">Total Daily</Text>
+                <Text className="text-slate-900 font-bold">{result?.recommendation?.actualMilk} L</Text>
+              </View>
+              <View className="flex-row justify-between">
+                <Text className="text-slate-600 font-medium">Predicted Daily</Text>
+                <Text className="text-indigo-600 font-bold">{result?.recommendation?.predictedMilk} L</Text>
+              </View>
+            </View>
+
+            {result?.recommendation?.actions?.length > 0 && (
+              <View className="mt-2">
+                {result.recommendation.actions.map(
+                  (actionKey: string, index: number) => (
+                    <Text
+                      key={index}
+                      className="text-slate-600 mb-1"
+                    >
+                      • {t('milkEntry', actionKey)}
+                    </Text>
+                  )
+                )}
+              </View>
             )}
-          </View>
-        )}
 
-      <Pressable
-        onPress={() => {
-          setShowRecommendation(false);
-          resetForm();
-        }}
-        className="bg-green-600 py-3 rounded-xl items-center mt-4"
-      >
-        <Text className="text-white font-semibold">{t('milkEntry', 'gotIt')}</Text>
-      </Pressable>
-    </View>
-  </View>
-</Modal>
+            <Pressable
+              onPress={() => {
+                setShowRecommendation(false);
+              }}
+              className="bg-green-600 py-3 rounded-xl items-center mt-4"
+            >
+              <Text className="text-white font-semibold">{t('milkEntry', 'gotIt')}</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
 
     </>
   );

@@ -7,9 +7,11 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import { ArrowLeft, Camera } from "lucide-react-native";
+import { ArrowLeft, Camera, Calendar } from "lucide-react-native";
 import { useCowStore } from "../../Store/cowStore";
 import { useTranslations } from "@/hooks/useTranslations";
+import CustomDatePicker from "../ui/CustomDatePicker";
+
 
 interface AddCowScreenProps {
   onBack: () => void;
@@ -41,6 +43,9 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+
+
 
   const isFormValid =
     formData.name &&
@@ -181,16 +186,12 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
               <Text className="text-sm text-slate-600 mb-2">
                 {t('addCow', 'birthDate')} {t('addCow', 'required')}
               </Text>
-              <TextInput
+
+              <CustomDatePicker
                 value={formData.birthDate}
-                onChangeText={(v) =>
-                  setFormData({
-                    ...formData,
-                    birthDate: v,
-                  })
+                onChange={(date) =>
+                  setFormData({ ...formData, birthDate: date })
                 }
-                placeholder="YYYY-MM-DD"
-                className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
               />
             </View>
 

@@ -146,7 +146,17 @@
       "recommendation_below_expected_peak_action_3": "Recheck milk output for the next 2-3 days and consult a vet if decline continues",
       "recommendation_below_expected_non_peak_action_1": "Do not increase feed immediately outside peak period",
       "recommendation_below_expected_non_peak_action_2": "Review feed quality, cow comfort, and possible health stress",
-      "recommendation_below_expected_non_peak_action_3": "Track milk trend for the next 2-3 days before changing ration"
+      "recommendation_below_expected_non_peak_action_3": "Track milk trend for the next 2-3 days before changing ration",
+      "action_maintain_feeding_strategy": "Maintain feeding strategy",
+      "action_high_energy_feed_peak": "Provide high-energy feed during peak lactation",
+      "action_check_feed_quality": "Check feed quality",
+      "action_monitor_cow_illness": "Monitor cow for illness",
+      "action_inspect_cow_sudden_drop": "Inspect cow health (sudden drop detected)",
+      "action_provide_cooling": "Provide cooling or ventilation",
+      "action_increase_water": "Increase water availability",
+      "action_shade_and_water": "Ensure adequate shade and water access",
+      "completedForToday": "Milk entry completed for today",
+      "cannotAddMoreRecords": "Cannot add any more records for today."
     },
     "analytics": {
       "analytics": "Analytics",
@@ -172,10 +182,13 @@
       "alert_sudden_drop_description": "Milk production decreased by 12% over the last 3 days",
       "alert_lactation_milestone_title": "Lactation Day Milestone",
       "alert_lactation_milestone_description": "Daisy has reached day 200 of lactation",
-      "alert_above_average_title": "Above Average Performance",
       "alert_above_average_description": "Lassie is producing 8% above expected",
       "below_expected_title": "Needs Attention",
-      "below_expected_message": "Milk yield is lower than predicted."
+      "below_expected_message": "Milk yield is lower than predicted.",
+      "all": "All",
+      "belowExpected": "Needs Attention",
+      "onTrack": "On Track",
+      "aboveExpected": "Above Expected"
     },
     "history": {
       "history": "History",
@@ -535,7 +548,17 @@
       "recommendation_below_expected_peak_action_3": "ඊළඟ දින 2-3 තුළ කිරි ප්‍රමාණය නැවත පරීක්ෂා කර අඩුවීම දිගු වුවහොත් වෛද්‍ය උපදෙස් ගන්න",
       "recommendation_below_expected_non_peak_action_1": "peak කාලයට පිටතදී වහාම ආහාර ප්‍රමාණය වැඩි නොකරන්න",
       "recommendation_below_expected_non_peak_action_2": "ආහාර තත්ත්වය, ගවයගේ සුවපහසුව සහ සෞඛ්‍ය ආතතිය සමාලෝචනය කරන්න",
-      "recommendation_below_expected_non_peak_action_3": "ration වෙනස් කිරීමට පෙර ඊළඟ දින 2-3 තුළ කිරි ප්‍රවණතාව නිරීක්ෂණය කරන්න"
+      "recommendation_below_expected_non_peak_action_3": "ration වෙනස් කිරීමට පෙර ඊළඟ දින 2-3 තුළ කිරි ප්‍රවණතාව නිරීක්ෂණය කරන්න",
+      "action_maintain_feeding_strategy": "වත්මන් ආහාර සැපයුම් උපාය පවත්වාගන්න",
+      "action_high_energy_feed_peak": "ඉහළ කිරිදීමේ කාලයේදී අධි ශක්ති ප්‍රමාණයක් ලබාදෙන්න",
+      "action_check_feed_quality": "ආහාරවල ප්‍රමිතිය පරීක්ෂා කරන්න",
+      "action_monitor_cow_illness": "ගවයගේ රෝග ලක්ෂණ පිලිබඳව අවදානයෙන් සිටින්න",
+      "action_inspect_cow_sudden_drop": "ගව සෞඛ්‍ය පරීක්ෂා කරන්න (අහඹු කිරි අඩුවීමක්)",
+      "action_provide_cooling": "සිසිලස හෝ වාතාශ්‍රය ලබා දෙන්න",
+      "action_increase_water": "ජලය ලබාදීම වැඩි කරන්න",
+      "action_shade_and_water": "ප්‍රමාණවත් සෙවනක් සහ ජලය ලබාදීමට කටයුතු කරන්න",
+      "completedForToday": "අද දින සඳහා කිරි ඇතුළත් කිරීම සම්පූර්ණයි",
+      "cannotAddMoreRecords": "අද දිනට තවත් වාර්තා ඇතුළත් කළ නොහැක."
     },
     "analytics": {
       "analytics": "විශ්ලේෂණ",
@@ -561,10 +584,13 @@
       "alert_sudden_drop_description": "අවසාන දින තුන තුළ කිරි නිෂ්පාදනය 12% කින් පහත වැටුණි",
       "alert_lactation_milestone_title": "කිරිදීම දිනය සීමාව සලකා බැලීම",
       "alert_lactation_milestone_description": "Daisy යට පසු කිරිදීමේ 200වන දිනට පත් විය",
-      "alert_above_average_title": "සාමාන්‍යයට மேல் செயல்திறன்",
       "alert_above_average_description": "Lassie எதிர்பார்த்ததைவிட 8% மேல் உற்பத்தி செய்கிறது",
       "below_expected_title": "අවධානය අවශ්‍යයි",
-      "below_expected_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ තරමට වඩා පහළ වේ."
+      "below_expected_message": "කිරි ප්‍රමාණය බලාපොරොත්තු කළ තරමට වඩා පහළ වේ.",
+      "all": "සියල්ල",
+      "belowExpected": "අවධානය අවශ්‍යයි",
+      "onTrack": "නිසි මට්ටමේ",
+      "aboveExpected": "ඉතා හොඳයි"
     },
     "history": {
       "history": "ඉතිහාසය",
@@ -923,7 +949,17 @@
       "recommendation_below_expected_peak_action_3": "அடுத்த 2-3 நாட்கள் பால் வெளியீட்டை மீண்டும் பார்த்து குறைவு தொடர்ந்தால் வைத்தியரை அணுகவும்",
       "recommendation_below_expected_non_peak_action_1": "peak காலத்திற்கு வெளியே உடனே தீவனத்தை அதிகரிக்க வேண்டாம்",
       "recommendation_below_expected_non_peak_action_2": "தீவன தரம், மாட்டின் வசதி, உடல்நிலை அழுத்தம் ஆகியவற்றை பரிசீலிக்கவும்",
-      "recommendation_below_expected_non_peak_action_3": "ration மாற்றத்திற்கு முன் அடுத்த 2-3 நாட்கள் பால் போக்கை கண்காணிக்கவும்"
+      "recommendation_below_expected_non_peak_action_3": "ration மாற்றத்திற்கு முன் அடுத்த 2-3 நாட்கள் பால் போக்கை கண்காணிக்கவும்",
+      "action_maintain_feeding_strategy": "உணவுத் திட்டத்தை பராமரிக்கவும்",
+      "action_high_energy_feed_peak": "அதிக பால் தரும் காலத்தில் அதிக சக்தி உணவை வழங்கவும்",
+      "action_check_feed_quality": "உணவின் தரத்தை சரிபார்க்கவும்",
+      "action_monitor_cow_illness": "பசுவிற்கு நோய் உள்ளதா என கண்காணிக்கவும்",
+      "action_inspect_cow_sudden_drop": "பசுவின் உடல்நிலையை பரிசோதிக்கவும் (திடீர் சரிவு)",
+      "action_provide_cooling": "குளிர்ச்சி அல்லது காற்றோட்டம் வழங்கவும்",
+      "action_increase_water": "தண்ணீர் வசதியை அதிகரிக்கவும்",
+      "action_shade_and_water": "போதுமான நிழல் மற்றும் தண்ணீர் அளவை உறுதி செய்யவும்",
+      "completedForToday": "இன்று பால் பதிவு முடிந்தது",
+      "cannotAddMoreRecords": "இன்று மேலும் பதிவுகளை சேர்க்க முடியாது."
     },
     "analytics": {
       "analytics": "பகுப்பாய்வு",
@@ -949,10 +985,13 @@
       "alert_sudden_drop_description": "கடந்த 3 நாட்களில் கதிர் உற்பத்தி 12% குறைந்தது",
       "alert_lactation_milestone_title": "பால் நாள் மைல்கல்",
       "alert_lactation_milestone_description": "Daisy பால் தாழ்வு 200 ஆம் நாளை அடைந்தது",
-      "alert_above_average_title": "சராசரியை மீறிய செயல்திறன்",
       "alert_above_average_description": "Lassie எதிர்பார்த்ததைவிட 8% மேலாக உற்பத்தி செய்கிறது",
       "below_expected_title": "கவனத்தை தேவை",
-      "below_expected_message": "பால் உற்பத்தி எதிர்பார்ப்பிற்குக் கீழே உள்ளது."
+      "below_expected_message": "பால் உற்பத்தி எதிர்பார்ப்பிற்குக் கீழே உள்ளது.",
+      "all": "அனைத்தும்",
+      "belowExpected": "கவனம் தேவை",
+      "onTrack": "சரியான பாதையில்",
+      "aboveExpected": "மிகச் சிறப்பு"
     },
     "history": {
       "history": "வரலாறு",
