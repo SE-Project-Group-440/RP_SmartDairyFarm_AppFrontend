@@ -9,14 +9,14 @@ const LOCAL_IP = Constants.expoConfig?.hostUri?.split(":")[0];
 
 const BASE_URL =
   Platform.OS === "web"
-    ? "http://54.169.89.67:8080"
+    ? "http://16.16.141.71:8080"
     : Platform.OS === "android"
-    ? `http://54.169.89.67:8080`
-    : `http://54.169.89.67:8080`;
+      ? `http://16.16.141.71:8080`
+      : `http://16.16.141.71:8080`;
 
 export const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 30000, 
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },
