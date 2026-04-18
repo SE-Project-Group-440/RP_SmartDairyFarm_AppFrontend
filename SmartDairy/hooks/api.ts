@@ -2,14 +2,14 @@ import axios from "axios";
 import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//const LOCAL_IP = "172.28.1.99"; 
-const LOCAL_IP = "192.168.1.15"; 
+//const LOCAL_IP = "192.168.1.15"; 
+const LOCAL_IP = "16.16.141.71"; 
 //const LOCAL_IP = "192.168.138.238"; 
 
 const BASE_URL =
   Platform.OS === "web"
-    ? `http://${LOCAL_IP}:8000`  
-    : `http://${LOCAL_IP}:8000`;
+    ? `http://${LOCAL_IP}:8080`  
+    : `http://${LOCAL_IP}:8080`;
 
 export const api = axios.create({
   baseURL: BASE_URL,
