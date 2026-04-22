@@ -117,7 +117,10 @@ export default function LactationCurveHome() {
   return (
     <SafeAreaView className="flex-1 bg-slate-50">
       {/* Main Content */}
-      <View className="flex-1 pb-20">
+      <View 
+        className="flex-1"
+        style={{ paddingBottom: 64 + Math.max(require("react-native-safe-area-context").useSafeAreaInsets().bottom, 8) }}
+      >
         {renderMainContent()}
       </View>
 
