@@ -16,6 +16,7 @@
       }
     },
     "android": {
+      "usesCleartextTraffic": true,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -60,9 +61,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "ad2fbf12-993c-4a78-aa09-dc47ef128a5f"
+        "projectId": "0eb7aca5-e8e9-4a0a-810d-8a4a84854d4b"
       }
     },
-    "owner": "samudraw"
+    "owner": "samuwit"
   }
 }

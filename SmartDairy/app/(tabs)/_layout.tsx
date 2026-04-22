@@ -122,7 +122,10 @@ export default function LactationCurveHome() {
       </View>
 
       {/* Bottom Tab Bar */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 py-2">
+      <View
+        className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 pt-2"
+        style={{ paddingBottom: Math.max(require("react-native-safe-area-context").useSafeAreaInsets().bottom, 8) }}
+      >
         <View className="flex-row items-center justify-between">
 
           {/* 🐄 Dairy */}
@@ -136,7 +139,7 @@ export default function LactationCurveHome() {
           >
             <Milk size={22} color={currentTab === "Dairy" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "Dairy" ? "text-green-700" : "text-slate-600"}`}>
-              🐄 Dairy
+              {t("common", "dairy")}
             </Text>
           </Pressable>
 
@@ -148,7 +151,7 @@ export default function LactationCurveHome() {
           >
             <Bot size={22} color={currentTab === "Chatbot" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "Chatbot" ? "text-green-700" : "text-slate-600"}`}>
-              🤖 AI
+              {t("common", "chatbot")}
             </Text>
           </Pressable>
 
@@ -160,7 +163,7 @@ export default function LactationCurveHome() {
           >
             <Thermometer size={22} color={currentTab === "HeatStress" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "HeatStress" ? "text-green-700" : "text-slate-600"}`}>
-              🌡️ Heat
+              {t("common", "heatstress")}
             </Text>
           </Pressable>
 
@@ -175,7 +178,7 @@ export default function LactationCurveHome() {
           >
             <HeartPulse size={22} color={currentTab === "Health" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "Health" ? "text-green-700" : "text-slate-600"}`}>
-              ❤️ Health
+              {t("common", "health")}
             </Text>
           </Pressable>
 
@@ -187,13 +190,13 @@ export default function LactationCurveHome() {
           >
             <User size={22} color={currentTab === "profile" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "profile" ? "text-green-700" : "text-slate-600"}`}>
-              👤 Profile
+              {t("common", "profile")}
             </Text>
           </Pressable>
 
         </View>
       </View>
-      <CommonFooter
+      {/* <CommonFooter
         currentTab={currentTab}
         onTabPress={(tab) => {
           setCurrentTab(tab);
@@ -201,7 +204,7 @@ export default function LactationCurveHome() {
           if (tab === "Health") setDiseaseScreen("home");
           if (tab === "profile") setProfileScreen("home");
         }}
-      />
+      /> */}
     </SafeAreaView>
   );
 }
