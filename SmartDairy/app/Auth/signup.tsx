@@ -101,7 +101,7 @@ export default function Signup() {
           </Text>
         </View>
 
-        <View className="space-y-4">
+        <View className="gap-4">
           <View className="flex-row items-start justify-between">
             <View className="flex-1 mr-2">
               <View className={`flex-row items-center h-14 rounded-2xl border px-3 shadow-sm ${errors.fname ? 'border-red-500' : 'border-border'}`}>

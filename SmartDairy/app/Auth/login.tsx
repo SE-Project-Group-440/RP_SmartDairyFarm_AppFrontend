@@ -62,8 +62,8 @@ export default function Login() {
           </Text>
         </View>
 
-        <View className="space-y-5">
-          <View>
+        <View className="gap-5">
+          <View className="mb-2">
             <View className={`flex-row items-center h-14 rounded-2xl border px-4 shadow-sm ${error.includes("Email") ? "border-red-500" : "border-border"}`}>
               <Ionicons name="mail-outline" size={20} color={error.includes("Email") ? "#ef4444" : "#9ca3af"} className="mr-3" />
               <TextInput

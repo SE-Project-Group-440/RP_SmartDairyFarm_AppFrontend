@@ -12,9 +12,13 @@ interface CommonFooterProps {
 
 export function CommonFooter({ currentTab, onTabPress }: CommonFooterProps) {
   const { t } = useTranslation();
+  const { bottom } = require("react-native-safe-area-context").useSafeAreaInsets();
 
   return (
-    <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 py-2">
+    <View 
+      className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-2 pt-2"
+      style={{ paddingBottom: Math.max(bottom, 8) }}
+    >
       <View className="flex-row items-center justify-around">
         {/* Dairy */}
         <Pressable
