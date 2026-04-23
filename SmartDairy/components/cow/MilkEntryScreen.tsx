@@ -231,8 +231,8 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
 
         {cowId && !activeCycle ? (
           <View className="bg-amber-50 border border-amber-200 rounded-2xl p-6 items-center mb-6">
-            <Text className="text-amber-800 font-bold mb-2 text-lg">No Active Lactation</Text>
-            <Text className="text-amber-700 text-center mb-6">This cow is currently dry. Start a new lactation cycle to record milk.</Text>
+            <Text className="text-amber-800 font-bold mb-2 text-lg">{t('milkEntry', 'noActiveLactation')}</Text>
+            <Text className="text-amber-700 text-center mb-6">{t('milkEntry', 'cowCurrentlyDry')}</Text>
 
 
             <View className="w-full mb-6">
@@ -252,7 +252,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               disabled={isSubmitting || !calvingDate}
               className={`py-4 px-6 rounded-xl w-full items-center ${isSubmitting || !calvingDate ? 'bg-amber-400' : 'bg-amber-600'}`}
             >
-              <Text className="text-white font-bold text-lg">Start Lactation Cycle</Text>
+              <Text className="text-white font-bold text-lg">{t('milkEntry', 'startLactationCycle')}</Text>
             </Pressable>
           </View>
         ) : isCompletedToday ? (
@@ -284,7 +284,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               disabled={isSubmitting}
               className="mt-6 border border-red-300 bg-red-50 py-3 px-6 rounded-xl w-full items-center"
             >
-              <Text className="text-red-700 font-semibold">Stop Current Lactation (Dry Off)</Text>
+              <Text className="text-red-700 font-semibold">{t('milkEntry', 'stopCurrentLactation')}</Text>
             </Pressable>
           </View>
         ) : cowId ? (
@@ -340,7 +340,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               disabled={isSubmitting}
               className="border border-red-300 bg-red-50 py-3 px-6 rounded-xl w-full items-center"
             >
-              <Text className="text-red-700 font-semibold">Stop Current Lactation (Dry Off)</Text>
+              <Text className="text-red-700 font-semibold">{t('milkEntry', 'stopCurrentLactation')}</Text>
             </Pressable>
           </>
         ) : null}
