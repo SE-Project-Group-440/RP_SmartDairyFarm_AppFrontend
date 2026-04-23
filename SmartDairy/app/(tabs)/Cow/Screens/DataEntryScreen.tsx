@@ -18,6 +18,7 @@ import {
 
 import { useCowListStore } from "../../../../Store/cowStore";
 import { api } from "../../../../hooks/api";
+import { useTranslations } from "../../../../hooks/useTranslations";
 
 export default function DataEntryScreen() {
   const { cows, fetchCows } = useCowListStore();

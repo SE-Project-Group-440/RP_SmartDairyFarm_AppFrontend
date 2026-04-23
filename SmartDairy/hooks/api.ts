@@ -1,18 +1,9 @@
 import axios from "axios";
-import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Constants from "expo-constants";
 
 
-const LOCAL_IP = Constants.expoConfig?.hostUri?.split(":")[0];
 
-
-const BASE_URL =
-  Platform.OS === "web"
-    ? "http://54.169.89.67:8080"
-    : Platform.OS === "android"
-    ? `http://54.169.89.67:8080`
-    : `http://54.169.89.67:8080`;
+const BASE_URL = "http://13.63.58.14:8080";
 
 export const api = axios.create({
   baseURL: BASE_URL,
