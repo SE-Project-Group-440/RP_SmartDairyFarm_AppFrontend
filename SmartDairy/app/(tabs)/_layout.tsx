@@ -117,7 +117,7 @@ export default function LactationCurveHome() {
   return (
     <SafeAreaView className="flex-1 bg-slate-50">
       {/* Main Content */}
-      <View className="flex-1 pb-18">
+      <View className="flex-1 pb-19">
         {renderMainContent()}
       </View>
 
