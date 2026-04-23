@@ -13,7 +13,6 @@ import {
 } from "lucide-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useTranslation from "../../hooks/useTranslation";
-import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 import { AiRecommendationScreen } from "../AIPrediction/AiRecommendationScreen";
 import AiHomeScreen from "../AIPrediction/AIHomeScreen";
 import { CommonFooter, NavTab } from "../../components/CommonFooter";
@@ -23,9 +22,7 @@ import CattleListScreen from "../(tabs)/cattleHeat/Screens/CattleListScreen";
 import DairyManagementScreen from "../(tabs)/Cow/Screens/DairyManagementScreen";
 import ProfileScreen from "../(tabs)/Cow/Screens/ProfileScreen";
 
-import CattleListScreen from "../(tabs)/cattleHeat/Screens/CattleListScreen";
-import DairyManagementScreen from "../(tabs)/Cow/Screens/DairyManagementScreen";
-import ProfileScreen from "../(tabs)/Cow/Screens/ProfileScreen";
+
 import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
 import DiseaseScreenComponent from "../(tabs)/Disease/Screens/DiseaseScreen";
 import UploadImageScreen from "../(tabs)/Disease/Screens/UploadImageScreen";
@@ -120,12 +117,18 @@ export default function LactationCurveHome() {
   return (
     <SafeAreaView className="flex-1 bg-slate-50">
       {/* Main Content */}
-      <View className="flex-1 pb-20">
+      <View 
+        className="flex-1"
+        style={{ paddingBottom: 64 + Math.max(require("react-native-safe-area-context").useSafeAreaInsets().bottom, 8) }}
+      >
         {renderMainContent()}
       </View>
 
       {/* Bottom Tab Bar */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 py-2">
+      <View
+        className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 pt-2"
+        style={{ paddingBottom: Math.max(require("react-native-safe-area-context").useSafeAreaInsets().bottom, 8) }}
+      >
         <View className="flex-row items-center justify-between">
 
           {/* 🐄 Dairy */}
@@ -134,39 +137,36 @@ export default function LactationCurveHome() {
               setCurrentTab("Dairy");
               setDairyScreen("dashboard");
             }}
-            className={`flex-1 items-center py-2 rounded-xl ${
-              currentTab === "Dairy" ? "bg-green-50" : ""
-            }`}
+            className={`flex-1 items-center py-2 rounded-xl ${currentTab === "Dairy" ? "bg-green-50" : ""
+              }`}
           >
             <Milk size={22} color={currentTab === "Dairy" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "Dairy" ? "text-green-700" : "text-slate-600"}`}>
-              🐄 Dairy
+              {t("common", "dairy")}
             </Text>
           </Pressable>
 
           {/* 🤖 Chatbot */}
           <Pressable
             onPress={() => setCurrentTab("Chatbot")}
-            className={`flex-1 items-center py-2 rounded-xl ${
-              currentTab === "Chatbot" ? "bg-green-50" : ""
-            }`}
+            className={`flex-1 items-center py-2 rounded-xl ${currentTab === "Chatbot" ? "bg-green-50" : ""
+              }`}
           >
             <Bot size={22} color={currentTab === "Chatbot" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "Chatbot" ? "text-green-700" : "text-slate-600"}`}>
-              🤖 AI
+              {t("common", "chatbot")}
             </Text>
           </Pressable>
 
           {/* 🌡️ Heat */}
           <Pressable
             onPress={() => setCurrentTab("HeatStress")}
-            className={`flex-1 items-center py-2 rounded-xl ${
-              currentTab === "HeatStress" ? "bg-green-50" : ""
-            }`}
+            className={`flex-1 items-center py-2 rounded-xl ${currentTab === "HeatStress" ? "bg-green-50" : ""
+              }`}
           >
             <Thermometer size={22} color={currentTab === "HeatStress" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "HeatStress" ? "text-green-700" : "text-slate-600"}`}>
-              🌡️ Heat
+              {t("common", "heatstress")}
             </Text>
           </Pressable>
 
@@ -176,32 +176,30 @@ export default function LactationCurveHome() {
               setCurrentTab("Health");
               setDiseaseScreen("home");
             }}
-            className={`flex-1 items-center py-2 rounded-xl ${
-              currentTab === "Health" ? "bg-green-50" : ""
-            }`}
+            className={`flex-1 items-center py-2 rounded-xl ${currentTab === "Health" ? "bg-green-50" : ""
+              }`}
           >
             <HeartPulse size={22} color={currentTab === "Health" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "Health" ? "text-green-700" : "text-slate-600"}`}>
-              ❤️ Health
+              {t("common", "health")}
             </Text>
           </Pressable>
 
           {/* 👤 Profile */}
           <Pressable
             onPress={() => setCurrentTab("profile")}
-            className={`flex-1 items-center py-2 rounded-xl ${
-              currentTab === "profile" ? "bg-green-50" : ""
-            }`}
+            className={`flex-1 items-center py-2 rounded-xl ${currentTab === "profile" ? "bg-green-50" : ""
+              }`}
           >
             <User size={22} color={currentTab === "profile" ? "#15803d" : "#475569"} />
             <Text numberOfLines={1} className={`text-xs ${currentTab === "profile" ? "text-green-700" : "text-slate-600"}`}>
-              👤 Profile
+              {t("common", "profile")}
             </Text>
           </Pressable>
 
         </View>
       </View>
-      <CommonFooter 
+      {/* <CommonFooter
         currentTab={currentTab}
         onTabPress={(tab) => {
           setCurrentTab(tab);
@@ -209,7 +207,7 @@ export default function LactationCurveHome() {
           if (tab === "Health") setDiseaseScreen("home");
           if (tab === "profile") setProfileScreen("home");
         }}
-      />
+      /> */}
     </SafeAreaView>
   );
 }
