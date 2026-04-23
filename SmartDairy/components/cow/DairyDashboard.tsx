@@ -85,8 +85,8 @@ export function DairyDashboard({
     hour < 12
       ? t('dashboard', 'goodMorning')
       : hour < 18
-      ? t('dashboard', 'goodAfternoon')
-      : t('dashboard', 'goodEvening');
+        ? t('dashboard', 'goodAfternoon')
+        : t('dashboard', 'goodEvening');
 
   const weatherIcon = hour < 18 ? "🌤️" : "🌙";
 
@@ -143,7 +143,7 @@ export function DairyDashboard({
             {t('dashboard', 'cowManagement')}
           </Text>
 
-          <View className="space-y-3">
+          <View className="space-y-3 gap-2">
             <Pressable
               onPress={() => onNavigate("add-cow")}
               className="bg-green-600 rounded-2xl p-5 flex-row items-center gap-4"
@@ -215,38 +215,38 @@ export function DairyDashboard({
 
         {/* Analytics */}
         {/* Analytics */}
-<View>
-  <Text className="text-slate-900 mb-3">
-    {t('dashboard', 'analyticsInsights')}
-  </Text>
+        <View>
+          <Text className="text-slate-900 mb-3">
+            {t('dashboard', 'analyticsInsights')}
+          </Text>
 
-  <Pressable
-    onPress={() => onNavigate("analytics")}
-    className="bg-white border-2 border-slate-200 rounded-2xl p-5 flex-row items-center gap-4"
-  >
-    <View className="w-12 h-12 bg-purple-50 rounded-xl items-center justify-center">
-      <TrendingUp size={24} color="#7c3aed" />
-    </View>
+          <Pressable
+            onPress={() => onNavigate("analytics")}
+            className="bg-white border-2 border-slate-200 rounded-2xl p-5 flex-row items-center gap-4"
+          >
+            <View className="w-12 h-12 bg-purple-50 rounded-xl items-center justify-center">
+              <TrendingUp size={24} color="#7c3aed" />
+            </View>
 
-    <View className="flex-1">
-      <Text className="text-slate-900 mb-1">
-        {t('dashboard', 'analytics')}
-      </Text>
-      <Text className="text-sm text-slate-600">
-        {t('analytics', 'analyticsDetail')}
-      </Text>
-    </View>
+            <View className="flex-1">
+              <Text className="text-slate-900 mb-1">
+                {t('dashboard', 'analytics')}
+              </Text>
+              <Text className="text-sm text-slate-600">
+                {t('analytics', 'analyticsDetail')}
+              </Text>
+            </View>
 
-    <ChevronRight size={20} color="#94a3b8" />
-  </Pressable>
-</View>
+            <ChevronRight size={20} color="#94a3b8" />
+          </Pressable>
+        </View>
         {/* Smart Features */}
         <View>
           <Text className="text-slate-900 mb-3">
             {t('dashboard', 'smartFeatures')}
           </Text>
 
-          <View className="space-y-3">
+          <View className="space-y-3 mb-2">
             <Pressable
               onPress={() => onNavigate("alerts")}
               className="bg-orange-50 border-2 border-orange-200 rounded-2xl p-5 flex-row items-center gap-4"
@@ -276,7 +276,7 @@ export function DairyDashboard({
         {/* History */}
         <Pressable
           onPress={() => onNavigate("history")}
-          className="bg-white border-2 border-slate-200 rounded-2xl p-5 flex-row items-center gap-4"
+          className="bg-white border-2 border-slate-200 rounded-2xl p-5 flex-row items-center gap-4 mb-12"
         >
           <View className="w-12 h-12 bg-slate-100 rounded-xl items-center justify-center">
             <History size={24} color="#334155" />
@@ -294,7 +294,7 @@ export function DairyDashboard({
           <ChevronRight size={20} color="#94a3b8" />
         </Pressable>
 
-       
+
       </View>
     </ScrollView>
   );
