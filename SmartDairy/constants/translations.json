@@ -161,9 +161,6 @@
       "cowCurrentlyDry": "This cow is currently dry. Start a new lactation cycle to record milk.",
       "startLactationCycle": "Start Lactation Cycle",
       "stopCurrentLactation": "Stop Current Lactation (Dry Off)",
-      "cowCurrentlyDry": "This cow is currently dry. Start a new lactation cycle to record milk.",
-      "startLactationCycle": "Start Lactation Cycle",
-      "stopCurrentLactation": "Stop Current Lactation (Dry Off)",
       "totalDaily": "Total Daily",
       "predictedDaily": "Predicted Daily",
       "dataSaved": "Data Saved!",
@@ -189,6 +186,10 @@
       "analyticsDetail": "Analytics & Insights"
     },
     "alerts": {
+      "allClear": "All Clear!",
+      "noActiveAlerts": "No active alerts",
+        "totalDaily": "Total Daily",
+        "predictedDaily": "Predicted Daily",
       "alertsRecommendations": "Alerts & Recommendations",
       "noAlerts": "No active alerts",
       "header": "Alerts & Notifications",
@@ -595,6 +596,10 @@
       "analyticsDetail": "විශ්ලේෂණ සහ අවබෝධතා"
     },
     "alerts": {
+      "allClear": "සියල්ල හරි!",
+      "noActiveAlerts": "ක්‍රියාත්මක අනතුරු ඇඟවීම් නොමැත",
+        "totalDaily": "මුළු දිනපතා",
+        "predictedDaily": "කල්පිත දිනපතා",
       "alertsRecommendations": "ඇඟවීම් සහ නිර්දේශ",
       "noAlerts": "ක්‍රියාකාරී ඇඟවීම් නැත",
       "header": "ඇඟවීම් සහ දැනුම්දීම්",
@@ -1000,6 +1005,10 @@
       "analyticsDetail": "பகுப்பாய்வு மற்றும் நுண்ணறிவு"
     },
     "alerts": {
+      "allClear": "அனைத்தும் சரி!",
+      "noActiveAlerts": "செயலில் எச்சரிக்கைகள் இல்லை",
+        "totalDaily": "மொத்த தினசரி",
+        "predictedDaily": "முன்னறிவிக்கப்பட்ட தினசரி",
       "alertsRecommendations": "எச்சரிக்கைகள் மற்றும் பரிந்துரைகள்",
       "noAlerts": "செயல்பட்ட எச்சரிக்கைகள் இல்லை",
       "header": "எச்சரிக்கைகள் & அறிவிப்புகள்",

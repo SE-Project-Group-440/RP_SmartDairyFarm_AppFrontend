@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   View,
   Text,
@@ -45,6 +46,8 @@ export type DairyScreen =
   | "history";
 
 export default function LactationCurveHome() {
+  const insets = useSafeAreaInsets();
+  const TAB_BAR_HEIGHT = 64;
   const { t } = useTranslation();
 
   const [currentTab, setCurrentTab] =
@@ -117,17 +120,24 @@ export default function LactationCurveHome() {
   return (
     <SafeAreaView className="flex-1 bg-slate-50">
       {/* Main Content */}
-      <View className="flex-1 pb-19">
+      <View
+        className="flex-1"
+        style={{
+          paddingBottom: TAB_BAR_HEIGHT + (insets.bottom || 0),
+        }}
+      >
         {renderMainContent()}
       </View>
 
       {/* Bottom Tab Bar */}
       <View
         className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-1 pt-2"
-        style={{ paddingBottom: Math.max(require("react-native-safe-area-context").useSafeAreaInsets().bottom, 8) }}
+        style={{
+          paddingBottom: Math.max(insets.bottom, 8),
+          height: TAB_BAR_HEIGHT + Math.max(insets.bottom, 8),
+        }}
       >
         <View className="flex-row items-center justify-between">
-
           {/* 🐄 Dairy */}
           <Pressable
             onPress={() => {
@@ -193,18 +203,8 @@ export default function LactationCurveHome() {
               {t("common", "profile")}
             </Text>
           </Pressable>
-
         </View>
       </View>
-      {/* <CommonFooter
-        currentTab={currentTab}
-        onTabPress={(tab) => {
-          setCurrentTab(tab);
-          if (tab === "Dairy") setDairyScreen("dashboard");
-          if (tab === "Health") setDiseaseScreen("home");
-          if (tab === "profile") setProfileScreen("home");
-        }}
-      /> */}
     </SafeAreaView>
   );
 }

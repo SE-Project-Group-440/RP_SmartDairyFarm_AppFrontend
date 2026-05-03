@@ -74,9 +74,11 @@ export default function AlertsScreen({ onCowSelect }: AlertsScreenProps) {
         {activeAlerts.length === 0 ? (
           <View className="bg-white rounded-2xl p-8 items-center">
             <Info size={32} color="#16a34a" />
-            <Text className="text-slate-900 mt-3">All Clear!</Text>
+            <Text className="text-slate-900 mt-3">
+              {t('alerts', 'allClear')}
+            </Text>
             <Text className="text-slate-600 text-sm">
-              No active alerts
+              {t('alerts', 'noActiveAlerts')}
             </Text>
           </View>
         ) : (

@@ -78,15 +78,27 @@ export default function CowProfileScreen({
 
   const activeLactation = lactationCycles?.at(-1);
 
-  const avgMilk =
-    predictions.reduce((s, p) => s + (p.actualMilk || 0), 0) /
-    (predictions.filter((p) => p.actualMilk > 0).length || 1);
 
-  const predictedAvg =
-    predictions.reduce((s, p) => s + p.predictedMilk, 0) /
-    (predictions.length || 1);
+  // Defensive: Ensure all numbers are valid and not NaN/Infinity
+  const safeNumber = (n: any, fallback = 0) => {
+    if (typeof n !== "number" || isNaN(n) || !isFinite(n)) return fallback;
+    return n;
+  };
 
-  const status = avgMilk < predictedAvg ? "warning" : "healthy";
+  const validActualMilk = predictions.map((p) => safeNumber(p.actualMilk, 0));
+  const validPredictedMilk = predictions.map((p) => safeNumber(p.predictedMilk, 0));
+
+  // If no predictions, set averages to 0
+  const actualCount = validActualMilk.filter((v) => v > 0).length;
+  const avgMilk = actualCount > 0
+    ? validActualMilk.reduce((s, v) => s + v, 0) / actualCount
+    : 0;
+
+  const predictedAvg = validPredictedMilk.length > 0
+    ? validPredictedMilk.reduce((s, v) => s + v, 0) / validPredictedMilk.length
+    : 0;
+
+  const status = (actualCount > 0 && avgMilk < predictedAvg) ? "warning" : "healthy";
 
   const chartConfig = {
     backgroundGradientFrom: "#ffffff",
@@ -101,14 +113,18 @@ export default function CowProfileScreen({
     },
   };
 
-  const displayData = predictions.slice(
-    0,
-    Math.min(predictions.length, 280)
-  );
+
+  // Defensive: filter out invalid milkingDay values
+  const displayData = predictions
+    .map((p) => ({
+      milkingDay: safeNumber(p.milkingDay, 0),
+      actualMilk: safeNumber(p.actualMilk, 0),
+      predictedMilk: safeNumber(p.predictedMilk, 0),
+    }))
+    .slice(0, Math.min(predictions.length, 280));
 
   const totalDays = displayData.length;
-
-  const interval = Math.floor(totalDays / 6);
+  const interval = Math.max(1, Math.floor(totalDays / 6));
 
   return (
     <ScrollView className="flex-1 bg-slate-50">
@@ -171,9 +187,10 @@ export default function CowProfileScreen({
           </Text>
 
           <View className="flex-row flex-wrap gap-y-4">
+
             <InfoItem
               label={t("cowList", "age")}
-              value={`${cow.ageInMonths} ${t("cowList", "months")}`}
+              value={`${safeNumber(cow.ageInMonths, 0)} ${t("cowList", "months")}`}
             />
 
             <InfoItem
@@ -183,12 +200,12 @@ export default function CowProfileScreen({
 
             <InfoItem
               label={t("cowList", "day")}
-              value={`${displayData.at(-1)?.milkingDay ?? 0}`}
+              value={displayData.length > 0 ? `${displayData.at(-1)?.milkingDay ?? 0}` : "-"}
             />
 
             <InfoItem
               label={t("cowList", "avgMilk")}
-              value={`${avgMilk.toFixed(1)} L`}
+              value={actualCount > 0 ? `${safeNumber(avgMilk, 0).toFixed(1)} L` : "-"}
             />
           </View>
         </View>
@@ -202,12 +219,14 @@ export default function CowProfileScreen({
             <Text className="text-slate-900">
               Lactation Curve
             </Text>
-
             <Info size={18} color="#64748b" />
           </View>
-
           {loadingPred ? (
             <ActivityIndicator />
+          ) : displayData.length === 0 ? (
+            <Text className="text-slate-500 text-center py-8">
+              No lactation or milk records yet.
+            </Text>
           ) : (
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <LineChart
@@ -215,27 +234,23 @@ export default function CowProfileScreen({
                   labels: displayData.map((p, index) => {
                     if (index === 0) return "D1";
                     if (index === totalDays - 1)
-                      return `D${p.milkingDay}`;
+                      return `D${safeNumber(p.milkingDay, 0)}`;
                     if (index % interval === 0)
-                      return `D${p.milkingDay}`;
+                      return `D${safeNumber(p.milkingDay, 0)}`;
                     return "";
                   }),
-
                   datasets: [
                     {
-                      data: displayData.map((p) => p.actualMilk),
+                      data: displayData.map((p) => safeNumber(p.actualMilk, 0)),
                       color: () => "#10b981",
                       strokeWidth: 3,
                     },
                     {
-                      data: displayData.map(
-                        (p) => p.predictedMilk
-                      ),
+                      data: displayData.map((p) => safeNumber(p.predictedMilk, 0)),
                       color: () => "#6366f1",
                       strokeWidth: 2,
                     },
                   ],
-
                   legend: ["Actual", "Predicted"],
                 }}
                 width={Math.max(

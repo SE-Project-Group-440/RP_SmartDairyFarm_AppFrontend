@@ -468,11 +468,11 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               </View>
               <View className="h-[1px] bg-slate-200 my-2" />
               <View className="flex-row justify-between mb-1">
-                <Text className="text-slate-600 font-medium">Total Daily</Text>
+                <Text className="text-slate-600 font-medium">{t('milkEntry', 'totalDaily')}</Text>
                 <Text className="text-slate-900 font-bold">{result?.recommendation?.actualMilk} L</Text>
               </View>
               <View className="flex-row justify-between">
-                <Text className="text-slate-600 font-medium">Predicted Daily</Text>
+                <Text className="text-slate-600 font-medium">{t('milkEntry', 'predictedDaily')}</Text>
                 <Text className="text-indigo-600 font-bold">{result?.recommendation?.predictedMilk} L</Text>
               </View>
             </View>
