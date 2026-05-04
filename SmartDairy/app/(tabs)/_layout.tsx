@@ -22,7 +22,7 @@ import ChatScreen from "./SinhalaVoiceAssistedChat/chatbot";
 import CattleListScreen from "../(tabs)/cattleHeat/Screens/CattleListScreen";
 import DairyManagementScreen from "../(tabs)/Cow/Screens/DairyManagementScreen";
 import ProfileScreen from "../(tabs)/Cow/Screens/ProfileScreen";
-
+import { StatusBar } from "react-native";
 
 import DiseaseHomeScreen, { DiseaseScreen } from "../(tabs)/Disease/Screens/DiseaseHomeScreen";
 import DiseaseScreenComponent from "../(tabs)/Disease/Screens/DiseaseScreen";
@@ -118,8 +118,16 @@ export default function LactationCurveHome() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-slate-50">
+    <View
+      className="flex-1 bg-slate-50"
+      style={{ paddingTop: insets.top }}
+    >
       {/* Main Content */}
+      <StatusBar
+        translucent={true}
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <View
         className="flex-1"
         style={{
@@ -205,6 +213,6 @@ export default function LactationCurveHome() {
           </Pressable>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
