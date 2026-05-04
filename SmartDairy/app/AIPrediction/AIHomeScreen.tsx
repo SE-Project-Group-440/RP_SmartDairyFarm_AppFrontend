@@ -40,7 +40,7 @@ import { router } from "expo-router";
 import { CommonFooter } from "../../components/CommonFooter";
 
 
-export default function AIHomeScreen() {
+export default function AIHomeScreen({ onBack }: { onBack?: () => void }) {
   const {
     cows,
     addCow,
@@ -194,9 +194,16 @@ export default function AIHomeScreen() {
     <View style={styles.container}>
       {/* HEADER */}
       <View className="bg-green-600 px-6 pt-12 pb-8 rounded-b-3xl">
-        <Text className="text-2xl text-white mb-1">
-          {user?.name || user?.email || "Farmer"}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+          {onBack && (
+            <TouchableOpacity onPress={onBack} style={{ marginRight: 12 }}>
+              <ArrowLeft size={24} color="white" />
+            </TouchableOpacity>
+          )}
+          <Text className="text-2xl text-white">
+            {user?.name || user?.email || "Farmer"}
+          </Text>
+        </View>
         <Text className="text-green-100">
           {t('dashboard', 'dairyFarmManagement')}
         </Text>

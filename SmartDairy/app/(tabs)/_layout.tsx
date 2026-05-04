@@ -108,7 +108,7 @@ export default function LactationCurveHome() {
 
       case "profile":
         if (profileScreen === "ai") {
-          return <AiHomeScreen />;
+          return <AiHomeScreen onBack={() => setProfileScreen("home")} />;
         }
         return <ProfileScreen onNavigateToAI={() => setProfileScreen("ai")} />;
 
