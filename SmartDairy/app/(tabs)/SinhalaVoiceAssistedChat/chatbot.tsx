@@ -457,7 +457,7 @@ export default function ChatScreen() {
 
 
         </View>
-        <View className="pb-16">
+        <View className="pb-4">
           <Text style={styles.footerText}>
             නොමිලේ ලබාදෙන කෘතිම බුද්ධි උපදේශකයෙකි. වැදගත් තීරණ සඳහා විශේෂඥ සහාය පතන්න.
           </Text></View>
