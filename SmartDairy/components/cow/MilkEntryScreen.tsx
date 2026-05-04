@@ -310,6 +310,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
                 value={milkValue}
                 onChangeText={setMilkValue}
                 placeholder="0.0"
+                placeholderTextColor="#94a3b8"
                 className="bg-white border rounded-xl p-4"
               />
             </View>
@@ -318,6 +319,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
               placeholder={`${t('milkEntry', 'notes')} ${t('milkEntry', 'optional')}`}
               value={notes}
               onChangeText={setNotes}
+              placeholderTextColor="#94a3b8"
               className="bg-white border rounded-xl p-4 mb-6"
               multiline
             />
@@ -353,6 +355,7 @@ export function MilkEntryScreen({ onBack }: MilkEntryScreenProps) {
             placeholder={t('milkEntry', 'searchCow')}
             value={search}
             onChangeText={setSearch}
+            placeholderTextColor="#94a3b8"
             className="border rounded-xl px-4 py-2 mb-4"
           />
 

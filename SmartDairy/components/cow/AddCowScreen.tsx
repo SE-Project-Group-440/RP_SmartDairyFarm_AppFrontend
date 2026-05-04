@@ -143,6 +143,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
                   setFormData({ ...formData, name: v })
                 }
                 placeholder={`${t('addCow', 'example')} Raththi`}
+                placeholderTextColor="#94a3b8" // slate-400
                 className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
               />
             </View>
@@ -206,6 +207,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
                   setFormData({ ...formData, color: v })
                 }
                 placeholder={`${t('addCow', 'example')} Black`}
+                placeholderTextColor="#94a3b8"
                 className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
               />
             </View>
@@ -222,6 +224,7 @@ export function AddCowScreen({ onBack }: AddCowScreenProps) {
                 }
                 keyboardType="numeric"
                 placeholder={`${t('addCow', 'example')} 450`}
+                placeholderTextColor="#94a3b8"
                 className="px-4 py-3 bg-slate-50 border-2 border-slate-200 rounded-xl"
               />
             </View>
