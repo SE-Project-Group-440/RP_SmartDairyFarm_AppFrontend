@@ -108,8 +108,7 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
         <Text style={styles.backText}>{editId ? t('addAiCow', 'editTitle') || 'Edit AI Record' : t('addAiCow', 'addtitle')}</Text>
       </Pressable>
 
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40, paddingLeft: 10, paddingRight: 10 }}>
+      <View style={{ paddingBottom: 40, paddingLeft: 10, paddingRight: 10 }}>
 
           <SectionHeader icon={Info} title="Basic Information" />
 
@@ -445,8 +444,7 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
             </TouchableOpacity>
           </View>
 
-        </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
     </View>
   );
 }
