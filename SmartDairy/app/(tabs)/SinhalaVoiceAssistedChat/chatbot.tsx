@@ -18,22 +18,16 @@ import { api } from "../../../hooks/api";
 const hostIP = api.defaults.baseURL?.match(/https?:\/\/([^:/]+)/)?.[1];
 const welcomeAudioUrl = `http://${hostIP}:8080/audio/welcome.mp3`;
 
-type Message = {
-  id: number;
-  text: string;
-  isUser: boolean;
-  audioUri?: string;
-};
+import { useChatStore, Message } from "../../../Store/chatStore";
 
 export default function ChatScreen() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා. ඔබට ප්‍රශ්න අසන්න පුළුවන්",
-      isUser: false,
-      audioUri: welcomeAudioUrl,
-    },
-  ]);
+  const { messages, setMessages, clearMessages } = useChatStore();
+
+  React.useEffect(() => {
+    if (messages.length === 0) {
+      clearMessages(welcomeAudioUrl);
+    }
+  }, []);
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
@@ -257,14 +251,7 @@ export default function ChatScreen() {
 
   const clearChat = async () => {
     await stopAllAudio();
-    setMessages([
-      {
-        id: 1,
-        text: "ආයුබෝවන්! මම ඔබගේ කිරි ගොවිතැන් උපදේශකයා. ඔබට ප්‍රශ්න අසන්න පුළුවන්",
-        isUser: false,
-        audioUri: welcomeAudioUrl,
-      },
-    ]);
+    clearMessages(welcomeAudioUrl);
   };
 
   const startRecordingWeb = async () => {
