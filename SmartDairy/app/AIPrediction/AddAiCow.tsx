@@ -108,8 +108,7 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
         <Text style={styles.backText}>{editId ? t('addAiCow', 'editTitle') || 'Edit AI Record' : t('addAiCow', 'addtitle')}</Text>
       </Pressable>
 
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40, paddingLeft: 10, paddingRight: 10 }}>
+      <View style={{ paddingBottom: 40, paddingLeft: 10, paddingRight: 10 }}>
 
           <SectionHeader icon={Info} title="Basic Information" />
 
@@ -186,7 +185,7 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
             </View>
 
             <View style={[styles.inputGroup, { flex: 1, marginLeft: 8 }]}>
-              <Text style={styles.label}>{t('addAiCow', 'milkYield')} *</Text>
+              <Text style={styles.label}>{t('addAiCow', 'milkYield')}  *</Text>
               <TextInput
                 style={[styles.input, errors["Milk_Yield"] && styles.inputError]}
                 placeholder="(Liters)"
@@ -373,12 +372,12 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
                   </TouchableOpacity>
                 </View>
               ))}
-              
+
               {Platform.OS === 'web' ? (
                 React.createElement('input', {
                   type: 'date',
                   max: yesterday.toISOString().split("T")[0],
-                  value: "", 
+                  value: "",
                   onChange: (e: any) => {
                     const val = e.target.value;
                     if (val && !formData["Previous AI Dates"].includes(val)) {
@@ -409,7 +408,7 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
               )}
             </View>
 
-            {errors["Previous AI Dates"] && <Text style={[styles.errorText, {marginTop: 6}]}>{errors["Previous AI Dates"]}</Text>}
+            {errors["Previous AI Dates"] && <Text style={[styles.errorText, { marginTop: 6 }]}>{errors["Previous AI Dates"]}</Text>}
 
             {Platform.OS !== 'web' && showAiPicker && (
               <DateTimePicker
@@ -445,8 +444,7 @@ export default function AddAiCow({ addCow, updateCow, editId, initialData, onCan
             </TouchableOpacity>
           </View>
 
-        </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
     </View>
   );
 }
